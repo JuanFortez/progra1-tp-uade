@@ -1,7 +1,7 @@
 # 📘 Proyecto "Programación 1 - UADE"
 
 <p align="center">
-<img src= "" alt="" width="200"/>
+<img src= "ParkingControl.png" alt="Logo de Estacionamiento" width="200"/>
 </p>
 
 ---
