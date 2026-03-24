@@ -12,3 +12,11 @@
 - **HYUN IAN**
 - **SALAZAR SAMUEL**
 - **FORTEZ JUAN IGNACIO**
+
+## Descripcion del proyecto
+
+Este proyecto simula la gestión de estacionamiento y el control de ocupación.
+
+---
+
+## Funcionalidades
