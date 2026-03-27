@@ -11,6 +11,7 @@
 - **MENDES IGNACIO**
 - **HYUN IAN**
 - **SALAZAR SAMUEL**
+- **OTTA SANTIAGO**
 - **FORTEZ JUAN IGNACIO**
 
 ## Descripcion del proyecto
