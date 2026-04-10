@@ -35,4 +35,4 @@ def agregar_vehiculo_plaza(matriz):
 
     print("\nVehículo agregado correctamente\n")
     
-    mostrar_estacionamiento(matriz)
+    
