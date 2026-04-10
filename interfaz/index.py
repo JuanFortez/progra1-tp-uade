@@ -1,5 +1,5 @@
 from gestion.index import crear_estacionamiento, agregar_vehiculo_plaza
-from consultas.visualización.index import mostrar_estacionamiento
+from consultas.visualizacion.index import mostrar_estacionamiento, mostrar_placas_disponibles, mostrar_placas_ocupadas
 
 def interfaz_inicio():
     print("=" * 50)
@@ -9,3 +9,5 @@ def interfaz_inicio():
     matriz = crear_estacionamiento()
     mostrar_estacionamiento(matriz)
     agregar_vehiculo_plaza(matriz)
+    mostrar_placas_ocupadas(matriz)
+    mostrar_placas_disponibles(matriz)

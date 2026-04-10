@@ -1,4 +1,4 @@
-from consultas.visualización.index import mostrar_estacionamiento
+from consultas.visualizacion.index import mostrar_estacionamiento
 
 def crear_estacionamiento():
     
@@ -35,4 +35,4 @@ def agregar_vehiculo_plaza(matriz):
 
     print("\nVehículo agregado correctamente\n")
     
-    return mostrar_estacionamiento(matriz)
+    mostrar_estacionamiento(matriz)
