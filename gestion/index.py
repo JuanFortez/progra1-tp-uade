@@ -30,6 +30,7 @@ def agregar_vehiculo_plaza(matriz):
     if matriz[fila][columna] != "LIBRE":
         print("La plaza está ocupada")
         return
+        
 
     matriz[fila][columna] = patente
 
