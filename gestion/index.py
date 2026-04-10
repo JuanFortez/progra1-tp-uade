@@ -20,8 +20,8 @@ def agregar_vehiculo_plaza(matriz):
 
     patente = input("\nIngrese la patente del vehículo: ").upper()
 
-    fila = int(input("Ingrese fila: "))
-    columna = int(input("Ingrese columna: "))
+    fila = int(input("Ingrese fila: ")) - 1
+    columna = int(input("Ingrese columna: ")) - 1
 
     if fila < 0 or fila >= len(matriz) or columna < 0 or columna >= len(matriz[0]):
         print("La plaza no existe")
