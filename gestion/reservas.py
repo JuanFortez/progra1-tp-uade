@@ -1,3 +1,6 @@
+from consultas.visualización.index import mostrar_estacionamiento
+
+
 def verificar_disponibilidad(
     reservas, fila, columna, fecha_inicio, fecha_fin, codigo_excluir=-1
 ):
@@ -28,6 +31,9 @@ def crear_reserva(reservas, matriz):
     """
 
     patente = input("Ingrese la patente: ").upper()
+
+    mostrar_estacionamiento(matriz)
+
     fila = int(input("Ingrese fila: "))
     columna = int(input("Ingrese columna: "))
     fecha_inicio = input("Ingrese fecha de inicio (AAAA-MM-DD): ")
