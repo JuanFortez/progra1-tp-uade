@@ -4,6 +4,13 @@ from datetime import datetime
 registros = {}
 
 def crear_estacionamiento():
+    """
+    Crea y retorna una matriz que representa un estacionamiento.
+
+    Solicita al usuario el número de filas y columnas mediante entrada estándar,
+    luego construye una matriz bidimensional donde cada celda está inicializada
+    con el valor "LIBRE", indicando que todos los espacios están disponibles.
+    """
     
     print("\nIngrese las filas y columnas del estacionamiento: \n")
     
@@ -21,7 +28,10 @@ def crear_estacionamiento():
 
 
 def registrar_ingreso_vehiculo(matriz):
-    """Registra el ingreso de un vehículo a una plaza libre."""
+    """
+    Registra el ingreso de un vehículo a una plaza libre del estacionamiento.
+    Valida que la patente no esté ya registrada, que la plaza exista y esté libre.
+    """
 
     patente = input("\nIngrese la patente del vehículo: ").upper()
 
@@ -47,7 +57,10 @@ def registrar_ingreso_vehiculo(matriz):
 
 
 def registrar_salida_vehiculo(matriz):
-    """Registra la salida de un vehículo, muestra tiempo y tarifa."""
+    """
+    Registra la salida de un vehículo y libera su plaza en el estacionamiento.
+    Valida que la patente tenga ingreso registrado y busca su ubicación en la matriz.
+    """
 
     patente = input("\nIngrese la patente del vehículo: ").upper()
 
