@@ -1,5 +1,5 @@
 from gestion.index import crear_estacionamiento, agregar_vehiculo_plaza
-from consultas.visualización.index import mostrar_estacionamiento, mostrar_placas_disponibles, mostrar_placas_ocupadas
+from consultas.visualización.index import mostrar_estacionamiento
 
 
 def interfaz_inicio():
