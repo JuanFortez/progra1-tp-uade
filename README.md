@@ -45,8 +45,9 @@ Rol cliente: visualizar el estacionamiento y solicitar reservas
 
 
 ## Estructura
+```
 ├── 📁 interfaz/                        # Interfaces de usuario
-│   └── index.py                        # interfaz_inicio(), interfaz_admin(), interfaz_cliente()
+│   └── index.py                        # Se muestran las interfaces de inicio, admin y cliente
 ├── 📁 gestion/                         # Lógica de gestión del estacionamiento
 │   ├── index.py                        # Creación del estacionamiento e ingreso de vehículos
 │   └── reservas.py                     # Crear, cancelar y modificar reservas
@@ -54,3 +55,4 @@ Rol cliente: visualizar el estacionamiento y solicitar reservas
 │   └── 📁 visualización/
 │       └── index.py                    # Mostrar estado, plazas ocupadas y disponibles
 ├── 📄 main.py                          # Punto de entrada del sistema
+```
