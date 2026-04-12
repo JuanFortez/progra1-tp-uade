@@ -39,14 +39,14 @@ def registrar_ingreso_vehiculo(matriz):
         print("Ese vehículo ya está en el estacionamiento.")
         return
 
-    fila = int(input("Ingrese fila de la plaza: "))
-    columna = int(input("Ingrese columna de la plaza: "))
+    fila = int(input("Ingrese fila de la plaza: ")) - 1
+    columna = int(input("Ingrese columna de la plaza: ")) - 1
 
     if fila < 0 or fila >= len(matriz) or columna < 0 or columna >= len(matriz[0]):
         print("La plaza no existe.")
         return
 
-    if matriz[fila][columna] != "LIBRE":
+    if matriz[fila - 1][columna - 1] != "LIBRE":
         print("La plaza está ocupada.")
         return
 
