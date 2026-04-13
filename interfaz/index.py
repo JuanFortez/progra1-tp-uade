@@ -5,6 +5,10 @@ from time import sleep
 
 
 def interfaz_inicio():
+    """
+    Muestra el menú principal de la aplicación Parking Control.
+    Permite al usuario seleccionar entre el panel de administrador, panel de cliente o salir del programa.
+    """
     
     print("🚗" * 19)
     print(" " * 5 + "BIENVENIDO A PARKING CONTROL")
@@ -36,6 +40,10 @@ def interfaz_inicio():
 
     
 def interfaz_admin():
+    """
+    Muestra el panel de administración del estacionamiento.
+    Permite al administrador registrar ingresos y salidas de vehículos, ver la ocupación actual y buscar vehículos.
+    """
     encabezado_principal() 
     
     matriz = crear_estacionamiento()
@@ -75,6 +83,10 @@ def interfaz_admin():
             break
         
 def interfaz_cliente():
+    """
+    Muestra el panel de cliente.
+    Permite al cliente solicitar una reserva o salir del panel.
+    """
     encabezado_principal()
     
     while True:    

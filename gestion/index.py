@@ -68,8 +68,8 @@ def registrar_salida_vehiculo(matriz):
         print("Ese vehículo no tiene ingreso registrado.")
         return
 
-    fila_encontrada = -1
-    columna_encontrada = -1
+    fila_encontrada = - 1
+    columna_encontrada = - 1
 
     for i in range(len(matriz)):
         for j in range(len(matriz[i])):
@@ -77,7 +77,7 @@ def registrar_salida_vehiculo(matriz):
                 fila_encontrada = i
                 columna_encontrada = j
 
-    if fila_encontrada == -1:
+    if fila_encontrada == - 1:
         print("No se encontró el vehículo en el estacionamiento.")
         return
 
