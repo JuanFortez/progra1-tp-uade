@@ -2,10 +2,14 @@ def mostrar_estacionamiento(matriz):
     """
     Muestra el estado actual del estacionamiento en formato de grilla.
     """
+    print("")
     for fila in matriz:
         for valor in fila:
             print(valor, end=" ")
         print()
+    
+    mostrar_placas_ocupadas(matriz)
+    mostrar_placas_disponibles(matriz)
         
 
 def contar_placas_ocupadas(matriz):
@@ -24,7 +28,7 @@ def mostrar_placas_ocupadas(matriz):
     Muestra por pantalla el número de plazas ocupadas.
     """
     ocupadas = contar_placas_ocupadas(matriz)
-    print(f"Placas ocupadas: {ocupadas}")
+    print(f"\nPlacas ocupadas: {ocupadas}")
 
 def contar_placas_disponibles(matriz):
     """
@@ -42,4 +46,4 @@ def mostrar_placas_disponibles(matriz):
     Muestra por pantalla el número de plazas disponibles.
     """
     disponibles = contar_placas_disponibles(matriz)
-    print(f"Placas disponibles: {disponibles}")
+    print(f"\nPlacas disponibles: {disponibles}")
