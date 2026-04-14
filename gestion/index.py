@@ -1,7 +1,8 @@
-from consultas.visualización.index import mostrar_estacionamiento
+from consultas.visualizacion.index import mostrar_estacionamiento
 from datetime import datetime
 
 registros = {}
+
 
 def crear_estacionamiento():
     """
@@ -11,19 +12,19 @@ def crear_estacionamiento():
     luego construye una matriz bidimensional donde cada celda está inicializada
     con el valor "LIBRE", indicando que todos los espacios están disponibles.
     """
-    
+
     print("\nIngrese las filas y columnas del estacionamiento: \n")
-    
+
     filas = int(input("Filas: "))
     columnas = int(input("Columnas: "))
-    
+
     matriz = []
-    
+
     for fila in range(filas):
         matriz.append([])
         for columna in range(columnas):
             matriz[fila].append("LIBRE")
-    
+
     return matriz
 
 
@@ -46,7 +47,7 @@ def registrar_ingreso_vehiculo(matriz):
         print("La plaza no existe.")
         return
 
-    if matriz[fila - 1][columna - 1] != "LIBRE":
+    if matriz[fila][columna] != "LIBRE":
         print("La plaza está ocupada.")
         return
 
@@ -68,8 +69,8 @@ def registrar_salida_vehiculo(matriz):
         print("Ese vehículo no tiene ingreso registrado.")
         return
 
-    fila_encontrada = - 1
-    columna_encontrada = - 1
+    fila_encontrada = -1
+    columna_encontrada = -1
 
     for i in range(len(matriz)):
         for j in range(len(matriz[i])):
@@ -77,9 +78,26 @@ def registrar_salida_vehiculo(matriz):
                 fila_encontrada = i
                 columna_encontrada = j
 
-    if fila_encontrada == - 1:
+    if fila_encontrada == -1:
         print("No se encontró el vehículo en el estacionamiento.")
         return
 
     matriz[fila_encontrada][columna_encontrada] = "LIBRE"
     del registros[patente]
+
+
+def buscar_vehiculo(matriz):
+    """
+    Busca un vehículo por patente dentro del estacionamiento.
+    Si lo encuentra, muestra la fila y la columna en la que está ubicado.
+    """
+
+    patente = input("\nIngrese la patente a buscar: ").upper()
+
+    for i in range(len(matriz)):
+        for j in range(len(matriz[i])):
+            if matriz[i][j] == patente:
+                print(f"Vehículo encontrado en fila {i + 1}, columna {j + 1}.")
+                return
+
+    print("El vehículo no se encuentra en el estacionamiento.")

@@ -52,7 +52,7 @@ Rol cliente: visualizar el estacionamiento y solicitar reservas
 │   ├── index.py                        # Creación del estacionamiento e ingreso de vehículos
 │   └── reservas.py                     # Crear, cancelar y modificar reservas
 ├── 📁 consultas/                       # Consultas y visualización
-│   └── 📁 visualización/
+│   └── 📁 visualizacion/
 │       └── index.py                    # Mostrar estado, plazas ocupadas y disponibles
 ├── 📄 main.py                          # Punto de entrada del sistema
 ```
