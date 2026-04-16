@@ -57,9 +57,57 @@ def registrar_ingreso_vehiculo(matriz):
     print(f"\nIngreso registrado. Hora: {registros[patente].strftime('%H:%M:%S')}\n")
 
 
+def calcular_tiempo_estacionado(patente):
+    """
+    Calcula y retorna el tiempo que lleva estacionado un vehículo.
+
+    Recibe la patente del vehículo, busca su hora de ingreso en el
+    diccionario de registros y calcula la diferencia con la hora actual.
+    Retorna un objeto timedelta con el tiempo transcurrido, o None si
+    la patente no tiene ingreso registrado.
+    """
+
+    if patente not in registros:
+        return None
+
+    hora_ingreso = registros[patente]
+    hora_actual = datetime.now()
+    tiempo = hora_actual - hora_ingreso
+
+    return tiempo
+
+
+def calcular_tarifa(tiempo):
+    """
+    Calcula y retorna la tarifa a cobrar según el tiempo estacionado.
+
+    Recibe un objeto timedelta con el tiempo estacionado. Cobra una tarifa
+    base por la primera hora y un valor adicional por cada hora extra o
+    fracción. Retorna el monto total a pagar como número flotante.
+    """
+
+    TARIFA_BASE = 1000.0        # Precio por la primera hora
+    TARIFA_POR_HORA = 500.0    # Precio por cada hora adicional o fracción
+
+    total_segundos = tiempo.total_seconds()
+    horas = total_segundos / 3600
+
+    if horas <= 1:
+        return TARIFA_BASE
+
+    horas_extra = horas - 1
+    import math
+    horas_extra_enteras = math.ceil(horas_extra)
+
+    tarifa = TARIFA_BASE + (horas_extra_enteras * TARIFA_POR_HORA)
+
+    return tarifa
+
+
 def registrar_salida_vehiculo(matriz):
     """
     Registra la salida de un vehículo y libera su plaza en el estacionamiento.
+    Calcula el tiempo estacionado y la tarifa a cobrar antes de liberar la plaza.
     Valida que la patente tenga ingreso registrado y busca su ubicación en la matriz.
     """
 
@@ -81,6 +129,19 @@ def registrar_salida_vehiculo(matriz):
     if fila_encontrada == -1:
         print("No se encontró el vehículo en el estacionamiento.")
         return
+
+    tiempo = calcular_tiempo_estacionado(patente)
+    tarifa = calcular_tarifa(tiempo)
+
+    horas = int(tiempo.total_seconds() // 3600)
+    minutos = int((tiempo.total_seconds() % 3600) // 60)
+    segundos = int(tiempo.total_seconds() % 60)
+
+    print(f"Patente:            {patente}")
+    print(f"Hora de ingreso:    {registros[patente].strftime('%H:%M:%S')}")
+    print(f"Hora de salida:     {datetime.now().strftime('%H:%M:%S')}")
+    print(f"Tiempo estacionado: {horas}h {minutos}m {segundos}s")
+    print(f"Tarifa a cobrar:    ${tarifa:.2f}")
 
     matriz[fila_encontrada][columna_encontrada] = "LIBRE"
     del registros[patente]
