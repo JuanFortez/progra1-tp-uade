@@ -1,5 +1,5 @@
 from consultas.visualizacion.index import mostrar_estacionamiento
-from consultas.validacion.index import validar_patente
+from consultas.validacion.index import validar_patente, validar_fecha
 
 
 def verificar_disponibilidad(
@@ -41,11 +41,20 @@ def crear_reserva(reservas, matriz):
 
     fila = int(input("Ingrese fila: "))
     columna = int(input("Ingrese columna: "))
-    fecha_inicio = input("Ingrese fecha de inicio (AAAA-MM-DD): ")
-    fecha_fin = input("Ingrese fecha de fin (AAAA-MM-DD): ")
-
+    
     if fila < 0 or fila >= len(matriz) or columna < 0 or columna >= len(matriz[0]):
         print("La plaza no existe.")
+        return
+    
+    fecha_inicio = input("Ingrese fecha de inicio (AAAA-MM-DD): ")
+    
+    if not validar_fecha(fecha_inicio):
+        print("Fecha inválida. Formato esperado: AAAA-MM-DD")
+        return
+    fecha_fin = input("Ingrese fecha de fin (AAAA-MM-DD): ")
+
+    if not validar_fecha(fecha_fin):
+        print("Fecha inválida. Formato esperado: AAAA-MM-DD")
         return
 
     if fecha_inicio > fecha_fin:
