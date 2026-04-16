@@ -1,4 +1,5 @@
 from consultas.visualizacion.index import mostrar_estacionamiento
+from consultas.validacion.index import validar_patente
 
 
 def verificar_disponibilidad(
@@ -31,6 +32,10 @@ def crear_reserva(reservas, matriz):
     """
 
     patente = input("Ingrese la patente: ").upper()
+    
+    if not validar_patente(patente):
+        print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
+        return
 
     mostrar_estacionamiento(matriz)
 
