@@ -1,4 +1,4 @@
-from consultas.visualizacion.index import mostrar_estacionamiento
+from consultas.validacion.index import validar_patente
 from datetime import datetime
 
 registros = {}
@@ -35,6 +35,10 @@ def registrar_ingreso_vehiculo(matriz):
     """
 
     patente = input("\nIngrese la patente del vehículo: ").upper()
+    
+    if not validar_patente(patente):
+        print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
+        return
 
     if patente in registros:
         print("Ese vehículo ya está en el estacionamiento.")
@@ -112,6 +116,10 @@ def registrar_salida_vehiculo(matriz):
     """
 
     patente = input("\nIngrese la patente del vehículo: ").upper()
+    
+    if not validar_patente(patente):
+        print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
+        return
 
     if patente not in registros:
         print("Ese vehículo no tiene ingreso registrado.")
@@ -154,6 +162,10 @@ def buscar_vehiculo(matriz):
     """
 
     patente = input("\nIngrese la patente a buscar: ").upper()
+    
+    if not validar_patente(patente):
+        print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
+        return
 
     for i in range(len(matriz)):
         for j in range(len(matriz[i])):
@@ -187,6 +199,11 @@ def modificar_estado_plaza(matriz):
 
         if opcion == 1:
             nueva_patente = input("Ingrese nueva patente (deje vacío para liberar plaza): ").upper().strip()
+            
+            if not validar_patente(nueva_patente):
+                print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
+                return
+            
             estado_anterior = matriz[fila][columna]
 
             if estado_anterior in registros:
