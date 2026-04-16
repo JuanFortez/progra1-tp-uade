@@ -142,6 +142,7 @@ def lista_reservas_activas(reservas):
     """
 
     hay_activas = False
+    reservas_ordenadas = ordenar_reservas_fechas(reservas)
 
     print("\nLISTA DE RESERVAS ACTIVAS")
     print("-" * 40)
@@ -151,8 +152,8 @@ def lista_reservas_activas(reservas):
             hay_activas = True
             print("Código:", reserva[0])
             print("Patente:", reserva[1])
-            print("Fila:", reserva[2])
-            print("Columna:", reserva[3])
+            print("Fila:", reserva[2] + 1)
+            print("Columna:", reserva[3] + 1)
             print("Fecha inicio:", reserva[4])
             print("Fecha fin:", reserva[5])
             print("Estado:", reserva[6])
