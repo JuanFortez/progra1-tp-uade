@@ -1,4 +1,4 @@
-from consultas.visualización.index import mostrar_estacionamiento
+from consultas.visualizacion.index import mostrar_estacionamiento
 from datetime import datetime
 
 registros = {}

@@ -1,13 +1,8 @@
-<<<<<<< HEAD
-from gestion.index import crear_estacionamiento, agregar_vehiculo_plaza
-from consultas.visualizacion.index import mostrar_estacionamiento
-=======
 from gestion.index import crear_estacionamiento, registrar_ingreso_vehiculo, registrar_salida_vehiculo
-from consultas.visualización.index import mostrar_estacionamiento
+from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import encabezado_principal
 from time import sleep
 
->>>>>>> develop
 
 def interfaz_inicio():
     """
@@ -53,11 +48,6 @@ def interfaz_admin():
     
     matriz = crear_estacionamiento()
     mostrar_estacionamiento(matriz)
-<<<<<<< HEAD
-
-    agregar_vehiculo_plaza(matriz)
-    reservas = []
-=======
     
     while True:
         print("\n" + "=" * 39)
@@ -116,4 +106,3 @@ def interfaz_cliente():
             break
             
 
->>>>>>> develop
