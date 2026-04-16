@@ -3,6 +3,7 @@ from gestion.index import (
     registrar_ingreso_vehiculo,
     registrar_salida_vehiculo,
     buscar_vehiculo,
+    modificar_estado_plaza
 )
 from gestion.reservas import (
     crear_reserva,
@@ -25,7 +26,6 @@ def interfaz_inicio():
     print(" " * 5 + "BIENVENIDO A PARKING CONTROL")
     print("🚗" * 19)
 
-    matriz = crear_estacionamiento()
     reservas = []
 
     while True:
@@ -40,11 +40,11 @@ def interfaz_inicio():
 
         if opcion == 1:
             print("Accediendo a panel de administración...")
-            interfaz_admin(matriz, reservas)
+            interfaz_admin(reservas)
 
         elif opcion == 2:
             print("Accediendo a panel de cliente...")
-            interfaz_cliente(matriz, reservas)
+            interfaz_cliente(reservas)
 
         elif opcion == 3:
             print("\n👋 ¡Gracias por usar Parking Control!")
@@ -53,12 +53,14 @@ def interfaz_inicio():
             break
 
 
-def interfaz_admin(matriz, reservas):
+def interfaz_admin(reservas):
     """
     Muestra el panel de administración del estacionamiento.
     Permite al administrador registrar ingresos y salidas de vehículos, ver la ocupación actual y buscar vehículos.
     """
     encabezado_principal()
+    
+    matriz = crear_estacionamiento()
 
     while True:
         print("\n" + "=" * 39)
@@ -69,8 +71,9 @@ def interfaz_admin(matriz, reservas):
         print("  2 - Registrar egreso de vehículo")
         print("  3 - Ver ocupación actual")
         print("  4 - Buscar vehículo")
-        print("  5 - Gestionar reservas")
-        print("  9 - Salir\n")
+        print("  5 - Modificar plaza")
+        print("  6 - Gestionar reservas")
+        print("  9 - Volver\n")
 
         opcion = int(input("Seleccione una opción: "))
 
@@ -91,6 +94,9 @@ def interfaz_admin(matriz, reservas):
             buscar_vehiculo(matriz)
 
         elif opcion == 5:
+            modificar_estado_plaza(matriz)
+            
+        elif opcion == 6:
             interfaz_reservas_admin(matriz, reservas)
 
         elif opcion == 9:

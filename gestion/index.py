@@ -162,3 +162,58 @@ def buscar_vehiculo(matriz):
                 return
 
     print("El vehículo no se encuentra en el estacionamiento.")
+
+def modificar_estado_plaza(matriz):
+    """
+    Modifica el estado o patente de una plaza específica en el estacionamiento.
+    Permite cambiar la patente (actualizando registros de ingreso) o el estado general.
+    """
+    
+    print("\nIndique la fila y columna de la plaza a modificar ")
+    fila = int(input("\nIngrese fila de la plaza: ")) - 1
+    columna = int(input("Ingrese columna de la plaza: ")) - 1
+    
+    if fila < 0 or fila >= len(matriz) or columna < 0 or columna >= len(matriz[0]):
+        print("La plaza no existe.")
+        return
+    
+    while True:
+        print("\nModificaciones:")
+        print("  1 - Cambiar patente")
+        print("  2 - Cambiar estado")
+        print("  3 - Volver")
+
+        opcion = int(input("Seleccione la modificación a realizar: "))
+
+        if opcion == 1:
+            nueva_patente = input("Ingrese nueva patente (deje vacío para liberar plaza): ").upper().strip()
+            estado_anterior = matriz[fila][columna]
+
+            if estado_anterior in registros:
+                del registros[estado_anterior]
+                
+            if nueva_patente:
+                if nueva_patente in registros:
+                    print("Esa patente ya está registrada en el estacionamiento.")
+                    continue
+                matriz[fila][columna] = nueva_patente
+                registros[nueva_patente] = datetime.now()
+                print(f"Patente cambiada a {nueva_patente}. Ingreso registrado.")
+            else:
+                matriz[fila][columna] = "LIBRE"
+                print("Plaza liberada.")
+
+        elif opcion == 2:
+            nuevo_estado = input("Ingrese el nuevo estado (LIBRE, OCUPADO, etc.): ").upper().strip()
+            if nuevo_estado:
+                if nuevo_estado == "LIBRE" and matriz[fila][columna] in registros:
+                    del registros[matriz[fila][columna]]
+                matriz[fila][columna] = nuevo_estado
+                print(f"Estado cambiado a {nuevo_estado}.")
+            else:
+                print("Estado no válido.")
+
+        elif opcion == 3:
+            break
+        else:
+            print("Opción no válida. Intente nuevamente.")
