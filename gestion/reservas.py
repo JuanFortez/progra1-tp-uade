@@ -32,9 +32,9 @@ def crear_reserva(reservas, matriz):
     Crea una nueva reserva si la plaza está disponible.
     """
     limpiar_pantalla()
-    
+
     patente = input("Ingrese la patente: ").upper()
-    
+
     if not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
         return
@@ -43,13 +43,13 @@ def crear_reserva(reservas, matriz):
 
     fila = int(input("Ingrese fila: ")) - 1
     columna = int(input("Ingrese columna: ")) - 1
-    
+
     if fila < 0 or fila >= len(matriz) or columna < 0 or columna >= len(matriz[0]):
         print("La plaza no existe.")
         return
-    
+
     fecha_inicio = input("Ingrese fecha de inicio (AAAA-MM-DD): ")
-    
+
     if not validar_fecha(fecha_inicio):
         print("Fecha inválida. Formato esperado: AAAA-MM-DD")
         return
@@ -81,7 +81,7 @@ def cancelar_reserva(reservas):
     Cancela una reserva cambiando su estado a CANCELADA.
     """
     limpiar_pantalla()
-    
+
     codigo_buscar = int(input("Ingrese el código de la reserva a cancelar: "))
 
     for reserva in reservas:
@@ -102,7 +102,7 @@ def modificar_reserva(reservas, matriz):
     Modifica los datos de una reserva existente.
     """
     limpiar_pantalla()
-    
+
     codigo_buscar = int(input("Ingrese el código de la reserva a modificar: "))
 
     for reserva in reservas:
@@ -110,13 +110,13 @@ def modificar_reserva(reservas, matriz):
             if reserva[6] == "CANCELADA":
                 print("No se puede modificar una reserva cancelada.")
                 return
-            
+
             nueva_patente = reserva[1]
             nueva_fila = reserva[2]
             nueva_columna = reserva[3]
             nueva_fecha_inicio = reserva[4]
             nueva_fecha_fin = reserva[5]
-            
+
             while True:
                 print("\nModificaciones:")
                 print("  1 - Cambiar patente")
@@ -126,17 +126,19 @@ def modificar_reserva(reservas, matriz):
                 print("  5 - Volver")
 
                 opcion = int(input("Seleccione la modificación a realizar: "))
-                
+
                 if opcion == 1:
                     nueva_patente = input("Ingrese nueva patente: ").upper()
-                
+
                 elif opcion == 2:
                     nueva_fila = int(input("Ingrese nueva fila: ")) - 1
                     nueva_columna = int(input("Ingrese nueva columna: ")) - 1
-                
+
                 elif opcion == 3:
-                    nueva_fecha_inicio = input("Ingrese nueva fecha de inicio (AAAA-MM-DD): ")
-                    
+                    nueva_fecha_inicio = input(
+                        "Ingrese nueva fecha de inicio (AAAA-MM-DD): "
+                    )
+
                 elif opcion == 4:
                     nueva_fecha_fin = input("Ingrese nueva fecha de fin (AAAA-MM-DD): ")
 
@@ -182,7 +184,7 @@ def lista_reservas_activas(reservas):
     Muestra todas las reservas activas.
     """
     limpiar_pantalla()
-    
+
     hay_activas = False
     reservas_ordenadas = ordenar_reservas_fechas(reservas)
 
