@@ -3,7 +3,7 @@ from gestion.index import (
     registrar_ingreso_vehiculo,
     registrar_salida_vehiculo,
     buscar_vehiculo,
-    modificar_estado_plaza
+    modificar_estado_plaza,
 )
 from gestion.reservas import (
     crear_reserva,
@@ -12,6 +12,7 @@ from gestion.reservas import (
     lista_reservas_activas,
 )
 from consultas.visualizacion.index import mostrar_estacionamiento
+from consultas.validacion.index import validar_entero
 from ui.index import encabezado_principal, limpiar_pantalla
 from time import sleep
 
@@ -27,6 +28,7 @@ def interfaz_inicio():
     print("🚗" * 19)
 
     reservas = []
+    matriz = None
 
     while True:
         print("\n" + "=" * 40)
@@ -36,15 +38,22 @@ def interfaz_inicio():
         print("  2 - Panel Cliente")
         print("  3 - Salir\n")
 
-        opcion = int(input("Seleccione una opción: "))
+        opcion = validar_entero("Seleccione una opción: ", 1, 3)
 
         if opcion == 1:
             print("Accediendo a panel de administración...")
-            interfaz_admin(reservas)
+
+            if matriz is None:
+                matriz = crear_estacionamiento()
+
+            interfaz_admin(matriz, reservas)
 
         elif opcion == 2:
-            print("Accediendo a panel de cliente...")
-            interfaz_cliente(reservas)
+            if matriz is None:
+                print("\nPrimero el administrador debe crear el estacionamiento.")
+            else:
+                print("Accediendo a panel de cliente...")
+                interfaz_cliente(matriz, reservas)
 
         elif opcion == 3:
             print("\n👋 ¡Gracias por usar Parking Control!")
@@ -53,15 +62,13 @@ def interfaz_inicio():
             break
 
 
-def interfaz_admin(reservas):
+def interfaz_admin(matriz, reservas):
     """
     Muestra el panel de administración del estacionamiento.
     Permite al administrador registrar ingresos y salidas de vehículos, ver la ocupación actual y buscar vehículos.
     """
     limpiar_pantalla()
     encabezado_principal()
-    
-    matriz = crear_estacionamiento()
 
     while True:
         print("\n" + "=" * 39)
@@ -96,7 +103,7 @@ def interfaz_admin(reservas):
 
         elif opcion == 5:
             modificar_estado_plaza(matriz)
-            
+
         elif opcion == 6:
             interfaz_reservas_admin(matriz, reservas)
 
@@ -138,7 +145,7 @@ def interfaz_reservas_admin(matriz, reservas):
     Permite crear, cancelar, modificar y listar reservas actuales.
     """
     limpiar_pantalla()
-    
+
     while True:
         print("\n" + "=" * 40)
         print(" " * 10 + "Gestión de Reservas")

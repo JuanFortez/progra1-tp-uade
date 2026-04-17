@@ -15,7 +15,7 @@ def crear_estacionamiento():
     con el valor "LIBRE", indicando que todos los espacios están disponibles.
     """
     limpiar_pantalla()
-    
+
     print("\nIngrese las filas y columnas del estacionamiento: \n")
 
     filas = int(input("Filas: "))
@@ -37,11 +37,11 @@ def registrar_ingreso_vehiculo(matriz):
     Valida que la patente no esté ya registrada, que la plaza exista y esté libre.
     """
     limpiar_pantalla()
-    
+
     mostrar_estacionamiento(matriz)
-    
+
     patente = input("\nIngrese la patente del vehículo: ").upper()
-    
+
     if not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
         return
@@ -96,8 +96,8 @@ def calcular_tarifa(tiempo):
     fracción. Retorna el monto total a pagar como número flotante.
     """
 
-    TARIFA_BASE = 1000.0        # Precio por la primera hora
-    TARIFA_POR_HORA = 500.0    # Precio por cada hora adicional o fracción
+    TARIFA_BASE = 1000.0  # Precio por la primera hora
+    TARIFA_POR_HORA = 500.0  # Precio por cada hora adicional o fracción
 
     total_segundos = tiempo.total_seconds()
     horas = total_segundos / 3600
@@ -107,6 +107,7 @@ def calcular_tarifa(tiempo):
 
     horas_extra = horas - 1
     import math
+
     horas_extra_enteras = math.ceil(horas_extra)
 
     tarifa = TARIFA_BASE + (horas_extra_enteras * TARIFA_POR_HORA)
@@ -121,11 +122,11 @@ def registrar_salida_vehiculo(matriz):
     Valida que la patente tenga ingreso registrado y busca su ubicación en la matriz.
     """
     limpiar_pantalla()
-    
+
     mostrar_estacionamiento(matriz)
-    
+
     patente = input("\nIngrese la patente del vehículo: ").upper()
-    
+
     if not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
         return
@@ -170,9 +171,9 @@ def buscar_vehiculo(matriz):
     Si lo encuentra, muestra la fila y la columna en la que está ubicado.
     """
     limpiar_pantalla()
-    
+
     patente = input("\nIngrese la patente a buscar: ").upper()
-    
+
     if not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
         return
@@ -185,21 +186,22 @@ def buscar_vehiculo(matriz):
 
     print("El vehículo no se encuentra en el estacionamiento.")
 
+
 def modificar_estado_plaza(matriz):
     """
     Modifica el estado o patente de una plaza específica en el estacionamiento.
     Permite cambiar la patente (actualizando registros de ingreso) o el estado general.
     """
     limpiar_pantalla()
-    
+
     print("\nIndique la fila y columna de la plaza a modificar ")
     fila = int(input("\nIngrese fila de la plaza: ")) - 1
     columna = int(input("Ingrese columna de la plaza: ")) - 1
-    
+
     if fila < 0 or fila >= len(matriz) or columna < 0 or columna >= len(matriz[0]):
         print("La plaza no existe.")
         return
-    
+
     while True:
         print("\nModificaciones:")
         print("  1 - Cambiar patente")
@@ -209,21 +211,26 @@ def modificar_estado_plaza(matriz):
         opcion = int(input("Seleccione la modificación a realizar: "))
 
         if opcion == 1:
-            nueva_patente = input("Ingrese nueva patente (deje vacío para liberar plaza): ").upper().strip()
-            
+            nueva_patente = (
+                input("Ingrese nueva patente (deje vacío para liberar plaza): ")
+                .upper()
+                .strip()
+            )
+
             if not validar_patente(nueva_patente):
                 print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
                 return
-            
+
             estado_anterior = matriz[fila][columna]
 
             if estado_anterior in registros:
                 del registros[estado_anterior]
-                
+
             if nueva_patente:
                 if nueva_patente in registros:
                     print("Esa patente ya está registrada en el estacionamiento.")
                     continue
+
                 matriz[fila][columna] = nueva_patente
                 registros[nueva_patente] = datetime.now()
                 print(f"Patente cambiada a {nueva_patente}. Ingreso registrado.")
@@ -232,7 +239,11 @@ def modificar_estado_plaza(matriz):
                 print("Plaza liberada.")
 
         elif opcion == 2:
-            nuevo_estado = input("Ingrese el nuevo estado (LIBRE, OCUPADO, etc.): ").upper().strip()
+            nuevo_estado = (
+                input("Ingrese el nuevo estado (LIBRE, OCUPADO, etc.): ")
+                .upper()
+                .strip()
+            )
             if nuevo_estado:
                 if nuevo_estado == "LIBRE" and matriz[fila][columna] in registros:
                     del registros[matriz[fila][columna]]
