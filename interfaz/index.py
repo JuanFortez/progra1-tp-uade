@@ -12,7 +12,7 @@ from gestion.reservas import (
     lista_reservas_activas,
 )
 from consultas.visualizacion.index import mostrar_estacionamiento
-from ui.index import encabezado_principal
+from ui.index import encabezado_principal, limpiar_pantalla
 from time import sleep
 
 
@@ -21,7 +21,7 @@ def interfaz_inicio():
     Muestra el menú principal de la aplicación Parking Control.
     Permite al usuario seleccionar entre el panel de administrador, panel de cliente o salir del programa.
     """
-
+    limpiar_pantalla()
     print("🚗" * 19)
     print(" " * 5 + "BIENVENIDO A PARKING CONTROL")
     print("🚗" * 19)
@@ -58,6 +58,7 @@ def interfaz_admin(reservas):
     Muestra el panel de administración del estacionamiento.
     Permite al administrador registrar ingresos y salidas de vehículos, ver la ocupación actual y buscar vehículos.
     """
+    limpiar_pantalla()
     encabezado_principal()
     
     matriz = crear_estacionamiento()
@@ -110,6 +111,7 @@ def interfaz_cliente(matriz, reservas):
     Muestra el panel de cliente.
     Permite al cliente solicitar una reserva o salir del panel.
     """
+    limpiar_pantalla()
     encabezado_principal()
 
     while True:
@@ -135,7 +137,8 @@ def interfaz_reservas_admin(matriz, reservas):
     Muestra el submenú de gestión de reservas para el administrador.
     Permite crear, cancelar, modificar y listar reservas actuales.
     """
-
+    limpiar_pantalla()
+    
     while True:
         print("\n" + "=" * 40)
         print(" " * 10 + "Gestión de Reservas")

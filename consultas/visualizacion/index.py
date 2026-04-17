@@ -1,7 +1,11 @@
+from ui.index import limpiar_pantalla
+
 def mostrar_estacionamiento(matriz):
     """
     Muestra el estado actual del estacionamiento en formato de grilla.
     """
+    limpiar_pantalla()
+    
     print("")
     for fila in matriz:
         for valor in fila:

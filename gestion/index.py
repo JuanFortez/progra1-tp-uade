@@ -1,4 +1,6 @@
 from consultas.validacion.index import validar_patente
+from consultas.visualizacion.index import mostrar_estacionamiento
+from ui.index import limpiar_pantalla
 from datetime import datetime
 
 registros = {}
@@ -12,7 +14,8 @@ def crear_estacionamiento():
     luego construye una matriz bidimensional donde cada celda está inicializada
     con el valor "LIBRE", indicando que todos los espacios están disponibles.
     """
-
+    limpiar_pantalla()
+    
     print("\nIngrese las filas y columnas del estacionamiento: \n")
 
     filas = int(input("Filas: "))
@@ -33,7 +36,10 @@ def registrar_ingreso_vehiculo(matriz):
     Registra el ingreso de un vehículo a una plaza libre del estacionamiento.
     Valida que la patente no esté ya registrada, que la plaza exista y esté libre.
     """
-
+    limpiar_pantalla()
+    
+    mostrar_estacionamiento(matriz)
+    
     patente = input("\nIngrese la patente del vehículo: ").upper()
     
     if not validar_patente(patente):
@@ -114,7 +120,10 @@ def registrar_salida_vehiculo(matriz):
     Calcula el tiempo estacionado y la tarifa a cobrar antes de liberar la plaza.
     Valida que la patente tenga ingreso registrado y busca su ubicación en la matriz.
     """
-
+    limpiar_pantalla()
+    
+    mostrar_estacionamiento(matriz)
+    
     patente = input("\nIngrese la patente del vehículo: ").upper()
     
     if not validar_patente(patente):
@@ -160,7 +169,8 @@ def buscar_vehiculo(matriz):
     Busca un vehículo por patente dentro del estacionamiento.
     Si lo encuentra, muestra la fila y la columna en la que está ubicado.
     """
-
+    limpiar_pantalla()
+    
     patente = input("\nIngrese la patente a buscar: ").upper()
     
     if not validar_patente(patente):
@@ -180,6 +190,7 @@ def modificar_estado_plaza(matriz):
     Modifica el estado o patente de una plaza específica en el estacionamiento.
     Permite cambiar la patente (actualizando registros de ingreso) o el estado general.
     """
+    limpiar_pantalla()
     
     print("\nIndique la fila y columna de la plaza a modificar ")
     fila = int(input("\nIngrese fila de la plaza: ")) - 1
