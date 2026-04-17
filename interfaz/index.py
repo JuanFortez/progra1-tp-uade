@@ -40,26 +40,27 @@ def interfaz_inicio():
 
         opcion = validar_entero("Seleccione una opción: ", 1, 3)
 
-        if opcion == 1:
-            print("Accediendo a panel de administración...")
+        match opcion:
+            case 1:
+                print("Accediendo a panel de administración...")
 
-            if matriz is None:
-                matriz = crear_estacionamiento()
+                if matriz is None:
+                    matriz = crear_estacionamiento()
 
-            interfaz_admin(matriz, reservas)
+                interfaz_admin(matriz, reservas)
 
-        elif opcion == 2:
-            if matriz is None:
-                print("\nPrimero el administrador debe crear el estacionamiento.")
-            else:
-                print("Accediendo a panel de cliente...")
-                interfaz_cliente(matriz, reservas)
+            case 2:
+                if matriz is None:
+                    print("\nPrimero el administrador debe crear el estacionamiento.")
+                else:
+                    print("Accediendo a panel de cliente...")
+                    interfaz_cliente(matriz, reservas)
 
-        elif opcion == 3:
-            print("\n👋 ¡Gracias por usar Parking Control!")
-            print("🚗 ¡Hasta la próxima!")
-            sleep(2)
-            break
+            case 3:
+                print("\n👋 ¡Gracias por usar Parking Control!")
+                print("🚗 ¡Hasta la próxima!")
+                sleep(2)
+                break
 
 
 def interfaz_admin(matriz, reservas):
@@ -84,33 +85,34 @@ def interfaz_admin(matriz, reservas):
         print("  9 - Volver\n")
 
         opcion = int(input("Seleccione una opción: "))
+        
+        match opcion:
+            case 1:
+                print("Ingreso de vehiculo...")
+                registrar_ingreso_vehiculo(matriz)
 
-        if opcion == 1:
-            print("Ingreso de vehiculo...")
-            registrar_ingreso_vehiculo(matriz)
+            case 2:
+                print("Salida de vehiculo...")
+                registrar_salida_vehiculo(matriz)
 
-        elif opcion == 2:
-            print("Salida de vehiculo...")
-            registrar_salida_vehiculo(matriz)
+            case 3:
+                print("Estado de estacionamiento...")
+                mostrar_estacionamiento(matriz)
 
-        elif opcion == 3:
-            print("Estado de estacionamiento...")
-            mostrar_estacionamiento(matriz)
+            case 4:
+                print("Búsqueda de vehículo...")
+                buscar_vehiculo(matriz)
 
-        elif opcion == 4:
-            print("Búsqueda de vehículo...")
-            buscar_vehiculo(matriz)
+            case 5:
+                modificar_estado_plaza(matriz)
 
-        elif opcion == 5:
-            modificar_estado_plaza(matriz)
+            case 6:
+                interfaz_reservas_admin(matriz, reservas)
 
-        elif opcion == 6:
-            interfaz_reservas_admin(matriz, reservas)
-
-        elif opcion == 9:
-            print("\n👋 Saliendo del panel de administración...")
-            sleep(2)
-            break
+            case 9:
+                print("\n👋 Saliendo del panel de administración...")
+                sleep(2)
+                break
 
 
 def interfaz_cliente(matriz, reservas):
@@ -158,25 +160,26 @@ def interfaz_reservas_admin(matriz, reservas):
 
         opcion = int(input("Seleccione una opción: "))
 
-        if opcion == 1:
-            print("Creación de reserva...")
-            crear_reserva(reservas, matriz)
+        match opcion:
+            case 1:
+                print("Creación de reserva...")
+                crear_reserva(reservas, matriz)
 
-        elif opcion == 2:
-            print("Cancelación de reserva...")
-            cancelar_reserva(reservas)
+            case 2:
+                print("Cancelación de reserva...")
+                cancelar_reserva(reservas)
 
-        elif opcion == 3:
-            print("Modificación de reserva...")
-            modificar_reserva(reservas, matriz)
+            case 3:
+                print("Modificación de reserva...")
+                modificar_reserva(reservas, matriz)
 
-        elif opcion == 4:
-            print("Listado de reservas activas...")
-            lista_reservas_activas(reservas)
+            case 4:
+                print("Listado de reservas activas...")
+                lista_reservas_activas(reservas)
 
-        elif opcion == 9:
-            print("Volviendo al panel de administración...")
-            break
+            case 9:
+                print("Volviendo al panel de administración...")
+                break
 
-        else:
-            print("Opción inválida.")
+            case _:
+                print("Opción inválida.")
