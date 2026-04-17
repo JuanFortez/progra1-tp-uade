@@ -1,3 +1,4 @@
+from functools import reduce
 from ui.index import limpiar_pantalla
 
 def mostrar_estacionamiento(matriz):
@@ -14,18 +15,13 @@ def mostrar_estacionamiento(matriz):
     
     mostrar_placas_ocupadas(matriz)
     mostrar_placas_disponibles(matriz)
-        
 
 def contar_placas_ocupadas(matriz):
     """
     Cuenta y retorna el número de plazas ocupadas en el estacionamiento.
     """
-    contador = 0
-    for fila in matriz:
-        for columna in fila:
-            if columna != "LIBRE":
-                contador = contador + 1
-    return contador
+    matriz_plana = [col for fila in matriz for col in fila]
+    return reduce(lambda acc, col: acc + (1 if col != "LIBRE" else 0), matriz_plana, 0)
 
 def mostrar_placas_ocupadas(matriz):
     """
@@ -38,12 +34,8 @@ def contar_placas_disponibles(matriz):
     """
     Cuenta y retorna el número de plazas libres en el estacionamiento.
     """
-    contador = 0
-    for fila in matriz:
-        for columna in fila:
-            if columna == "LIBRE":
-                contador = contador + 1
-    return contador
+    matriz_plana = [col for fila in matriz for col in fila]
+    return reduce(lambda acc, col: acc + (0 if col != "LIBRE" else 1), matriz_plana, 0)
 
 def mostrar_placas_disponibles(matriz):
     """
