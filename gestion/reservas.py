@@ -127,20 +127,21 @@ def modificar_reserva(reservas, matriz):
 
                 opcion = int(input("Seleccione la modificación a realizar: "))
 
-                if opcion == 1:
-                    nueva_patente = input("Ingrese nueva patente: ").upper()
+                match opcion:
+                    case 1:
+                        nueva_patente = input("Ingrese nueva patente: ").upper()
 
-                elif opcion == 2:
-                    nueva_fila = int(input("Ingrese nueva fila: ")) - 1
-                    nueva_columna = int(input("Ingrese nueva columna: ")) - 1
+                    case 2:
+                        nueva_fila = int(input("Ingrese nueva fila: ")) - 1
+                        nueva_columna = int(input("Ingrese nueva columna: ")) - 1
 
-                elif opcion == 3:
-                    nueva_fecha_inicio = input(
-                        "Ingrese nueva fecha de inicio (AAAA-MM-DD): "
-                    )
+                    case 3:
+                        nueva_fecha_inicio = input(
+                            "Ingrese nueva fecha de inicio (AAAA-MM-DD): "
+                        )
 
-                elif opcion == 4:
-                    nueva_fecha_fin = input("Ingrese nueva fecha de fin (AAAA-MM-DD): ")
+                    case 4:
+                        nueva_fecha_fin = input("Ingrese nueva fecha de fin (AAAA-MM-DD): ")
 
                 if (
                     nueva_fila < 0

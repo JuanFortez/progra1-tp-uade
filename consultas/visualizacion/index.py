@@ -16,10 +16,6 @@ def mostrar_estacionamiento(matriz):
 
     mostrar_placas_ocupadas(matriz)
     mostrar_placas_disponibles(matriz)
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
 
 def contar_placas_ocupadas(matriz):
     """
