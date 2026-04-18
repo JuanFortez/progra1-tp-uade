@@ -1,21 +1,22 @@
+from time import sleep
+
+from consultas.validacion.index import validar_entero
+from consultas.visualizacion.index import mostrar_estacionamiento
 from gestion.index import (
+    buscar_vehiculo,
     crear_estacionamiento,
+    modificar_estado_plaza,
     registrar_ingreso_vehiculo,
     registrar_salida_vehiculo,
-    buscar_vehiculo,
-    modificar_estado_plaza,
 )
 from gestion.reservas import (
-    crear_reserva,
+    buscar_fecha,
     cancelar_reserva,
-    modificar_reserva,
+    crear_reserva,
     lista_reservas_activas,
-    buscar_fecha
+    modificar_reserva,
 )
-from consultas.visualizacion.index import mostrar_estacionamiento
-from consultas.validacion.index import validar_entero
 from ui.index import encabezado_principal, limpiar_pantalla
-from time import sleep
 
 
 def interfaz_inicio():
@@ -85,8 +86,12 @@ def interfaz_admin(matriz, reservas):
         print("  6 - Gestionar reservas")
         print("  9 - Volver\n")
 
-        opcion = int(input("Seleccione una opción: "))
-        
+        opcion = validar_entero("Seleccione una opción: ", 1, 9)
+
+        if opcion in [7, 8]:
+            print("Opción no válida.")
+            continue
+
         match opcion:
             case 1:
                 print("Ingreso de vehiculo...")
@@ -129,8 +134,7 @@ def interfaz_cliente(matriz, reservas):
         print("  1 - Solicitar reserva")
         print("  2 - Salir\n")
 
-        opcion = int(input("Seleccione una opción: "))
-
+        opcion = validar_entero("Seleccione una opción: ", 1, 2)
         if opcion == 1:
             print("Solicitud de reserva...")
             crear_reserva(reservas, matriz)
@@ -160,7 +164,11 @@ def interfaz_reservas_admin(matriz, reservas):
         print("  5 - Buscar reservas por fecha")
         print("  9 - Volver\n")
 
-        opcion = int(input("Seleccione una opción: "))
+        opcion = validar_entero("Seleccione una opción: ", 1, 9)
+
+        if opcion in [6, 7, 8]:
+            print("Opción no válida.")
+            continue
 
         match opcion:
             case 1:
@@ -178,7 +186,7 @@ def interfaz_reservas_admin(matriz, reservas):
             case 4:
                 print("Listado de reservas activas...")
                 lista_reservas_activas(reservas)
-            
+
             case 5:
                 print("Búsqueda de reservas por fecha...")
                 fecha = input("Ingrese la fecha a buscar (AAAA-MM-DD): ")

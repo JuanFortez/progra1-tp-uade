@@ -1,7 +1,8 @@
-from consultas.validacion.index import validar_patente
+from datetime import datetime
+
+from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import limpiar_pantalla
-from datetime import datetime
 
 registros = {}
 
@@ -18,8 +19,8 @@ def crear_estacionamiento():
 
     print("\nIngrese las filas y columnas del estacionamiento: \n")
 
-    filas = int(input("Filas: "))
-    columnas = int(input("Columnas: "))
+    filas = validar_entero("Filas: ", 1)
+    columnas = validar_entero("Columnas: ", 1)
 
     matriz = []
 
@@ -50,12 +51,8 @@ def registrar_ingreso_vehiculo(matriz):
         print("Ese vehículo ya está en el estacionamiento.")
         return
 
-    fila = int(input("Ingrese fila de la plaza: ")) - 1
-    columna = int(input("Ingrese columna de la plaza: ")) - 1
-
-    if fila < 0 or fila >= len(matriz) or columna < 0 or columna >= len(matriz[0]):
-        print("La plaza no existe.")
-        return
+    fila = validar_entero("Ingrese fila de la plaza: ", 1, len(matriz)) - 1
+    columna = validar_entero("Ingrese columna de la plaza: ", 1, len(matriz[0])) - 1
 
     if matriz[fila][columna] != "LIBRE":
         print("La plaza está ocupada.")
@@ -195,12 +192,9 @@ def modificar_estado_plaza(matriz):
     limpiar_pantalla()
 
     print("\nIndique la fila y columna de la plaza a modificar ")
-    fila = int(input("\nIngrese fila de la plaza: ")) - 1
-    columna = int(input("Ingrese columna de la plaza: ")) - 1
 
-    if fila < 0 or fila >= len(matriz) or columna < 0 or columna >= len(matriz[0]):
-        print("La plaza no existe.")
-        return
+    fila = validar_entero("\nIngrese fila de la plaza: ", 1, len(matriz)) - 1
+    columna = validar_entero("Ingrese columna de la plaza: ", 1, len(matriz[0])) - 1
 
     while True:
         print("\nModificaciones:")
@@ -208,7 +202,7 @@ def modificar_estado_plaza(matriz):
         print("  2 - Cambiar estado")
         print("  3 - Volver")
 
-        opcion = int(input("Seleccione la modificación a realizar: "))
+        opcion = validar_entero("Seleccione la modificación a realizar: ", 1, 3)
 
         if opcion == 1:
             nueva_patente = (
@@ -254,5 +248,3 @@ def modificar_estado_plaza(matriz):
 
         elif opcion == 3:
             break
-        else:
-            print("Opción no válida. Intente nuevamente.")

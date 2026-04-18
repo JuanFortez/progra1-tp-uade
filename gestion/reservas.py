@@ -1,5 +1,5 @@
+from consultas.validacion.index import validar_entero, validar_fecha, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
-from consultas.validacion.index import validar_patente, validar_fecha
 from ui.index import limpiar_pantalla
 
 
@@ -41,12 +41,8 @@ def crear_reserva(reservas, matriz):
 
     mostrar_estacionamiento(matriz)
 
-    fila = int(input("Ingrese fila: ")) - 1
-    columna = int(input("Ingrese columna: ")) - 1
-
-    if fila < 0 or fila >= len(matriz) or columna < 0 or columna >= len(matriz[0]):
-        print("La plaza no existe.")
-        return
+    fila = validar_entero("Ingrese fila: ", 1, len(matriz)) - 1
+    columna = validar_entero("Ingrese columna: ", 1, len(matriz[0])) - 1
 
     fecha_inicio = input("Ingrese fecha de inicio (AAAA-MM-DD): ")
 
@@ -82,7 +78,7 @@ def cancelar_reserva(reservas):
     """
     limpiar_pantalla()
 
-    codigo_buscar = int(input("Ingrese el código de la reserva a cancelar: "))
+    codigo_buscar = validar_entero("Ingrese el código de la reserva a cancelar: ", 1)
 
     for reserva in reservas:
         if reserva[0] == codigo_buscar:
@@ -103,7 +99,7 @@ def modificar_reserva(reservas, matriz):
     """
     limpiar_pantalla()
 
-    codigo_buscar = int(input("Ingrese el código de la reserva a modificar: "))
+    codigo_buscar = validar_entero("Ingrese el código de la reserva a modificar: ", 1)
 
     for reserva in reservas:
         if reserva[0] == codigo_buscar:
@@ -125,15 +121,20 @@ def modificar_reserva(reservas, matriz):
                 print("  4 - Cambiar fecha de finalización")
                 print("  5 - Volver")
 
-                opcion = int(input("Seleccione la modificación a realizar: "))
+                opcion = validar_entero("Seleccione la modificación a realizar: ", 1, 5)
 
                 match opcion:
                     case 1:
                         nueva_patente = input("Ingrese nueva patente: ").upper()
 
                     case 2:
-                        nueva_fila = int(input("Ingrese nueva fila: ")) - 1
-                        nueva_columna = int(input("Ingrese nueva columna: ")) - 1
+                        nueva_fila = (
+                            validar_entero("Ingrese nueva fila: ", 1, len(matriz)) - 1
+                        )
+                        nueva_columna = (
+                            validar_entero("Ingrese nueva columna: ", 1, len(matriz[0]))
+                            - 1
+                        )
 
                     case 3:
                         nueva_fecha_inicio = input(
@@ -141,16 +142,9 @@ def modificar_reserva(reservas, matriz):
                         )
 
                     case 4:
-                        nueva_fecha_fin = input("Ingrese nueva fecha de fin (AAAA-MM-DD): ")
-
-                if (
-                    nueva_fila < 0
-                    or nueva_fila >= len(matriz)
-                    or nueva_columna < 0
-                    or nueva_columna >= len(matriz[0])
-                ):
-                    print("La plaza no existe.")
-                    return
+                        nueva_fecha_fin = input(
+                            "Ingrese nueva fecha de fin (AAAA-MM-DD): "
+                        )
 
                 if nueva_fecha_inicio > nueva_fecha_fin:
                     print("La fecha de inicio no puede ser mayor que la fecha de fin.")
@@ -224,19 +218,28 @@ def ordenar_reservas_fechas(reservas):
 
     return reservas_ordenadas
 
+
 def filtrar_por_fecha(reservas, fecha):
     # Devuelve reservas que comienzan en la fecha indicada
     return list(filter(lambda r: r[4] == fecha, reservas))
+
 
 def filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin):
     # Devuelve reservas dentro del rango de fechas
     return list(filter(lambda r: r[4] >= fecha_inicio and r[4] <= fecha_fin, reservas))
 
+
 def filtrar_vehiculo_patente(vehiculos, patente):
     # Busca vehículos que coincidan con la patente
     return list(filter(lambda v: v[0] == patente, vehiculos))
 
+
 def buscar_fecha(reservas, fecha, fecha_inicio, fecha_fin):
-    #Devuelve el rango de fechas de la reserva
-    print(filtrar_por_fecha(reservas,fecha)) 
-    print(filtrar_rango_fechas(reservas,fecha_inicio, fecha_fin)) 
+    # Devuelve el rango de fechas de la reserva
+    print(filtrar_por_fecha(reservas, fecha))
+    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
+    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
+    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
+    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
+    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
+    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
