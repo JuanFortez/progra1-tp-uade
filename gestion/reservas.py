@@ -238,8 +238,3 @@ def buscar_fecha(reservas, fecha, fecha_inicio, fecha_fin):
     # Devuelve el rango de fechas de la reserva
     print(filtrar_por_fecha(reservas, fecha))
     print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
-    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
-    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
-    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
-    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
-    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
