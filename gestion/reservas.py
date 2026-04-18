@@ -223,3 +223,20 @@ def ordenar_reservas_fechas(reservas):
                 reservas_ordenadas[j] = aux
 
     return reservas_ordenadas
+
+def filtrar_por_fecha(reservas, fecha):
+    # Devuelve reservas que comienzan en la fecha indicada
+    return list(filter(lambda r: r[4] == fecha, reservas))
+
+def filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin):
+    # Devuelve reservas dentro del rango de fechas
+    return list(filter(lambda r: r[4] >= fecha_inicio and r[4] <= fecha_fin, reservas))
+
+def filtrar_vehiculo_patente(vehiculos, patente):
+    # Busca vehículos que coincidan con la patente
+    return list(filter(lambda v: v[0] == patente, vehiculos))
+
+def buscar_fecha(reservas, fecha, fecha_inicio, fecha_fin):
+    #Devuelve el rango de fechas de la reserva
+    print(filtrar_por_fecha(reservas,fecha)) 
+    print(filtrar_rango_fechas(reservas,fecha_inicio, fecha_fin)) 
