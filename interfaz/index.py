@@ -10,6 +10,7 @@ from gestion.reservas import (
     cancelar_reserva,
     modificar_reserva,
     lista_reservas_activas,
+    buscar_fecha
 )
 from consultas.visualizacion.index import mostrar_estacionamiento
 from consultas.validacion.index import validar_entero
@@ -156,6 +157,7 @@ def interfaz_reservas_admin(matriz, reservas):
         print("  2 - Cancelar reserva")
         print("  3 - Modificar reserva")
         print("  4 - Ver reservas activas")
+        print("  5 - Buscar reservas por fecha")
         print("  9 - Volver\n")
 
         opcion = int(input("Seleccione una opción: "))
@@ -176,6 +178,13 @@ def interfaz_reservas_admin(matriz, reservas):
             case 4:
                 print("Listado de reservas activas...")
                 lista_reservas_activas(reservas)
+            
+            case 5:
+                print("Búsqueda de reservas por fecha...")
+                fecha = input("Ingrese la fecha a buscar (AAAA-MM-DD): ")
+                fecha_inicio = input("Ingrese fecha de inicio (AAAA-MM-DD): ")
+                fecha_fin = input("Ingrese fecha de fin (AAAA-MM-DD): ")
+                buscar_fecha(reservas, fecha, fecha_inicio, fecha_fin)
 
             case 9:
                 print("Volviendo al panel de administración...")
