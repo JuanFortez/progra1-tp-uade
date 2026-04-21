@@ -7,13 +7,58 @@ def validar_patente(patente):
     return re.match(patron_viejo, patente) or re.match(patron_nuevo, patente)
 
 
+const_meses = {
+    1: 31,
+    2: 28,
+    3: 31,
+    4: 30,
+    5: 31,
+    6: 30,
+    7: 31,
+    8: 31,
+    9: 30,
+    10: 31,
+    11: 30,
+    12: 31,
+}
+
+
+def año_bisiesto(anio):
+    return (anio % 4 == 0 and anio % 100 != 0) or (anio % 400 == 0)
+
+
+def dia_valido(dia, mes, anio):
+    meses = const_meses.copy()
+
+    if año_bisiesto(anio):
+        meses[2] = 29
+
+    return 1 <= dia <= meses[mes]
+
+
 def validar_fecha(fecha):
     """
     Valida que la fecha tenga formato AAAA-MM-DD.
     Retorna True si es válida, False si no.
     """
     patron = r"^\d{4}-\d{2}-\d{2}$"
-    return re.match(patron, fecha) is not None
+
+    if re.match(patron, fecha) is None:
+        return False
+
+    anio, mes, dia = fecha.split("-")
+
+    anio = int(anio)
+    mes = int(mes)
+    dia = int(dia)
+
+    if mes < 1 or mes > 12:
+        return False
+
+    if not dia_valido(dia, mes, anio):
+        return False
+
+    return True
 
 
 def validar_entero(mensaje, minimo=None, maximo=None):
