@@ -24,10 +24,16 @@ const_meses = {
 
 
 def año_bisiesto(anio):
+    """
+    Devuelve si un año es bisiesto o no.
+    """
     return (anio % 4 == 0 and anio % 100 != 0) or (anio % 400 == 0)
 
 
 def dia_valido(dia, mes, anio):
+    """
+    Devuelve la cantidad de dias por mes.
+    """
     meses = const_meses.copy()
 
     if año_bisiesto(anio):

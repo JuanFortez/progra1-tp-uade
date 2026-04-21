@@ -224,31 +224,31 @@ def modificar_estado_plaza(matriz):
                 print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
                 return
 
+            if nueva_patente in registros and nueva_patente != estado_anterior:
+                print("Esa patente ya está registrada en el estacionamiento.")
+                continue
+
             if estado_anterior in registros:
                 del registros[estado_anterior]
 
-            if nueva_patente:
-                if nueva_patente in registros:
-                    print("Esa patente ya está registrada en el estacionamiento.")
-                    continue
-
-                matriz[fila][columna] = nueva_patente
-                registros[nueva_patente] = datetime.now()
-                print(f"Patente cambiada a {nueva_patente}. Ingreso registrado.")
+            matriz[fila][columna] = nueva_patente
+            registros[nueva_patente] = datetime.now()
+            print(f"Patente cambiada a {nueva_patente}. Ingreso registrado.")
 
         elif opcion == 2:
             nuevo_estado = (
-                input("Ingrese el nuevo estado (LIBRE, OCUPADO, etc.): ")
-                .upper()
-                .strip()
+                input("Ingrese el nuevo estado (LIBRE u OCUPADO): ").upper().strip()
             )
-            if nuevo_estado:
-                if nuevo_estado == "LIBRE" and matriz[fila][columna] in registros:
-                    del registros[matriz[fila][columna]]
-                matriz[fila][columna] = nuevo_estado
-                print(f"Estado cambiado a {nuevo_estado}.")
-            else:
-                print("Estado no válido.")
+
+            if nuevo_estado not in ["LIBRE", "OCUPADO"]:
+                print("Estado no válido. Solo se permite LIBRE u OCUPADO.")
+                continue
+
+            if matriz[fila][columna] in registros:
+                del registros[matriz[fila][columna]]
+
+            matriz[fila][columna] = nuevo_estado
+            print(f"Estado cambiado a {nuevo_estado}.")
 
         elif opcion == 3:
             break

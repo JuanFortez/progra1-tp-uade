@@ -33,7 +33,7 @@ def crear_reserva(reservas, matriz):
     """
     limpiar_pantalla()
 
-    patente = input("Ingrese la patente (ej: ABC123 o AB123CD): "   ).upper()
+    patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper()
 
     if not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
@@ -43,6 +43,10 @@ def crear_reserva(reservas, matriz):
 
     fila = validar_entero("Ingrese fila: ", 1, len(matriz)) - 1
     columna = validar_entero("Ingrese columna: ", 1, len(matriz[0])) - 1
+
+    if matriz[fila][columna] != "LIBRE":
+        print("La plaza está ocupada actualmente.")
+        return
 
     fecha_inicio = input("Ingrese fecha de inicio (AAAA-MM-DD): ")
 
@@ -262,13 +266,13 @@ def buscar_fecha(reservas):
 
     opcion = validar_entero("Seleccione una opción: ", 1, 3)
 
-    if opcion == 0:
+    if opcion == 1:
+        buscar_por_fecha_exacta(reservas)
+    elif opcion == 2:
+        buscar_por_rango_fechas(reservas)
+    elif opcion == 3:
         return
 
-    elif opcion == 1:
-        buscar_por_fecha_exacta(reservas)
-    else:
-        buscar_por_rango_fechas(reservas)
 
 def buscar_por_fecha_exacta(reservas):
     """
@@ -283,6 +287,7 @@ def buscar_por_fecha_exacta(reservas):
 
     reservas_filtradas = filtrar_por_fecha(reservas, fecha)
     lista_reservas_activas(reservas_filtradas)
+
 
 def buscar_por_rango_fechas(reservas):
     """
@@ -306,4 +311,3 @@ def buscar_por_rango_fechas(reservas):
 
     reservas_filtradas = filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin)
     lista_reservas_activas(reservas_filtradas)
-
