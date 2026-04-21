@@ -260,7 +260,7 @@ def buscar_fecha(reservas):
     print("2 - Rango de fechas")
     print("3 - Volver al menú anterior")
 
-    opcion = validar_entero("Seleccione una opción: ", 0, 2)
+    opcion = validar_entero("Seleccione una opción: ", 1, 3)
 
     if opcion == 0:
         return
