@@ -258,7 +258,7 @@ def buscar_fecha(reservas):
     print("\nTipo de búsqueda:")
     print("1 - Fecha exacta")
     print("2 - Rango de fechas")
-    print("0 - Volver al menú anterior")
+    print("3 - Volver al menú anterior")
 
     opcion = validar_entero("Seleccione una opción: ", 0, 2)
 
