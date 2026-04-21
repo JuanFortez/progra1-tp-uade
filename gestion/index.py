@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import limpiar_pantalla
@@ -211,11 +210,19 @@ def modificar_estado_plaza(matriz):
                 .strip()
             )
 
+            estado_anterior = matriz[fila][columna]
+
+            if nueva_patente == "":
+                if estado_anterior in registros:
+                    del registros[estado_anterior]
+
+                matriz[fila][columna] = "LIBRE"
+                print("Plaza liberada.")
+                continue
+
             if not validar_patente(nueva_patente):
                 print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
                 return
-
-            estado_anterior = matriz[fila][columna]
 
             if estado_anterior in registros:
                 del registros[estado_anterior]
@@ -228,9 +235,6 @@ def modificar_estado_plaza(matriz):
                 matriz[fila][columna] = nueva_patente
                 registros[nueva_patente] = datetime.now()
                 print(f"Patente cambiada a {nueva_patente}. Ingreso registrado.")
-            else:
-                matriz[fila][columna] = "LIBRE"
-                print("Plaza liberada.")
 
         elif opcion == 2:
             nuevo_estado = (

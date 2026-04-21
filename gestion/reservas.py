@@ -127,6 +127,9 @@ def modificar_reserva(reservas, matriz):
                     case 1:
                         nueva_patente = input("Ingrese nueva patente: ").upper()
 
+                        if not validar_patente(nueva_patente):
+                            print("Patente inválida.")
+                            continue
                     case 2:
                         nueva_fila = (
                             validar_entero("Ingrese nueva fila: ", 1, len(matriz)) - 1
@@ -139,16 +142,24 @@ def modificar_reserva(reservas, matriz):
                     case 3:
                         nueva_fecha_inicio = input(
                             "Ingrese nueva fecha de inicio (AAAA-MM-DD): "
-                        )
+                        ).strip()
+
+                        if not validar_fecha(nueva_fecha_inicio):
+                            print("Fecha inválida.")
+                            continue
 
                     case 4:
                         nueva_fecha_fin = input(
                             "Ingrese nueva fecha de fin (AAAA-MM-DD): "
-                        )
+                        ).strip()
+
+                        if not validar_fecha(nueva_fecha_fin):
+                            print("Fecha inválida.")
+                            continue
 
                 if nueva_fecha_inicio > nueva_fecha_fin:
                     print("La fecha de inicio no puede ser mayor que la fecha de fin.")
-                    return
+                    continue
 
                 disponible = verificar_disponibilidad(
                     reservas,
@@ -186,7 +197,7 @@ def lista_reservas_activas(reservas):
     print("\nLISTA DE RESERVAS ACTIVAS")
     print("-" * 40)
 
-    for reserva in reservas:
+    for reserva in reservas_ordenadas:
         if reserva[6] == "ACTIVA":
             hay_activas = True
             print("Código:", reserva[0])
