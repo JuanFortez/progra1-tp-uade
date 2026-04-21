@@ -33,7 +33,7 @@ def crear_reserva(reservas, matriz):
     """
     limpiar_pantalla()
 
-    patente = input("Ingrese la patente: ").upper()
+    patente = input("Ingrese la patente (ej: ABC123 o AB123CD): "   ).upper()
 
     if not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
@@ -231,21 +231,79 @@ def ordenar_reservas_fechas(reservas):
 
 
 def filtrar_por_fecha(reservas, fecha):
-    # Devuelve reservas que comienzan en la fecha indicada
+    """
+    Devuelve reservas que comienzan en la fecha indicada
+    """
     return list(filter(lambda r: r[4] == fecha, reservas))
 
 
 def filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin):
-    # Devuelve reservas dentro del rango de fechas
+    """
+    Devuelve reservas dentro del rango de fechas
+    """
     return list(filter(lambda r: r[4] >= fecha_inicio and r[4] <= fecha_fin, reservas))
 
 
 def filtrar_vehiculo_patente(vehiculos, patente):
-    # Busca vehículos que coincidan con la patente
+    """
+    Busca vehículos que coincidan con la patente
+    """
     return list(filter(lambda v: v[0] == patente, vehiculos))
 
 
-def buscar_fecha(reservas, fecha, fecha_inicio, fecha_fin):
-    # Devuelve el rango de fechas de la reserva
-    print(filtrar_por_fecha(reservas, fecha))
-    print(filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin))
+def buscar_fecha(reservas):
+    """
+    Permite elegir el tipo de búsqueda o volver al menú anterior
+    """
+    print("\nTipo de búsqueda:")
+    print("1 - Fecha exacta")
+    print("2 - Rango de fechas")
+    print("0 - Volver al menú anterior")
+
+    opcion = validar_entero("Seleccione una opción: ", 0, 2)
+
+    if opcion == 0:
+        return
+
+    elif opcion == 1:
+        buscar_por_fecha_exacta(reservas)
+    else:
+        buscar_por_rango_fechas(reservas)
+
+def buscar_por_fecha_exacta(reservas):
+    """
+    Busca reservas que coincidan con una fecha exacta
+    """
+
+    fecha = input("Ingrese la fecha (AAAA-MM-DD): ")
+
+    if validar_fecha(fecha) == False:
+        print("Fecha inválida.")
+        return
+
+    reservas_filtradas = filtrar_por_fecha(reservas, fecha)
+    lista_reservas_activas(reservas_filtradas)
+
+def buscar_por_rango_fechas(reservas):
+    """
+    Busca reservas cuya fecha de inicio esté dentro de un rango
+    """
+
+    fecha_inicio = input("Ingrese fecha inicio (AAAA-MM-DD): ")
+    fecha_fin = input("Ingrese fecha fin (AAAA-MM-DD): ")
+
+    if validar_fecha(fecha_inicio) == False:
+        print("Fecha de inicio inválida.")
+        return
+
+    if validar_fecha(fecha_fin) == False:
+        print("Fecha de fin inválida.")
+        return
+
+    if fecha_inicio > fecha_fin:
+        print("La fecha de inicio no puede ser mayor que la fecha de fin.")
+        return
+
+    reservas_filtradas = filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin)
+    lista_reservas_activas(reservas_filtradas)
+
