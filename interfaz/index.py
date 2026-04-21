@@ -189,10 +189,7 @@ def interfaz_reservas_admin(matriz, reservas):
 
             case 5:
                 print("Búsqueda de reservas por fecha...")
-                fecha = input("Ingrese la fecha a buscar (AAAA-MM-DD): ")
-                fecha_inicio = input("Ingrese fecha de inicio (AAAA-MM-DD): ")
-                fecha_fin = input("Ingrese fecha de fin (AAAA-MM-DD): ")
-                buscar_fecha(reservas, fecha, fecha_inicio, fecha_fin)
+                buscar_fecha(reservas)
 
             case 9:
                 print("Volviendo al panel de administración...")
