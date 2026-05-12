@@ -5,6 +5,7 @@ from ui.index import limpiar_pantalla
 
 registros = {}
 
+tipos_validos = {"AUTO", "MOTO", "CAMIONETA"}
 
 def crear_estacionamiento():
     """
@@ -57,10 +58,22 @@ def registrar_ingreso_vehiculo(matriz):
         print("La plaza está ocupada.")
         return
 
-    matriz[fila][columna] = patente
-    registros[patente] = datetime.now()
+    tipo = input("\nIngrese el tipo de vehículo (AUTO, MOTO O CAMIONETA): ").upper().strip()
 
-    print(f"\nIngreso registrado. Hora: {registros[patente].strftime('%H:%M:%S')}\n")
+    while tipo not in tipos_validos:
+        print("Tipo inválido. Opciones válidas: AUTO, MOTO, CAMIONETA")
+        tipo = input("\nIngrese el tipo de vehículo (AUTO, MOTO o CAMIONETA): ").upper().strip()
+
+    matriz[fila][columna] = patente
+    registros[patente] = {
+        "patente": patente,
+        "plaza": (fila, columna),
+        "hora_ingreso": datetime.now(),
+        "tipo": tipo,
+        "estado": "OCUPADO"
+    }
+
+    print(f"\nIngreso registrado. Hora: {registros[patente]["hora_ingreso"].strftime('%H:%M:%S')}\n")
 
 
 def calcular_tiempo_estacionado(patente):
@@ -76,7 +89,7 @@ def calcular_tiempo_estacionado(patente):
     if patente not in registros:
         return None
 
-    hora_ingreso = registros[patente]
+    hora_ingreso = registros[patente]["hora_ingreso"]
     hora_actual = datetime.now()
     tiempo = hora_actual - hora_ingreso
 
@@ -152,7 +165,7 @@ def registrar_salida_vehiculo(matriz):
     segundos = int(tiempo.total_seconds() % 60)
 
     print(f"Patente:            {patente}")
-    print(f"Hora de ingreso:    {registros[patente].strftime('%H:%M:%S')}")
+    print(f"Hora de ingreso:    {registros[patente]["hora_ingreso"].strftime('%H:%M:%S')}")
     print(f"Hora de salida:     {datetime.now().strftime('%H:%M:%S')}")
     print(f"Tiempo estacionado: {horas}h {minutos}m {segundos}s")
     print(f"Tarifa a cobrar:    ${tarifa:.2f}")
@@ -178,6 +191,9 @@ def buscar_vehiculo(matriz):
         for j in range(len(matriz[i])):
             if matriz[i][j] == patente:
                 print(f"Vehículo encontrado en fila {i + 1}, columna {j + 1}.")
+                print("\nHora de ingreso del vehículo: ", registros[patente]["hora_ingreso"])
+                print("\nTipo de vehículo: ", registros[patente]["tipo"])
+                print("\nEstado del vehículo: ", registros[patente]["estado"])
                 return
 
     print("El vehículo no se encuentra en el estacionamiento.")
@@ -232,7 +248,13 @@ def modificar_estado_plaza(matriz):
                 del registros[estado_anterior]
 
             matriz[fila][columna] = nueva_patente
-            registros[nueva_patente] = datetime.now()
+            registros[nueva_patente] = {
+                "patente": nueva_patente,
+                "plaza": (fila,columna),
+                "hora_ingreso": datetime.now(),
+                "tipo": tipo,
+                "estado": "OCUPADO"
+            }
             print(f"Patente cambiada a {nueva_patente}. Ingreso registrado.")
 
         elif opcion == 2:
