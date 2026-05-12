@@ -30,6 +30,7 @@ def interfaz_inicio():
     print("🚗" * 19)
 
     reservas = []
+    registros = {}
     matriz = None
 
     while True:
@@ -49,7 +50,7 @@ def interfaz_inicio():
                 if matriz is None:
                     matriz = crear_estacionamiento()
 
-                interfaz_admin(matriz, reservas)
+                interfaz_admin(matriz, reservas, registros)
 
             case 2:
                 if matriz is None:
@@ -65,7 +66,7 @@ def interfaz_inicio():
                 break
 
 
-def interfaz_admin(matriz, reservas):
+def interfaz_admin(matriz, reservas, registros):
     """
     Muestra el panel de administración del estacionamiento.
     Permite al administrador registrar ingresos y salidas de vehículos, ver la ocupación actual y buscar vehículos.
@@ -95,11 +96,11 @@ def interfaz_admin(matriz, reservas):
         match opcion:
             case 1:
                 print("Ingreso de vehiculo...")
-                registrar_ingreso_vehiculo(matriz)
+                registrar_ingreso_vehiculo(matriz, registros)
 
             case 2:
                 print("Salida de vehiculo...")
-                registrar_salida_vehiculo(matriz)
+                registrar_salida_vehiculo(matriz, registros)
 
             case 3:
                 print("Estado de estacionamiento...")
@@ -107,10 +108,10 @@ def interfaz_admin(matriz, reservas):
 
             case 4:
                 print("Búsqueda de vehículo...")
-                buscar_vehiculo(matriz)
+                buscar_vehiculo(matriz, registros)
 
             case 5:
-                modificar_estado_plaza(matriz)
+                modificar_estado_plaza(matriz, registros)
 
             case 6:
                 interfaz_reservas_admin(matriz, reservas)
