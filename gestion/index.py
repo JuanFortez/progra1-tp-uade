@@ -191,6 +191,9 @@ def buscar_vehiculo(matriz):
         for j in range(len(matriz[i])):
             if matriz[i][j] == patente:
                 print(f"Vehículo encontrado en fila {i + 1}, columna {j + 1}.")
+                print("\nHora de ingreso del vehículo: ", registros[patente]["hora_ingreso"])
+                print("\nTipo de vehículo: ", registros[patente]["tipo"])
+                print("\nEstado del vehículo: ", registros[patente]["estado"])
                 return
 
     print("El vehículo no se encuentra en el estacionamiento.")
