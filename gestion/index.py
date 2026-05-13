@@ -3,8 +3,6 @@ from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import limpiar_pantalla
 
-registros = {}
-
 tipos_validos = {"AUTO", "MOTO", "CAMIONETA"}
 
 def crear_estacionamiento():
@@ -234,6 +232,13 @@ def modificar_estado_plaza(matriz, registros):
                     .upper()
                     .strip()
                 )
+                
+                if nueva_patente == "":
+                    if patente_actual in registros:
+                        del registros[patente_actual]
+                    matriz[fila][columna] = "LIBRE"
+                    print("Plaza liberada correctamente")
+                    return
                 
                 if not validar_patente(nueva_patente):
                     print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
