@@ -4,7 +4,7 @@ from ui.index import limpiar_pantalla
 
 
 def verificar_disponibilidad(
-    reservas, fila, columna, fecha_inicio, fecha_fin, codigo_excluir=-1
+    reservas, fila, columna, fecha_ingreso, fecha_salida, codigo_excluir=-1
 ):
     """
     Verifica si una plaza está disponible entre dos fechas.
@@ -14,13 +14,13 @@ def verificar_disponibilidad(
         if reserva["codigo"] != codigo_excluir:
             if reserva["estado"] == "ACTIVA":
                 if reserva["fila"] == fila and reserva["columna"] == columna:
-                    if not (fecha_fin <  reserva["fecha_ingreso"] or fecha_inicio > reserva["fecha_salida"]):
+                    if not (fecha_salida <  reserva["fecha_ingreso"] or fecha_ingreso > reserva["fecha_salida"]):
                         return False
 
     return True
 
 
-def crear_reserva(reservas, matriz):
+def crear_reserva_administrador(reservas, matriz):
     """
     Crea una nueva reserva si la plaza está disponible.
     """
@@ -86,6 +86,51 @@ def crear_reserva(reservas, matriz):
     else:
         print("La plaza no está disponible en esas fechas.")
 
+def crear_reserva_cliente(reservas_clientes):
+    """
+    Crea una nueva reserva de cliente si la plaza está disponible.
+    """
+    limpiar_pantalla()
+
+    patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper()
+
+    if not validar_patente(patente):
+        print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
+        return
+    
+    nombre = input("Ingrese nombre del titular: ").strip()
+    dni = input("Ingrese DNI del titular: ").strip()
+    numero_telefono = input("Ingrese número de teléfono: ").strip()
+    tipo_vehiculo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").lower()
+    
+    fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
+
+    if not validar_fecha(fecha_ingreso):
+        print("Fecha inválida. Formato esperado: AAAA-MM-DD")
+        return
+    
+    fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
+
+    if not validar_fecha(fecha_salida):
+        print("Fecha inválida. Formato esperado: AAAA-MM-DD")
+        return
+
+    if fecha_ingreso > fecha_salida:
+        print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
+        return
+    
+    reserva = {
+        "patente": patente,
+        "nombre": nombre,
+        "dni": dni,
+        "numero_telefono": numero_telefono,
+        "fecha_ingreso": fecha_ingreso,
+        "fecha_salida": fecha_salida,
+        "tipo_vehiculo": tipo_vehiculo,
+        "estado": "ACTIVA"
+        }
+    reservas_clientes.append(reserva)
+    print("Reserva creada correctamente.")
 
 def cancelar_reserva(reservas):
     """
@@ -247,6 +292,33 @@ def lista_reservas_activas(reservas):
     if not hay_activas:
         print("No hay reservas activas.")
 
+def lista_reservas_clientes(reservas):
+    """
+    Muestra todas las reservas activas.
+    """
+    limpiar_pantalla()
+    hay_activas = False
+    
+    reservas_ordenadas = ordenar_reservas_fechas(reservas)
+
+    print("\nLISTA DE RESERVAS DE CLIENTES")
+    print("-" * 40)
+
+    for reserva in reservas_ordenadas:
+        if reserva['estado'] == "ACTIVA":
+            hay_activas = True
+            print("Patente:",               reserva["patente"])
+            print("Nombre:",                reserva["nombre"])
+            print("DNI:",                   reserva["dni"])
+            print("Teléfono:",              reserva["numero_telefono"])
+            print("Tipo de vehículo:",      reserva["tipo_vehiculo"])
+            print("Fecha de ingreso:",      reserva["fecha_ingreso"])
+            print("Fecha de salida:",       reserva["fecha_salida"])
+            print("Estado:",                reserva["estado"])
+            print("-" * 40)
+
+    if not hay_activas:
+        print("No hay reservas activas.")
 
 def ordenar_reservas_fechas(reservas):
     """
@@ -272,11 +344,11 @@ def filtrar_por_fecha(reservas, fecha):
     return list(filter(lambda r: r[4] == fecha, reservas))
 
 
-def filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin):
+def filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida):
     """
     Devuelve reservas dentro del rango de fechas
     """
-    return list(filter(lambda r: r[4] >= fecha_inicio and r[4] <= fecha_fin, reservas))
+    return list(filter(lambda r: r[4] >= fecha_ingreso and r[4] <= fecha_salida, reservas))
 
 
 def filtrar_vehiculo_patente(vehiculos, patente):
@@ -325,20 +397,20 @@ def buscar_por_rango_fechas(reservas):
     Busca reservas cuya fecha de inicio esté dentro de un rango
     """
 
-    fecha_inicio = input("Ingrese fecha inicio (AAAA-MM-DD): ")
-    fecha_fin = input("Ingrese fecha fin (AAAA-MM-DD): ")
+    fecha_ingreso = input("Ingrese fecha inicio (AAAA-MM-DD): ")
+    fecha_salida = input("Ingrese fecha fin (AAAA-MM-DD): ")
 
-    if validar_fecha(fecha_inicio) == False:
+    if validar_fecha(fecha_ingreso) == False:
         print("Fecha de inicio inválida.")
         return
 
-    if validar_fecha(fecha_fin) == False:
+    if validar_fecha(fecha_salida) == False:
         print("Fecha de fin inválida.")
         return
 
-    if fecha_inicio > fecha_fin:
+    if fecha_ingreso > fecha_salida:
         print("La fecha de inicio no puede ser mayor que la fecha de fin.")
         return
 
-    reservas_filtradas = filtrar_rango_fechas(reservas, fecha_inicio, fecha_fin)
+    reservas_filtradas = filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida)
     lista_reservas_activas(reservas_filtradas)

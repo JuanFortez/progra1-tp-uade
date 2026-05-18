@@ -1,26 +1,34 @@
 import re
-
+from constantes.index import PREFIJOS_PREFIJOS, MESES
 
 def validar_patente(patente):
     patron_viejo = r"^[A-Z]{3}\d{3}$"  # ABC123
     patron_nuevo = r"^[A-Z]{2}\d{3}[A-Z]{2}$"  # AB123CD
     return re.match(patron_viejo, patente) or re.match(patron_nuevo, patente)
 
+def validar_telefono(numero):
+    """
+    Valida números argentinos:
+    - Solo dígitos
+    - Sin +54
+    - Sin 15
+    - Prefijo válido
+    """
 
-const_meses = {
-    1: 31,
-    2: 28,
-    3: 31,
-    4: 30,
-    5: 31,
-    6: 30,
-    7: 31,
-    8: 31,
-    9: 30,
-    10: 31,
-    11: 30,
-    12: 31,
-}
+    prefijos = "|".join(sorted(PREFIJOS_PREFIJOS, key=len, reverse=True))
+
+    patron = rf"^({prefijos})(?!15)\d{{6,8}}$"
+
+    return re.match(patron, numero.strip()) is not None
+
+def validar_dni(dni):
+    '''
+    Valida DNI formato argentino
+    - Solo números
+    - Permite puntos
+    - Permite formato viejo de 7 dígitos
+    '''
+    return re.match(r'^\d{7,8}$', dni.replace('.', '').strip())
 
 
 def año_bisiesto(anio):
@@ -34,7 +42,7 @@ def dia_valido(dia, mes, anio):
     """
     Devuelve la cantidad de dias por mes.
     """
-    meses = const_meses.copy()
+    meses = MESES.copy()
 
     if año_bisiesto(anio):
         meses[2] = 29
