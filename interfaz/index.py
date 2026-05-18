@@ -10,6 +10,7 @@ from gestion.index import (
     registrar_salida_vehiculo,
 )
 from gestion.reservas import (
+    asignar_plaza,
     buscar_fecha,
     cancelar_reserva,
     crear_reserva,
@@ -161,13 +162,14 @@ def interfaz_reservas_admin(matriz, reservas):
         print("\n  1 - Crear reserva")
         print("  2 - Cancelar reserva")
         print("  3 - Modificar reserva")
-        print("  4 - Ver reservas activas")
+        print("  4 - Ver reservas")
         print("  5 - Buscar reservas por fecha")
+        print("  6 - Asignar plaza")
         print("  9 - Volver\n")
 
         opcion = validar_entero("Seleccione una opción: ", 1, 9)
 
-        if opcion in [6, 7, 8]:
+        if opcion in [7, 8]:
             print("Opción no válida.")
             continue
 
@@ -178,7 +180,7 @@ def interfaz_reservas_admin(matriz, reservas):
 
             case 2:
                 print("Cancelación de reserva...")
-                cancelar_reserva(reservas)
+                cancelar_reserva(reservas, matriz)
 
             case 3:
                 print("Modificación de reserva...")
@@ -191,6 +193,10 @@ def interfaz_reservas_admin(matriz, reservas):
             case 5:
                 print("Búsqueda de reservas por fecha...")
                 buscar_fecha(reservas)
+
+            case 6:
+                print("Asignacion de plaza...")
+                asignar_plaza(reservas, matriz)
 
             case 9:
                 print("Volviendo al panel de administración...")
