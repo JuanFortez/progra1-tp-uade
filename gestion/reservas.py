@@ -27,28 +27,6 @@ def crear_reserva_administrador(reservas, matriz):
 
     patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper()
 
-<<<<<<< HEAD
-    if not validar_patente(patente):
-        print("\nPatente invalida. Formato esperado: ABC123 o AB123CD")
-        return
-
-    nombre = input("Ingrese nombre del titular: ").strip()
-    dni = input("Ingrese DNI del titular: ").strip()
-    numero_telefono = input("Ingrese numero de telefono: ").strip()
-    tipo_vehiculo = input("Ingrese tipo de vehiculo (auto, moto, camioneta): ").lower()
-
-    fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
-
-    if not validar_fecha(fecha_ingreso):
-        print("Fecha invalida. Formato esperado: AAAA-MM-DD")
-        return
-
-    fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
-
-    if not validar_fecha(fecha_salida):
-        print("Fecha invalida. Formato esperado: AAAA-MM-DD")
-        return
-=======
     while not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
         patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper()
@@ -87,7 +65,6 @@ def crear_reserva_administrador(reservas, matriz):
     while not validar_fecha(fecha_salida):
         print("Fecha inválida. Formato esperado: AAAA-MM-DD")
         fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
->>>>>>> develop
 
     if fecha_ingreso > fecha_salida:
         print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
