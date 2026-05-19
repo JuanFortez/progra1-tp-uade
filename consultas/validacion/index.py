@@ -1,5 +1,5 @@
 import re
-from constantes.index import PREFIJOS_PREFIJOS, MESES
+from consultas.constantes.index import PREFIJOS_PREFIJOS, MESES
 
 def validar_patente(patente):
     patron_viejo = r"^[A-Z]{3}\d{3}$"  # ABC123
