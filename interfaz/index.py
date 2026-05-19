@@ -184,7 +184,7 @@ def interfaz_reservas_admin(matriz, reservas, reservas_clientes):
 
             case 2:
                 print("Cancelación de reserva...")
-                cancelar_reserva(reservas, matriz)
+                cancelar_reserva(reservas)
 
             case 3:
                 print("Modificación de reserva...")
