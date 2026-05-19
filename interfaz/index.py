@@ -165,12 +165,13 @@ def interfaz_reservas_admin(matriz, reservas, reservas_clientes):
         print("  2 - Cancelar reserva")
         print("  3 - Modificar reserva")
         print("  4 - Ver reservas activas")
-        print("  5 - Buscar reservas por fecha")
+        print("  5 - Ver reservas de clientes")
+        print("  6 - Buscar reservas por fecha")
         print("  9 - Volver\n")
 
         opcion = validar_entero("Seleccione una opción: ", 1, 9)
 
-        if opcion in [6, 7, 8]:
+        if opcion in [7, 8]:
             print("Opción no válida.")
             continue
 
