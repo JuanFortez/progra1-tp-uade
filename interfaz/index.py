@@ -165,9 +165,15 @@ def interfaz_reservas_admin(matriz, reservas, reservas_clientes):
         print("\n  1 - Crear reserva")
         print("  2 - Cancelar reserva")
         print("  3 - Modificar reserva")
+<<<<<<< HEAD
         print("  4 - Ver reservas")
         print("  5 - Buscar reservas por fecha")
         print("  6 - Asignar plaza")
+=======
+        print("  4 - Ver reservas activas")
+        print("  5 - Ver reservas de clientes")
+        print("  6 - Buscar reservas por fecha")
+>>>>>>> develop
         print("  9 - Volver\n")
 
         opcion = validar_entero("Seleccione una opción: ", 1, 9)

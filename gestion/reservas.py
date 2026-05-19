@@ -1,4 +1,4 @@
-from consultas.validacion.index import validar_entero, validar_fecha, validar_patente
+from consultas.validacion.index import validar_entero, validar_fecha, validar_patente, validar_dni, validar_telefono
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import limpiar_pantalla
 
@@ -27,6 +27,7 @@ def crear_reserva_administrador(reservas, matriz):
 
     patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper()
 
+<<<<<<< HEAD
     if not validar_patente(patente):
         print("\nPatente invalida. Formato esperado: ABC123 o AB123CD")
         return
@@ -47,6 +48,46 @@ def crear_reserva_administrador(reservas, matriz):
     if not validar_fecha(fecha_salida):
         print("Fecha invalida. Formato esperado: AAAA-MM-DD")
         return
+=======
+    while not validar_patente(patente):
+        print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
+        patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper()
+    
+    nombre = input("Ingrese nombre del titular: ").strip()
+    dni = input("Ingrese DNI del titular: ").strip()
+    
+    while not validar_dni(dni):
+        print("\nDNI inválido. Formato esperado: 45873620 o 45.873.620\n")
+        dni = input("Ingrese DNI del titular: ").strip()
+    
+    numero_telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
+
+    while not validar_telefono(numero_telefono):
+        print("\nNúmero de teléfono inválido.\n")
+    
+    tipo_vehiculo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").lower()
+
+    mostrar_estacionamiento(matriz)
+
+    fila = validar_entero("Ingrese fila: ", 1, len(matriz)) - 1
+    columna = validar_entero("Ingrese columna: ", 1, len(matriz[0])) - 1
+
+    if matriz[fila][columna] != "LIBRE":
+        print("La plaza está ocupada actualmente.")
+        return
+
+    fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
+
+    while not validar_fecha(fecha_ingreso):
+        print("Fecha inválida. Formato esperado: AAAA-MM-DD")
+        fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
+    
+    fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
+
+    while not validar_fecha(fecha_salida):
+        print("Fecha inválida. Formato esperado: AAAA-MM-DD")
+        fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
+>>>>>>> develop
 
     if fecha_ingreso > fecha_salida:
         print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
@@ -84,7 +125,16 @@ def crear_reserva_cliente(reservas_clientes):
     
     nombre = input("Ingrese nombre del titular: ").strip()
     dni = input("Ingrese DNI del titular: ").strip()
+    
+    while not validar_dni(dni):
+        print("\nDNI inválido. Formato esperado: 45873620 o 45.873.620\n")
+        dni = input("Ingrese DNI del titular: ").strip()
+    
     numero_telefono = input("Ingrese número de teléfono: ").strip()
+    
+    while not validar_telefono(numero_telefono):
+        print("\nNúmero de teléfono inválido.\n")
+    
     tipo_vehiculo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").lower()
     
     fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
