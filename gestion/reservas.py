@@ -283,43 +283,30 @@ def modificar_reserva(reservas, matriz):
 
 def lista_reservas_activas(reservas):
     """
-    Muestra todas las reservas pendientes y activas.
+    Muestra todas las reservas activas.
     """
     limpiar_pantalla()
 
-    hay_reservas = False
+    hay_activas = False
     reservas_ordenadas = ordenar_reservas_fechas(reservas)
 
-    print("\nLISTA DE RESERVAS")
+    print("\nLISTA DE RESERVAS ACTIVAS")
     print("-" * 40)
 
     for reserva in reservas_ordenadas:
-        if reserva["estado"] != "CANCELADA":
-            hay_reservas = True
-            fila = "Sin asignar"
-            columna = "Sin asignar"
-
-            if reserva["fila"] is not None:
-                fila = reserva["fila"] + 1
-
-            if reserva["columna"] is not None:
-                columna = reserva["columna"] + 1
-
-            print("Codigo:", reserva["codigo"])
-            print("Patente:", reserva["patente"])
-            print("Nombre:", reserva["nombre"])
-            print("DNI:", reserva["dni"])
-            print("Telefono:", reserva["numero_telefono"])
-            print("Fila:", fila)
-            print("Columna:", columna)
-            print("Fecha ingreso:", reserva["fecha_ingreso"])
-            print("Fecha salida:", reserva["fecha_salida"])
-            print("Tipo de vehiculo:", reserva["tipo_vehiculo"])
-            print("Estado:", reserva["estado"])
+        if reserva[6] == "ACTIVA":
+            hay_activas = True
+            print("Código:", reserva[0])
+            print("Patente:", reserva[1])
+            print("Fila:", reserva[2] + 1)
+            print("Columna:", reserva[3] + 1)
+            print("Fecha inicio:", reserva[4])
+            print("Fecha fin:", reserva[5])
+            print("Estado:", reserva[6])
             print("-" * 40)
 
-    if not hay_reservas:
-        print("No hay reservas pendientes ni activas.")
+    if not hay_activas:
+        print("No hay reservas activas.")
 
 def lista_reservas_clientes(reservas):
     """
@@ -348,16 +335,17 @@ def lista_reservas_clientes(reservas):
 
     if not hay_activas:
         print("No hay reservas activas.")
-
+        
 def ordenar_reservas_fechas(reservas):
     """
-    Ordena las reservas por fecha de ingreso, de menor a mayor.
+    Ordena las reservas por fecha de inicio, de menor a mayor.
     """
+
     reservas_ordenadas = reservas[:]
 
     for i in range(len(reservas_ordenadas) - 1):
         for j in range(i + 1, len(reservas_ordenadas)):
-            if reservas_ordenadas[i]["fecha_ingreso"] > reservas_ordenadas[j]["fecha_ingreso"]:
+            if reservas_ordenadas[i][4] > reservas_ordenadas[j][4]:
                 aux = reservas_ordenadas[i]
                 reservas_ordenadas[i] = reservas_ordenadas[j]
                 reservas_ordenadas[j] = aux
@@ -367,35 +355,35 @@ def ordenar_reservas_fechas(reservas):
 
 def filtrar_por_fecha(reservas, fecha):
     """
-    Devuelve reservas que comienzan en la fecha indicada.
+    Devuelve reservas que comienzan en la fecha indicada
     """
-    return list(filter(lambda r: r["fecha_ingreso"] == fecha, reservas))
+    return list(filter(lambda r: r[4] == fecha, reservas))
 
 
 def filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida):
     """
-    Devuelve reservas dentro del rango de fechas.
+    Devuelve reservas dentro del rango de fechas
     """
     return list(filter(lambda r: r[4] >= fecha_ingreso and r[4] <= fecha_salida, reservas))
 
 
 def filtrar_vehiculo_patente(vehiculos, patente):
     """
-    Busca vehiculos que coincidan con la patente.
+    Busca vehículos que coincidan con la patente
     """
-    return list(filter(lambda v: v["patente"] == patente, vehiculos))
+    return list(filter(lambda v: v[0] == patente, vehiculos))
 
 
 def buscar_fecha(reservas):
     """
-    Permite elegir el tipo de busqueda o volver al menu anterior.
+    Permite elegir el tipo de búsqueda o volver al menú anterior
     """
-    print("\nTipo de busqueda:")
+    print("\nTipo de búsqueda:")
     print("1 - Fecha exacta")
     print("2 - Rango de fechas")
-    print("3 - Volver al menu anterior")
+    print("3 - Volver al menú anterior")
 
-    opcion = validar_entero("Seleccione una opcion: ", 1, 3)
+    opcion = validar_entero("Seleccione una opción: ", 1, 3)
 
     if opcion == 1:
         buscar_por_fecha_exacta(reservas)
@@ -407,12 +395,13 @@ def buscar_fecha(reservas):
 
 def buscar_por_fecha_exacta(reservas):
     """
-    Busca reservas que coincidan con una fecha exacta.
+    Busca reservas que coincidan con una fecha exacta
     """
+
     fecha = input("Ingrese la fecha (AAAA-MM-DD): ")
 
     if validar_fecha(fecha) == False:
-        print("Fecha invalida.")
+        print("Fecha inválida.")
         return
 
     reservas_filtradas = filtrar_por_fecha(reservas, fecha)
@@ -421,10 +410,8 @@ def buscar_por_fecha_exacta(reservas):
 
 def buscar_por_rango_fechas(reservas):
     """
-    Busca reservas cuya fecha de ingreso este dentro de un rango.
+    Busca reservas cuya fecha de ingreso esté dentro de un rango
     """
-    fecha_ingreso = input("Ingrese fecha ingreso (AAAA-MM-DD): ")
-    fecha_salida = input("Ingrese fecha salida (AAAA-MM-DD): ")
 
     fecha_ingreso = input("Ingrese fecha inicio (AAAA-MM-DD): ")
     fecha_salida = input("Ingrese fecha fin (AAAA-MM-DD): ")
@@ -443,7 +430,6 @@ def buscar_por_rango_fechas(reservas):
 
     reservas_filtradas = filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida)
     lista_reservas_activas(reservas_filtradas)
-
 
 def asignar_plaza(reservas, matriz):
     """
