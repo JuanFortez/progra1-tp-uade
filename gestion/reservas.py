@@ -7,9 +7,8 @@ def verificar_disponibilidad(
     reservas, fila, columna, fecha_ingreso, fecha_salida, codigo_excluir=-1
 ):
     """
-    Verifica si una plaza está disponible entre dos fechas.
+    Verifica si una plaza esta disponible entre dos fechas.
     """
-
     for reserva in reservas:
         if reserva["codigo"] != codigo_excluir:
             if reserva["estado"] == "ACTIVA":
@@ -282,7 +281,6 @@ def modificar_reserva(reservas, matriz):
 
     print("No se encontró una reserva con ese código.")
 
-
 def lista_reservas_activas(reservas):
     """
     Muestra todas las reservas activas.
@@ -337,7 +335,7 @@ def lista_reservas_clientes(reservas):
 
     if not hay_activas:
         print("No hay reservas activas.")
-
+        
 def ordenar_reservas_fechas(reservas):
     """
     Ordena las reservas por fecha de inicio, de menor a mayor.
@@ -412,7 +410,7 @@ def buscar_por_fecha_exacta(reservas):
 
 def buscar_por_rango_fechas(reservas):
     """
-    Busca reservas cuya fecha de inicio esté dentro de un rango
+    Busca reservas cuya fecha de ingreso esté dentro de un rango
     """
 
     fecha_ingreso = input("Ingrese fecha inicio (AAAA-MM-DD): ")
@@ -432,3 +430,57 @@ def buscar_por_rango_fechas(reservas):
 
     reservas_filtradas = filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida)
     lista_reservas_activas(reservas_filtradas)
+
+def asignar_plaza(reservas, matriz):
+    """
+    Asigna una plaza libre a una reserva pendiente.
+    """
+    limpiar_pantalla()
+
+    codigo_buscar = validar_entero("Ingrese el codigo de la reserva: ", 1)
+    reserva_encontrada = None
+
+    for reserva in reservas:
+        if reserva["codigo"] == codigo_buscar:
+            reserva_encontrada = reserva
+            break
+
+    if reserva_encontrada is None:
+        print("No se encontro una reserva con ese codigo.")
+        return
+
+    if reserva_encontrada["estado"] == "CANCELADA":
+        print("No se puede asignar plaza a una reserva cancelada.")
+        return
+
+    if reserva_encontrada["estado"] == "ACTIVA":
+        print("La reserva ya tiene una plaza asignada.")
+        return
+
+    mostrar_estacionamiento(matriz)
+
+    fila = validar_entero("Ingrese fila: ", 1, len(matriz)) - 1
+    columna = validar_entero("Ingrese columna: ", 1, len(matriz[0])) - 1
+
+    if matriz[fila][columna] != "LIBRE":
+        print("La plaza esta ocupada o reservada actualmente.")
+        return
+
+    disponible = verificar_disponibilidad(
+        reservas,
+        fila,
+        columna,
+        reserva_encontrada["fecha_ingreso"],
+        reserva_encontrada["fecha_salida"],
+        codigo_buscar,
+    )
+
+    if not disponible:
+        print("La plaza no esta disponible en esas fechas.")
+        return
+
+    reserva_encontrada["fila"] = fila
+    reserva_encontrada["columna"] = columna
+    reserva_encontrada["estado"] = "ACTIVA"
+    matriz[fila][columna] = "RESERVADA"
+    print("La plaza fue reservada correctamente.")
