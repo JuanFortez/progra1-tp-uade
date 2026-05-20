@@ -142,18 +142,7 @@ def registrar_salida_vehiculo(matriz, registros):
         print("Ese vehículo no tiene ingreso registrado.")
         return
 
-    fila_encontrada = -1
-    columna_encontrada = -1
-
-    for i in range(len(matriz)):
-        for j in range(len(matriz[i])):
-            if matriz[i][j] == patente:
-                fila_encontrada = i
-                columna_encontrada = j
-
-    if fila_encontrada == -1:
-        print("No se encontró el vehículo en el estacionamiento.")
-        return
+    fila, columna = registros[patente]["plaza"]
 
     tiempo = calcular_tiempo_estacionado(patente, registros)
     tarifa = calcular_tarifa(tiempo)
@@ -168,7 +157,7 @@ def registrar_salida_vehiculo(matriz, registros):
     print(f"Tiempo estacionado: {horas}h {minutos}m {segundos}s")
     print(f"Tarifa a cobrar:    ${tarifa:.2f}")
 
-    matriz[fila_encontrada][columna_encontrada] = "LIBRE"
+    matriz[fila][columna] = "LIBRE"
     del registros[patente]
 
 
