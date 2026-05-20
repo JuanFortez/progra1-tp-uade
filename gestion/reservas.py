@@ -1,6 +1,7 @@
 from consultas.validacion.index import validar_entero, validar_fecha, validar_patente, validar_dni, validar_telefono
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import limpiar_pantalla
+from time import sleep
 
 
 def verificar_disponibilidad(
@@ -35,13 +36,14 @@ def crear_reserva_administrador(reservas, matriz):
     dni = input("Ingrese DNI del titular: ").strip()
     
     while not validar_dni(dni):
-        print("\nDNI inválido. Formato esperado: 45873620 o 45.873.620\n")
+        print("\nDNI inválido. Formato esperado: 9999999 o 99.999.999\n")
         dni = input("Ingrese DNI del titular: ").strip()
     
     numero_telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
 
     while not validar_telefono(numero_telefono):
         print("\nNúmero de teléfono inválido.\n")
+        numero_telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
     
     tipo_vehiculo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").lower()
 
@@ -110,13 +112,14 @@ def crear_reserva_cliente(reservas_clientes):
     dni = input("Ingrese DNI del titular: ").strip()
     
     while not validar_dni(dni):
-        print("\nDNI inválido. Formato esperado: 45873620 o 45.873.620\n")
+        print("\nDNI inválido. Formato esperado: 99999999 o 99.999.999\n")
         dni = input("Ingrese DNI del titular: ").strip()
     
     numero_telefono = input("Ingrese número de teléfono: ").strip()
     
     while not validar_telefono(numero_telefono):
         print("\nNúmero de teléfono inválido.\n")
+        numero_telefono = input("Ingrese número de teléfono: ").strip()
     
     tipo_vehiculo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").lower()
     
@@ -124,13 +127,13 @@ def crear_reserva_cliente(reservas_clientes):
 
     if not validar_fecha(fecha_ingreso):
         print("Fecha inválida. Formato esperado: AAAA-MM-DD")
-        return
+        fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
     
     fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
 
     if not validar_fecha(fecha_salida):
         print("Fecha inválida. Formato esperado: AAAA-MM-DD")
-        return
+        fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
 
     if fecha_ingreso > fecha_salida:
         print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
@@ -196,7 +199,7 @@ def modificar_reserva(reservas, matriz):
                 print("  8 - Cambiar tipo de vehiculo")
                 print("  9 - Volver")
 
-                opcion = validar_entero("Seleccione la modificación a realizar: ", 1, 5)
+                opcion = validar_entero("Seleccione la modificación a realizar: ", 1, 9)
 
                 match opcion:
                     case 1:
@@ -215,10 +218,18 @@ def modificar_reserva(reservas, matriz):
                     case 3:
                         nuevo_dni = input("Ingrese nuevo DNI: ").strip()
                         
+                        while not validar_dni(nuevo_dni):
+                                print("\nDNI inválido. Formato esperado: 9999999 o 99.999.999\n")
+                                nuevo_dni = input("Ingrese nuevo DNI: ").strip()
+                        
                         reserva["dni"] = nuevo_dni
                         
                     case 4:
-                        nuevo_telefono = input("Ingrese nuevo número de teléfono: ").strip()
+                        nuevo_telefono = input("Ingrese nuevo número de teléfono (sin 0 ni 15): ").strip()
+                        
+                        while not validar_telefono(nuevo_telefono):
+                            print("\nNúmero de teléfono inválido.\n")
+                            nuevo_telefono = input("Ingrese nuevo número de teléfono: ").strip()   
                         
                         reserva["numero_telefono"] = nuevo_telefono
                         
@@ -258,6 +269,11 @@ def modificar_reserva(reservas, matriz):
                         nuevo_tipo_vehiculo = input("Ingrese el nuevo tipo de vehículo (auto, moto, camioneta): ").lower()
                         
                         reserva["tipo_vehiculo"] = nuevo_tipo_vehiculo
+                        
+                    case 9:
+                        print("Volviendo a vista de reservas...")
+                        sleep(1)
+                        break
 
                 if reserva["fecha_ingreso"] > reserva["fecha_salida"]:
                     print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
@@ -277,9 +293,10 @@ def modificar_reserva(reservas, matriz):
                 else:
                     print("La plaza no está disponible en esas fechas.")
 
-                return
+                continue
 
-    print("No se encontró una reserva con ese código.")
+        else: 
+            print("No se encontró una reserva con ese código.")
 
 def lista_reservas_activas(reservas):
     """
