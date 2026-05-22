@@ -18,44 +18,23 @@
     ],
     "reservas": [
         {
-            "codigo": 1,
             "patente": "DEF456",
-            "nombre": "Santiago Otta",
-            "dni": "44714647",
-            "numero_telefono": "1156671076",
+            "dni_cliente": "44714647",
+            "tipo": "CAMIONETA",
             "fila": 2,
             "columna": 0,
-            "fecha_ingreso": "2026-07-10",
-            "fecha_salida": "2026-07-25",
-            "tipo_vehiculo": "camioneta",
-            "estado": "ACTIVA"
+            "fecha_ingreso": "2026-05-30",
+            "fecha_salida": "2026-06-10"
         }
     ],
     "reservas_clientes": [],
     "registros": {},
-    "historial": [
+    "historial": [],
+    "clientes": [
         {
-            "accion": "INGRESO",
-            "patente": "ABC123",
-            "tipo": "AUTO",
-            "plaza": [
-                1,
-                0
-            ],
-            "fecha_hora": "2026-05-22T10:48:46.441199"
-        },
-        {
-            "accion": "EGRESO",
-            "patente": "ABC123",
-            "tipo": "AUTO",
-            "plaza": [
-                1,
-                0
-            ],
-            "hora_ingreso": "2026-05-22T10:48:46.441086",
-            "hora_salida": "2026-05-22T10:49:04.843548",
-            "tiempo_estacionado": "0h 0m 18s",
-            "tarifa": 1000.0
+            "dni": "44714647",
+            "nombre": "Santiago OTta",
+            "telefono": "1156671076"
         }
     ]
 }

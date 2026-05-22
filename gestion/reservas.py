@@ -30,32 +30,20 @@ def verificar_disponibilidad(
     return True
 
 
-def crear_reserva_administrador(reservas, matriz):
+def crear_reserva_administrador(reservas, matriz, clientes):
     """
-    Crea una nueva reserva si la plaza está disponible.
+    Crea una reserva desde el panel de administrador.
+
+    Los datos del cliente se guardan en la lista clientes.
+    La reserva solo guarda el DNI como referencia al cliente.
     """
-    limpiar_pantalla()
+    patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper().strip()
+    nombre_titular = input("Ingrese nombre del titular: ").strip()
+    dni_titular = input("Ingrese DNI del titular: ").strip()
+    telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
+    tipo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").upper().strip()
 
-    patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper()
-
-    while not validar_patente(patente):
-        print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
-        patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper()
-
-    nombre = input("Ingrese nombre del titular: ").strip()
-    dni = input("Ingrese DNI del titular: ").strip()
-
-    while not validar_dni(dni):
-        print("\nDNI inválido. Formato esperado: 9999999 o 99.999.999\n")
-        dni = input("Ingrese DNI del titular: ").strip()
-
-    numero_telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
-
-    while not validar_telefono(numero_telefono):
-        print("\nNúmero de teléfono inválido.\n")
-        numero_telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
-
-    tipo_vehiculo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").lower()
+    registrar_cliente_si_no_existe(clientes, nombre_titular, dni_titular, telefono)
 
     plaza = seleccionar_plaza_por_codigo(matriz)
 
@@ -65,48 +53,25 @@ def crear_reserva_administrador(reservas, matriz):
     fila, columna = plaza
 
     if matriz[fila][columna] != "LIBRE":
-        print("La plaza está ocupada actualmente.")
+        print("La plaza seleccionada no está libre.")
         return
 
-    fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
+    fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ").strip()
+    fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ").strip()
 
-    while not validar_fecha(fecha_ingreso):
-        print("Fecha inválida. Formato esperado: AAAA-MM-DD")
-        fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
+    reserva = {
+        "patente": patente,
+        "dni_cliente": dni_titular,
+        "tipo": tipo,
+        "fila": fila,
+        "columna": columna,
+        "fecha_ingreso": fecha_ingreso,
+        "fecha_salida": fecha_salida,
+    }
 
-    fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
+    reservas.append(reserva)
 
-    while not validar_fecha(fecha_salida):
-        print("Fecha inválida. Formato esperado: AAAA-MM-DD")
-        fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
-
-    if fecha_ingreso > fecha_salida:
-        print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
-        return
-
-    disponible = verificar_disponibilidad(
-        reservas, fila, columna, fecha_ingreso, fecha_salida
-    )
-
-    if disponible:
-        codigo = len(reservas) + 1
-        reserva = {
-            "codigo": codigo,
-            "patente": patente,
-            "nombre": nombre,
-            "dni": dni,
-            "numero_telefono": numero_telefono,
-            "fila": fila,
-            "columna": columna,
-            "fecha_ingreso": fecha_ingreso,
-            "fecha_salida": fecha_salida,
-            "tipo_vehiculo": tipo_vehiculo,
-            "estado": "ACTIVA",
-        }
-        reservas.append(reserva)
-        print("Reserva creada correctamente.")
-    else:
-        print("La plaza no está disponible en esas fechas.")
+    print("Reserva creada correctamente.")
 
 
 def crear_reserva_cliente(reservas_clientes):
@@ -367,6 +332,122 @@ def lista_reservas_activas(reservas, matriz):
 
         print(f"Plaza: {codigo_plaza}")
         print("-" * 30)
+
+
+def buscar_reserva_por_cliente(reservas, reservas_clientes, clientes, matriz):
+    """
+    Busca reservas por cliente usando los datos guardados en la lista clientes.
+
+    Permite buscar por:
+    - nombre
+    - DNI
+    - patente
+    """
+    if len(reservas) == 0 and len(reservas_clientes) == 0:
+        print("\nNo hay reservas registradas.")
+        return
+
+    busqueda = input("\nIngrese nombre, DNI o patente del cliente: ").upper().strip()
+
+    reservas_encontradas = []
+
+    for reserva in reservas:
+        dni_cliente = reserva.get("dni_cliente", "")
+        cliente = buscar_cliente_por_dni(clientes, dni_cliente)
+
+        nombre_cliente = ""
+        dni = ""
+
+        if cliente is not None:
+            nombre_cliente = cliente["nombre"].upper()
+            dni = cliente["dni"]
+
+        patente = reserva.get("patente", "").upper()
+
+        if busqueda in nombre_cliente or busqueda == dni or busqueda == patente:
+            reservas_encontradas.append((reserva, cliente))
+
+    for reserva in reservas_clientes:
+        dni_cliente = reserva.get("dni_cliente", "")
+        cliente = buscar_cliente_por_dni(clientes, dni_cliente)
+
+        nombre_cliente = ""
+        dni = ""
+
+        if cliente is not None:
+            nombre_cliente = cliente["nombre"].upper()
+            dni = cliente["dni"]
+
+        patente = reserva.get("patente", "").upper()
+
+        if busqueda in nombre_cliente or busqueda == dni or busqueda == patente:
+            reservas_encontradas.append((reserva, cliente))
+
+    if len(reservas_encontradas) == 0:
+        print("\nNo se encontraron reservas para ese cliente.")
+        return
+
+    mapa_plazas = generar_mapa_plazas(matriz)
+
+    print("\nReservas encontradas:\n")
+
+    for i, datos_reserva in enumerate(reservas_encontradas):
+        reserva = datos_reserva[0]
+        cliente = datos_reserva[1]
+
+        codigo_plaza = "Sin asignar"
+
+        if "fila" in reserva and "columna" in reserva:
+            for codigo, coordenadas in mapa_plazas.items():
+                if coordenadas == (reserva["fila"], reserva["columna"]):
+                    codigo_plaza = codigo
+
+        print(f"Reserva #{i + 1}")
+        print(f"Patente: {reserva.get('patente', 'Sin dato')}")
+
+        if cliente is not None:
+            print(f"Cliente: {cliente['nombre']}")
+            print(f"DNI: {cliente['dni']}")
+            print(f"Teléfono: {cliente['telefono']}")
+        else:
+            print("Cliente: Sin datos guardados")
+
+        print(f"Tipo de vehículo: {reserva.get('tipo', 'Sin dato')}")
+        print(f"Plaza: {codigo_plaza}")
+
+        if "fecha_ingreso" in reserva:
+            print(f"Fecha ingreso: {reserva['fecha_ingreso']}")
+
+        if "fecha_salida" in reserva:
+            print(f"Fecha salida: {reserva['fecha_salida']}")
+
+        print("-" * 30)
+
+
+def buscar_cliente_por_dni(clientes, dni):
+    """
+    Busca un cliente por DNI dentro de la lista de clientes.
+    """
+    for cliente in clientes:
+        if cliente["dni"] == dni:
+            return cliente
+
+    return None
+
+
+def registrar_cliente_si_no_existe(clientes, nombre, dni, telefono):
+    """
+    Registra un cliente en la lista si todavía no existe.
+
+    Si ya existe, actualiza nombre y teléfono por si cambiaron.
+    """
+    cliente = buscar_cliente_por_dni(clientes, dni)
+
+    if cliente is None:
+        clientes.append({"dni": dni, "nombre": nombre, "telefono": telefono})
+    else:
+        cliente["nombre"] = nombre
+        cliente["telefono"] = telefono
 
 
 def lista_reservas_clientes(reservas):
