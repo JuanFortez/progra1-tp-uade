@@ -537,13 +537,16 @@ def modificar_estado_plaza(matriz, registros):
                     print("Estado no válido. Solo se permite LIBRE u OCUPADO.")
                     continue
 
-                if matriz[fila][columna] in registros:
-                    del registros[matriz[fila][columna]]
-
-                if patente_actual in registros:
-                    registros[patente_actual]["estado"] = nuevo_estado
-
-                print(f"Estado modificado correctamente a {nuevo_estado}.")
+                if nuevo_estado == "LIBRE":
+                    if patente_actual in registros:
+                        del registros[patente_actual]
+                    matriz[fila][columna] = ESTADO_LIBRE
+                    print("Plaza liberada correctamente.")
+                    return
+                else:
+                    if patente_actual in registros:
+                        registros[patente_actual]["estado"] = nuevo_estado
+                    print(f"Estado modificado correctamente a {nuevo_estado}.")
 
             case 4:
                 break

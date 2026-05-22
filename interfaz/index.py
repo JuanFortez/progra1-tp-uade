@@ -260,7 +260,7 @@ def interfaz_reservas_admin(
 
             case 8:
                 print("Asignación de plaza...")
-                asignar_plaza(reservas, matriz)
+                asignar_plaza(reservas_clientes, reservas, matriz)
                 guardar_datos(
                     matriz, reservas, reservas_clientes, registros, historial, clientes
                 )

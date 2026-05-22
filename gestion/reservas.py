@@ -125,7 +125,7 @@ def crear_reserva_cliente(reservas_clientes):
         "fecha_ingreso": fecha_ingreso,
         "fecha_salida": fecha_salida,
         "tipo_vehiculo": tipo_vehiculo,
-        "estado": "ACTIVA",
+        "estado": "PENDIENTE",
     }
     reservas_clientes.append(reserva)
     print("Reserva creada correctamente.")
@@ -233,10 +233,23 @@ def modificar_reserva(reservas, matriz):
                             print("La plaza seleccionada no está libre.")
                             continue
 
+                        disponible = verificar_disponibilidad(
+                            reservas,
+                            nueva_fila,
+                            nueva_columna,
+                            reserva["fecha_ingreso"],
+                            reserva["fecha_salida"],
+                            codigo_buscar,
+                        )
+
+                        if not disponible:
+                            print("La plaza no está disponible en esas fechas.")
+                            continue
+
                         reserva["fila"] = nueva_fila
                         reserva["columna"] = nueva_columna
-
                         print("Plaza de la reserva modificada correctamente.")
+                        continue
 
                     case 6:
                         nueva_fecha = input(
@@ -463,7 +476,7 @@ def lista_reservas_clientes(reservas):
     print("-" * 40)
 
     for reserva in reservas_ordenadas:
-        if reserva["estado"] == "ACTIVA":
+        if reserva["estado"] == "PENDIENTE":
             hay_activas = True
             print("Patente:", reserva["patente"])
             print("Nombre:", reserva["nombre"])
@@ -476,7 +489,7 @@ def lista_reservas_clientes(reservas):
             print("-" * 40)
 
     if not hay_activas:
-        print("No hay reservas activas.")
+        print("No hay reservas pendientes.")
 
 
 def ordenar_reservas_fechas(reservas):
@@ -595,22 +608,22 @@ def buscar_por_rango_fechas(reservas):
     lista_reservas_activas(reservas_filtradas)
 
 
-def asignar_plaza(reservas, matriz):
+def asignar_plaza(reservas_clientes, reservas, matriz):
     """
-    Asigna una plaza libre a una reserva pendiente.
+    Asigna una plaza libre a una reserva pendiente de cliente.
     """
     limpiar_pantalla()
 
-    codigo_buscar = validar_entero("Ingrese el codigo de la reserva: ", 1)
+    patente_buscar = input("Ingrese la patente de la reserva a asignar: ").upper().strip()
     reserva_encontrada = None
 
-    for reserva in reservas:
-        if reserva["codigo"] == codigo_buscar:
+    for reserva in reservas_clientes:
+        if reserva["patente"] == patente_buscar:
             reserva_encontrada = reserva
             break
 
     if reserva_encontrada is None:
-        print("No se encontro una reserva con ese codigo.")
+        print("No se encontro una reserva con esa patente.")
         return
 
     if reserva_encontrada["estado"] == "CANCELADA":
@@ -623,8 +636,12 @@ def asignar_plaza(reservas, matriz):
 
     mostrar_estacionamiento(matriz)
 
-    fila = validar_entero("Ingrese fila: ", 1, len(matriz)) - 1
-    columna = validar_entero("Ingrese columna: ", 1, len(matriz[0])) - 1
+    plaza = seleccionar_plaza_por_codigo(matriz)
+
+    if plaza is None:
+        return
+
+    fila, columna = plaza
 
     if matriz[fila][columna] != "LIBRE":
         print("La plaza esta ocupada o reservada actualmente.")
@@ -636,7 +653,6 @@ def asignar_plaza(reservas, matriz):
         columna,
         reserva_encontrada["fecha_ingreso"],
         reserva_encontrada["fecha_salida"],
-        codigo_buscar,
     )
 
     if not disponible:
