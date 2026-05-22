@@ -1,5 +1,12 @@
-from consultas.validacion.index import validar_entero, validar_fecha, validar_patente, validar_dni, validar_telefono
+from consultas.validacion.index import (
+    validar_entero,
+    validar_fecha,
+    validar_patente,
+    validar_dni,
+    validar_telefono,
+)
 from consultas.visualizacion.index import mostrar_estacionamiento
+from gestion.index import seleccionar_plaza_por_codigo, generar_mapa_plazas
 from ui.index import limpiar_pantalla
 from time import sleep
 
@@ -14,7 +21,10 @@ def verificar_disponibilidad(
         if reserva["codigo"] != codigo_excluir:
             if reserva["estado"] == "ACTIVA":
                 if reserva["fila"] == fila and reserva["columna"] == columna:
-                    if not (fecha_salida <  reserva["fecha_ingreso"] or fecha_ingreso > reserva["fecha_salida"]):
+                    if not (
+                        fecha_salida < reserva["fecha_ingreso"]
+                        or fecha_ingreso > reserva["fecha_salida"]
+                    ):
                         return False
 
     return True
@@ -31,26 +41,28 @@ def crear_reserva_administrador(reservas, matriz):
     while not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
         patente = input("Ingrese la patente (ej: ABC123 o AB123CD): ").upper()
-    
+
     nombre = input("Ingrese nombre del titular: ").strip()
     dni = input("Ingrese DNI del titular: ").strip()
-    
+
     while not validar_dni(dni):
         print("\nDNI inválido. Formato esperado: 9999999 o 99.999.999\n")
         dni = input("Ingrese DNI del titular: ").strip()
-    
+
     numero_telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
 
     while not validar_telefono(numero_telefono):
         print("\nNúmero de teléfono inválido.\n")
         numero_telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
-    
+
     tipo_vehiculo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").lower()
 
-    mostrar_estacionamiento(matriz)
+    plaza = seleccionar_plaza_por_codigo(matriz)
 
-    fila = validar_entero("Ingrese fila: ", 1, len(matriz)) - 1
-    columna = validar_entero("Ingrese columna: ", 1, len(matriz[0])) - 1
+    if plaza is None:
+        return
+
+    fila, columna = plaza
 
     if matriz[fila][columna] != "LIBRE":
         print("La plaza está ocupada actualmente.")
@@ -61,7 +73,7 @@ def crear_reserva_administrador(reservas, matriz):
     while not validar_fecha(fecha_ingreso):
         print("Fecha inválida. Formato esperado: AAAA-MM-DD")
         fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
-    
+
     fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
 
     while not validar_fecha(fecha_salida):
@@ -89,12 +101,13 @@ def crear_reserva_administrador(reservas, matriz):
             "fecha_ingreso": fecha_ingreso,
             "fecha_salida": fecha_salida,
             "tipo_vehiculo": tipo_vehiculo,
-            "estado": "ACTIVA"
+            "estado": "ACTIVA",
         }
         reservas.append(reserva)
         print("Reserva creada correctamente.")
     else:
         print("La plaza no está disponible en esas fechas.")
+
 
 def crear_reserva_cliente(reservas_clientes):
     """
@@ -107,28 +120,28 @@ def crear_reserva_cliente(reservas_clientes):
     if not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
         return
-    
+
     nombre = input("Ingrese nombre del titular: ").strip()
     dni = input("Ingrese DNI del titular: ").strip()
-    
+
     while not validar_dni(dni):
         print("\nDNI inválido. Formato esperado: 99999999 o 99.999.999\n")
         dni = input("Ingrese DNI del titular: ").strip()
-    
+
     numero_telefono = input("Ingrese número de teléfono: ").strip()
-    
+
     while not validar_telefono(numero_telefono):
         print("\nNúmero de teléfono inválido.\n")
         numero_telefono = input("Ingrese número de teléfono: ").strip()
-    
+
     tipo_vehiculo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").lower()
-    
+
     fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
 
     if not validar_fecha(fecha_ingreso):
         print("Fecha inválida. Formato esperado: AAAA-MM-DD")
         fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ")
-    
+
     fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
 
     if not validar_fecha(fecha_salida):
@@ -138,7 +151,7 @@ def crear_reserva_cliente(reservas_clientes):
     if fecha_ingreso > fecha_salida:
         print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
         return
-    
+
     reserva = {
         "patente": patente,
         "nombre": nombre,
@@ -147,10 +160,11 @@ def crear_reserva_cliente(reservas_clientes):
         "fecha_ingreso": fecha_ingreso,
         "fecha_salida": fecha_salida,
         "tipo_vehiculo": tipo_vehiculo,
-        "estado": "ACTIVA"
-        }
+        "estado": "ACTIVA",
+    }
     reservas_clientes.append(reserva)
     print("Reserva creada correctamente.")
+
 
 def cancelar_reserva(reservas):
     """
@@ -158,27 +172,21 @@ def cancelar_reserva(reservas):
     """
     limpiar_pantalla()
 
-    
     codigo_buscar = validar_entero("Ingrese el código de la reserva a cancelar: ", 1)
 
-    
     for reserva in reservas:
 
-        
         if reserva["codigo"] == codigo_buscar:
 
-            
             if reserva["estado"] == "CANCELADA":
                 print("La reserva ya estaba cancelada.")
                 return
 
-            
             reserva["estado"] = "CANCELADA"
 
             print("Reserva cancelada correctamente.")
             return
 
-    
     print("No se encontró una reserva con ese código.")
 
 
@@ -218,41 +226,52 @@ def modificar_reserva(reservas, matriz):
                             print("Patente inválida.")
                             continue
                         reserva["patente"] = nueva_patente
-                        
+
                     case 2:
                         nuevo_nombre = input("Ingrese nuevo nombre: ").strip()
-                        
+
                         reserva["nombre"] = nuevo_nombre
-                        
+
                     case 3:
                         nuevo_dni = input("Ingrese nuevo DNI: ").strip()
-                        
+
                         while not validar_dni(nuevo_dni):
-                                print("\nDNI inválido. Formato esperado: 9999999 o 99.999.999\n")
-                                nuevo_dni = input("Ingrese nuevo DNI: ").strip()
-                        
+                            print(
+                                "\nDNI inválido. Formato esperado: 9999999 o 99.999.999\n"
+                            )
+                            nuevo_dni = input("Ingrese nuevo DNI: ").strip()
+
                         reserva["dni"] = nuevo_dni
-                        
+
                     case 4:
-                        nuevo_telefono = input("Ingrese nuevo número de teléfono (sin 0 ni 15): ").strip()
-                        
+                        nuevo_telefono = input(
+                            "Ingrese nuevo número de teléfono (sin 0 ni 15): "
+                        ).strip()
+
                         while not validar_telefono(nuevo_telefono):
                             print("\nNúmero de teléfono inválido.\n")
-                            nuevo_telefono = input("Ingrese nuevo número de teléfono: ").strip()   
-                        
+                            nuevo_telefono = input(
+                                "Ingrese nuevo número de teléfono: "
+                            ).strip()
+
                         reserva["numero_telefono"] = nuevo_telefono
-                        
+
                     case 5:
-                        nueva_fila = (
-                            validar_entero("Ingrese nueva fila: ", 1, len(matriz)) - 1
-                        )
-                        nueva_columna = (
-                            validar_entero("Ingrese nueva columna: ", 1, len(matriz[0]))
-                            - 1
-                        )
-                        
+                        plaza = seleccionar_plaza_por_codigo(matriz)
+
+                        if plaza is None:
+                            continue
+
+                        nueva_fila, nueva_columna = plaza
+
+                        if matriz[nueva_fila][nueva_columna] != "LIBRE":
+                            print("La plaza seleccionada no está libre.")
+                            continue
+
                         reserva["fila"] = nueva_fila
                         reserva["columna"] = nueva_columna
+
+                        print("Plaza de la reserva modificada correctamente.")
 
                     case 6:
                         nueva_fecha = input(
@@ -273,19 +292,23 @@ def modificar_reserva(reservas, matriz):
                             print("Fecha inválida.")
                             continue
                         reserva["fecha_salida"] = nueva_fecha
-                        
+
                     case 8:
-                        nuevo_tipo_vehiculo = input("Ingrese el nuevo tipo de vehículo (auto, moto, camioneta): ").lower()
-                        
+                        nuevo_tipo_vehiculo = input(
+                            "Ingrese el nuevo tipo de vehículo (auto, moto, camioneta): "
+                        ).lower()
+
                         reserva["tipo_vehiculo"] = nuevo_tipo_vehiculo
-                        
+
                     case 9:
                         print("Volviendo a vista de reservas...")
                         sleep(1)
                         break
 
                 if reserva["fecha_ingreso"] > reserva["fecha_salida"]:
-                    print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
+                    print(
+                        "La fecha de ingreso no puede ser mayor que la fecha de salida."
+                    )
                     continue
 
                 disponible = verificar_disponibilidad(
@@ -304,35 +327,68 @@ def modificar_reserva(reservas, matriz):
 
                 continue
 
-        else: 
+        else:
             print("No se encontró una reserva con ese código.")
 
-def lista_reservas_activas(reservas):
+
+def lista_reservas_activas(reservas, matriz):
+    """
+    Muestra todas las reservas activas indicando el código de plaza.
+    """
+    if len(reservas) == 0:
+        print("\nNo hay reservas activas.")
+        return
+
+    mapa_plazas = generar_mapa_plazas(matriz)
+
+    print("\nReservas activas:\n")
+
+    for i, reserva in enumerate(reservas):
+        codigo_plaza = "Sin asignar"
+
+        for codigo, coordenadas in mapa_plazas.items():
+            if coordenadas == (reserva["fila"], reserva["columna"]):
+                codigo_plaza = codigo
+
+        print(f"Reserva #{i + 1}")
+        print(f"Patente: {reserva['patente']}")
+
+        if "fecha_inicio" in reserva:
+            print(f"Fecha inicio: {reserva['fecha_inicio']}")
+
+        if "fecha_fin" in reserva:
+            print(f"Fecha fin: {reserva['fecha_fin']}")
+
+        if "fecha" in reserva:
+            print(f"Fecha: {reserva['fecha']}")
+
+        if "hora" in reserva:
+            print(f"Hora: {reserva['hora']}")
+
+        print(f"Plaza: {codigo_plaza}")
+        print("-" * 30)
+
+
+def lista_reservas_clientes(reservas):
     """
     Muestra todas las reservas activas.
     """
     limpiar_pantalla()
-
     hay_activas = False
 
     reservas_ordenadas = ordenar_reservas_fechas(reservas)
 
-    print("\nLISTA DE RESERVAS ACTIVAS")
+    print("\nLISTA DE RESERVAS DE CLIENTES")
     print("-" * 40)
 
     for reserva in reservas_ordenadas:
-
         if reserva["estado"] == "ACTIVA":
             hay_activas = True
-
-            print("Código:", reserva["codigo"])
             print("Patente:", reserva["patente"])
             print("Nombre:", reserva["nombre"])
             print("DNI:", reserva["dni"])
             print("Teléfono:", reserva["numero_telefono"])
             print("Tipo de vehículo:", reserva["tipo_vehiculo"])
-            print("Fila:", reserva["fila"] + 1)
-            print("Columna:", reserva["columna"] + 1)
             print("Fecha de ingreso:", reserva["fecha_ingreso"])
             print("Fecha de salida:", reserva["fecha_salida"])
             print("Estado:", reserva["estado"])
@@ -341,34 +397,7 @@ def lista_reservas_activas(reservas):
     if not hay_activas:
         print("No hay reservas activas.")
 
-def lista_reservas_clientes(reservas):
-    """
-    Muestra todas las reservas activas.
-    """
-    limpiar_pantalla()
-    hay_activas = False
-    
-    reservas_ordenadas = ordenar_reservas_fechas(reservas)
 
-    print("\nLISTA DE RESERVAS DE CLIENTES")
-    print("-" * 40)
-
-    for reserva in reservas_ordenadas:
-        if reserva['estado'] == "ACTIVA":
-            hay_activas = True
-            print("Patente:",               reserva["patente"])
-            print("Nombre:",                reserva["nombre"])
-            print("DNI:",                   reserva["dni"])
-            print("Teléfono:",              reserva["numero_telefono"])
-            print("Tipo de vehículo:",      reserva["tipo_vehiculo"])
-            print("Fecha de ingreso:",      reserva["fecha_ingreso"])
-            print("Fecha de salida:",       reserva["fecha_salida"])
-            print("Estado:",                reserva["estado"])
-            print("-" * 40)
-
-    if not hay_activas:
-        print("No hay reservas activas.")
-        
 def ordenar_reservas_fechas(reservas):
     """
     Ordena las reservas por fecha de ingreso, de menor a mayor.
@@ -379,13 +408,17 @@ def ordenar_reservas_fechas(reservas):
     for i in range(len(reservas_ordenadas) - 1):
         for j in range(i + 1, len(reservas_ordenadas)):
 
-            if reservas_ordenadas[i]["fecha_ingreso"] > reservas_ordenadas[j]["fecha_ingreso"]:
+            if (
+                reservas_ordenadas[i]["fecha_ingreso"]
+                > reservas_ordenadas[j]["fecha_ingreso"]
+            ):
 
                 aux = reservas_ordenadas[i]
                 reservas_ordenadas[i] = reservas_ordenadas[j]
                 reservas_ordenadas[j] = aux
 
     return reservas_ordenadas
+
 
 def filtrar_por_fecha(reservas, fecha):
     """
@@ -400,7 +433,13 @@ def filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida):
     Devuelve reservas dentro del rango de fechas.
     """
 
-    return list(filter(lambda reserva: reserva["fecha_ingreso"] >= fecha_ingreso and reserva["fecha_ingreso"] <= fecha_salida, reservas))
+    return list(
+        filter(
+            lambda reserva: reserva["fecha_ingreso"] >= fecha_ingreso
+            and reserva["fecha_ingreso"] <= fecha_salida,
+            reservas,
+        )
+    )
 
 
 def filtrar_vehiculo_patente(vehiculos, patente):
@@ -473,6 +512,7 @@ def buscar_por_rango_fechas(reservas):
     reservas_filtradas = filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida)
 
     lista_reservas_activas(reservas_filtradas)
+
 
 def asignar_plaza(reservas, matriz):
     """

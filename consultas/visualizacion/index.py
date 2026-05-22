@@ -1,6 +1,10 @@
 from functools import reduce
 from ui.index import limpiar_pantalla
 
+ESTADO_LIBRE = "LIBRE"
+ESTADO_PASILLO = "PASILLO"
+ESTADO_VACIO = "VACIO"
+
 
 def mostrar_estacionamiento(matriz):
     """
@@ -9,6 +13,7 @@ def mostrar_estacionamiento(matriz):
     limpiar_pantalla()
 
     print("")
+
     for fila in matriz:
         for valor in fila:
             print(valor, end=" ")
@@ -17,12 +22,33 @@ def mostrar_estacionamiento(matriz):
     mostrar_placas_ocupadas(matriz)
     mostrar_placas_disponibles(matriz)
 
+
+def es_plaza_real(valor):
+    """
+    Indica si una celda de la matriz representa una plaza real del estacionamiento.
+
+    No son plazas reales:
+    - PASILLO
+    - VACIO
+
+    Sí son plazas reales:
+    - LIBRE
+    - Una patente registrada
+    """
+    return valor != ESTADO_PASILLO and valor != ESTADO_VACIO
+
+
 def contar_placas_ocupadas(matriz):
     """
     Cuenta y retorna el número de plazas ocupadas en el estacionamiento.
     """
     matriz_plana = [col for fila in matriz for col in fila]
-    return reduce(lambda acc, col: acc + (1 if col != "LIBRE" else 0), matriz_plana, 0)
+
+    return reduce(
+        lambda acc, col: acc + (1 if es_plaza_real(col) and col != ESTADO_LIBRE else 0),
+        matriz_plana,
+        0,
+    )
 
 
 def mostrar_placas_ocupadas(matriz):
@@ -38,7 +64,10 @@ def contar_placas_disponibles(matriz):
     Cuenta y retorna el número de plazas libres en el estacionamiento.
     """
     matriz_plana = [col for fila in matriz for col in fila]
-    return reduce(lambda acc, col: acc + (0 if col != "LIBRE" else 1), matriz_plana, 0)
+
+    return reduce(
+        lambda acc, col: acc + (1 if col == ESTADO_LIBRE else 0), matriz_plana, 0
+    )
 
 
 def mostrar_placas_disponibles(matriz):
