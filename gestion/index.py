@@ -2,6 +2,7 @@ from datetime import datetime
 from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import limpiar_pantalla
+import math
 
 tipos_validos = {"AUTO", "MOTO", "CAMIONETA"}
 
@@ -337,27 +338,24 @@ def calcular_tiempo_estacionado(patente, registros):
 def calcular_tarifa(tiempo):
     """
     Calcula y retorna la tarifa a cobrar según el tiempo estacionado.
-
     Recibe un objeto timedelta con el tiempo estacionado. Cobra una tarifa
-    base por la primera hora y un valor adicional por cada hora extra o
-    fracción. Retorna el monto total a pagar como número flotante.
+    base por la primera hora y un valor adicional por cada
+    fracción de hora. Retorna el monto total a pagar como número flotante.
     """
 
     TARIFA_BASE = 1000.0  # Precio por la primera hora
-    TARIFA_POR_HORA = 500.0  # Precio por cada hora adicional o fracción
+    TARIFA_POR_FRACCION = 250.0  # Precio por cada fracción de hora
 
     total_segundos = tiempo.total_seconds()
-    horas = total_segundos / 3600
 
-    if horas <= 1:
+    if total_segundos <= 3600:
         return TARIFA_BASE
 
-    horas_extra = horas - 1
-    import math
+    segundos_extra = total_segundos - 3600
+    fracciones = math.ceil(segundos_extra / 900)    #cuantas fracciones extras de 15 minutos
+    
 
-    horas_extra_enteras = math.ceil(horas_extra)
-
-    tarifa = TARIFA_BASE + (horas_extra_enteras * TARIFA_POR_HORA)
+    tarifa = TARIFA_BASE + (fracciones * TARIFA_POR_FRACCION)
 
     return tarifa
 
