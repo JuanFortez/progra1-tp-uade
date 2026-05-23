@@ -1,5 +1,13 @@
 import re
+import uuid
 from consultas.constantes.index import PREFIJOS_PREFIJOS, MESES
+
+def generar_codigo_reserva(reservas):
+    codigos_existentes = {reserva["codigo"] for reserva in reservas}
+    while True:
+        codigo_reserva = str(uuid.uuid4())[:8]
+        if codigo_reserva not in codigos_existentes:
+            return codigo_reserva
 
 def validar_patente(patente):
     patron_viejo = r"^[A-Z]{3}\d{3}$"  # ABC123

@@ -77,7 +77,7 @@ def interfaz_inicio():
                     print("\nPrimero el administrador debe crear el estacionamiento.")
                 else:
                     print("Accediendo a panel de cliente...")
-                    interfaz_cliente(matriz, reservas, reservas_clientes, registros)
+                    interfaz_cliente(matriz, reservas, reservas_clientes, registros, historial, clientes)
             case 3:
                 guardar_datos(
                     matriz, reservas, reservas_clientes, registros, historial, clientes
@@ -162,7 +162,7 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
                 break
 
 
-def interfaz_cliente(matriz, reservas, reservas_clientes, registros):
+def interfaz_cliente(matriz, reservas, reservas_clientes, registros, historial, clientes):
     """
     Muestra el panel de cliente.
     Permite al cliente solicitar una reserva o salir del panel.
@@ -214,10 +214,6 @@ def interfaz_reservas_admin(
         print("  9 - Volver\n")
 
         opcion = validar_entero("Seleccione una opción: ", 1, 9)
-
-        if opcion == 8:
-            print("Opción no válida.")
-            continue
 
         match opcion:
             case 1:
