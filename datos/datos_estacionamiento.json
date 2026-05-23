@@ -16,25 +16,9 @@
             "VACIO"
         ]
     ],
-    "reservas": [
-        {
-            "patente": "DEF456",
-            "dni_cliente": "44714647",
-            "tipo": "CAMIONETA",
-            "fila": 2,
-            "columna": 0,
-            "fecha_ingreso": "2026-05-30",
-            "fecha_salida": "2026-06-10"
-        }
-    ],
+    "reservas": [],
     "reservas_clientes": [],
     "registros": {},
     "historial": [],
-    "clientes": [
-        {
-            "dni": "44714647",
-            "nombre": "Santiago OTta",
-            "telefono": "1156671076"
-        }
-    ]
+    "clientes": []
 }
