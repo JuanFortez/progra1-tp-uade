@@ -112,7 +112,7 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
 
         opcion = validar_entero("Seleccione una opción: ", 1, 9)
 
-        if opcion in [8]:
+        if opcion == 8:
             print("Opción no válida.")
             continue
 
