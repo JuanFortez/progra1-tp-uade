@@ -1,6 +1,6 @@
 import re
 import uuid
-from consultas.constantes.index import PREFIJOS_PREFIJOS, MESES
+from consultas.constantes.index import PREFIJOS_ARGENTINA, MESES
 
 def generar_codigo_reserva(reservas):
     codigos_existentes = {reserva["codigo"] for reserva in reservas}
@@ -23,7 +23,7 @@ def validar_telefono(numero):
     - Prefijo válido
     """
 
-    prefijos = "|".join(sorted(PREFIJOS_PREFIJOS, key=len, reverse=True))
+    prefijos = "|".join(sorted(PREFIJOS_ARGENTINA, key=len, reverse=True))
 
     patron = rf"^({prefijos})(?!15)\d{{6,8}}$"
 

@@ -1,3 +1,4 @@
+from consultas.constantes.index import TIPO_VEHICULO
 from consultas.validacion.index import (
     validar_entero,
     validar_fecha,
@@ -8,7 +9,7 @@ from consultas.validacion.index import (
 )
 from consultas.visualizacion.index import mostrar_estacionamiento
 from gestion.index import seleccionar_plaza_por_codigo, generar_mapa_plazas
-from ui.index import limpiar_pantalla
+from ui.index import limpiar_pantalla, lista_modificar_reserva
 from logs.index import escribir_log
 from time import sleep
 
@@ -61,6 +62,14 @@ def crear_reserva_administrador(reservas, matriz, clientes):
         numero_telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
     
     tipo_vehiculo = input("Ingrese tipo de vehículo (auto, moto, camioneta): ").upper().strip()
+    
+    while tipo_vehiculo not in TIPO_VEHICULO:
+        print("Tipo inválido. Opciones válidas: AUTO, MOTO, CAMIONETA")
+        tipo_vehiculo = (
+            input("\nIngrese el tipo de vehículo (AUTO, MOTO o CAMIONETA): ")
+            .upper()
+            .strip()
+        )
 
     registrar_cliente_si_no_existe(clientes, nombre_titular, dni_titular, numero_telefono)
 
@@ -218,16 +227,7 @@ def modificar_reserva(reservas, matriz):
                 return
 
             while True:
-                print("\nModificaciones:")
-                print("  1 - Cambiar patente")
-                print("  2 - Cambiar nombre")
-                print("  3 - Cambiar DNI")
-                print("  4 - Cambiar número de teléfono")
-                print("  5 - Cambiar fila y columna")
-                print("  6 - Cambiar fecha de ingreso")
-                print("  7 - Cambiar fecha de salida")
-                print("  8 - Cambiar tipo de vehiculo")
-                print("  9 - Volver")
+                lista_modificar_reserva()
                 
                 salir = False
                 opcion = validar_entero("Seleccione la modificación a realizar: ", 1, 9)
