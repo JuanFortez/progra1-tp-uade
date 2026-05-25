@@ -3,6 +3,9 @@ import uuid
 from consultas.constantes.index import PREFIJOS_ARGENTINA, MESES
 
 def generar_codigo_reserva(reservas):
+    """
+    Genera un código al azar de ocho dígitos para las reservas.
+    """
     codigos_existentes = {reserva["codigo"] for reserva in reservas}
     while True:
         codigo_reserva = str(uuid.uuid4())[:8]
@@ -10,6 +13,11 @@ def generar_codigo_reserva(reservas):
             return codigo_reserva
 
 def validar_patente(patente):
+    """
+    Valida los patrones de las patentes.
+    Patrón viejo: ABC123
+    Patrón nuevo: AB123CD
+    """
     patron_viejo = r"^[A-Z]{3}\d{3}$"  # ABC123
     patron_nuevo = r"^[A-Z]{2}\d{3}[A-Z]{2}$"  # AB123CD
     return re.match(patron_viejo, patente) or re.match(patron_nuevo, patente)
