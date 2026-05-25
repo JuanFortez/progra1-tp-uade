@@ -21,7 +21,14 @@ from gestion.reservas import (
     modificar_reserva,
     buscar_reserva_por_cliente,
 )
-from ui.index import encabezado_principal, limpiar_pantalla
+from ui.index import (
+    encabezado_principal, 
+    limpiar_pantalla,
+    lista_menu_principal,
+    lista_panel_administracion,
+    lista_panel_cliente,
+    lista_reservas_admin
+    )
 
 
 def interfaz_inicio():
@@ -44,12 +51,7 @@ def interfaz_inicio():
     clientes = datos["clientes"]
 
     while True:
-        print("\n" + "=" * 40)
-        print(" " * 13 + "MENÚ PRINCIPAL")
-        print("=" * 40)
-        print("\n  1 - Panel Administrador")
-        print("  2 - Panel Cliente")
-        print("  3 - Salir\n")
+        lista_menu_principal()
 
         opcion = validar_entero("Seleccione una opción: ", 1, 3)
 
@@ -97,18 +99,7 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
     encabezado_principal()
 
     while True:
-        print("\n" + "=" * 39)
-        print(" " * 8 + "PANEL DE ADMINISTRACIÓN")
-        print("=" * 39)
-
-        print("\n  1 - Registrar ingreso de vehículo")
-        print("  2 - Registrar egreso de vehículo")
-        print("  3 - Ver ocupación actual")
-        print("  4 - Buscar vehículo")
-        print("  5 - Modificar plaza")
-        print("  6 - Gestionar reservas")
-        print("  7 - Ver historial")
-        print("  9 - Volver\n")
+        lista_panel_administracion()
 
         opcion = validar_entero("Seleccione una opción: ", 1, 9)
 
@@ -171,9 +162,7 @@ def interfaz_cliente(matriz, reservas, reservas_clientes, registros, historial, 
     encabezado_principal()
 
     while True:
-        print("\n=== PANEL DE CLIENTE ===\n")
-        print("  1 - Solicitar reserva")
-        print("  2 - Salir\n")
+        lista_panel_cliente()
 
         opcion = validar_entero("Seleccione una opción: ", 1, 2)
         if opcion == 1:
@@ -200,18 +189,7 @@ def interfaz_reservas_admin(
     limpiar_pantalla()
 
     while True:
-        print("\n" + "=" * 40)
-        print(" " * 10 + "Gestión de Reservas")
-        print("=" * 40)
-        print("\n  1 - Crear reserva")
-        print("  2 - Cancelar reserva")
-        print("  3 - Modificar reserva")
-        print("  4 - Ver reservas activas")
-        print("  5 - Ver reservas de clientes")
-        print("  6 - Buscar reservas por fecha")
-        print("  7 - Buscar reservas por cliente")
-        print("  8 - Asignar plaza")
-        print("  9 - Volver\n")
+        lista_reservas_admin()
 
         opcion = validar_entero("Seleccione una opción: ", 1, 9)
 

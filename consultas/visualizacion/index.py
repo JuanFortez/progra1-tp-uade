@@ -19,8 +19,8 @@ def mostrar_estacionamiento(matriz):
             print(valor, end=" ")
         print()
 
-    mostrar_placas_ocupadas(matriz)
-    mostrar_placas_disponibles(matriz)
+    mostrar_plazas_ocupadas(matriz)
+    mostrar_plazas_disponibles(matriz)
 
 
 def es_plaza_real(valor):
@@ -38,7 +38,7 @@ def es_plaza_real(valor):
     return valor != ESTADO_PASILLO and valor != ESTADO_VACIO
 
 
-def contar_placas_ocupadas(matriz):
+def contar_plazas_ocupadas(matriz):
     """
     Cuenta y retorna el número de plazas ocupadas en el estacionamiento.
     """
@@ -51,15 +51,15 @@ def contar_placas_ocupadas(matriz):
     )
 
 
-def mostrar_placas_ocupadas(matriz):
+def mostrar_plazas_ocupadas(matriz):
     """
     Muestra por pantalla el número de plazas ocupadas.
     """
-    ocupadas = contar_placas_ocupadas(matriz)
+    ocupadas = contar_plazas_ocupadas(matriz)
     print(f"\nPlacas ocupadas: {ocupadas}")
 
 
-def contar_placas_disponibles(matriz):
+def contar_plazas_disponibles(matriz):
     """
     Cuenta y retorna el número de plazas libres en el estacionamiento.
     """
@@ -70,9 +70,9 @@ def contar_placas_disponibles(matriz):
     )
 
 
-def mostrar_placas_disponibles(matriz):
+def mostrar_plazas_disponibles(matriz):
     """
     Muestra por pantalla el número de plazas disponibles.
     """
-    disponibles = contar_placas_disponibles(matriz)
+    disponibles = contar_plazas_disponibles(matriz)
     print(f"\nPlacas disponibles: {disponibles}")

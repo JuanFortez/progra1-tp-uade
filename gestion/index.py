@@ -1,10 +1,13 @@
 from datetime import datetime
+import math
+from consultas.constantes.index import TIPO_VEHICULO
 from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
-from ui.index import limpiar_pantalla
-import math
-
-tipos_validos = {"AUTO", "MOTO", "CAMIONETA"}
+from ui.index import (
+    limpiar_pantalla, 
+    lista_crear_estacionamiento, 
+    lista_modificar_estado_plaza
+)
 
 ESTADO_LIBRE = "LIBRE"
 ESTADO_PASILLO = "PASILLO"
@@ -25,11 +28,7 @@ def crear_estacionamiento():
     """
     limpiar_pantalla()
 
-    print("\nSeleccione el tipo de plano del estacionamiento:\n")
-    print("  1 - Rectangular manual")
-    print("  2 - Dos columnas con pasillo central")
-    print("  3 - Doble pasillo")
-    print("  4 - En U\n")
+    lista_crear_estacionamiento()
 
     opcion = validar_entero("Seleccione una opción: ", 1, 4)
 
@@ -277,15 +276,15 @@ def registrar_ingreso_vehiculo(matriz, registros, historial):
         print("La plaza seleccionada no está libre.")
         return
 
-    tipo = (
+    tipo_vehiculo = (
         input("\nIngrese el tipo de vehículo (AUTO, MOTO O CAMIONETA): ")
         .upper()
         .strip()
     )
 
-    while tipo not in tipos_validos:
+    while tipo_vehiculo not in TIPO_VEHICULO:
         print("Tipo inválido. Opciones válidas: AUTO, MOTO, CAMIONETA")
-        tipo = (
+        tipo_vehiculo = (
             input("\nIngrese el tipo de vehículo (AUTO, MOTO o CAMIONETA): ")
             .upper()
             .strip()
@@ -296,7 +295,7 @@ def registrar_ingreso_vehiculo(matriz, registros, historial):
         "patente": patente,
         "plaza": (fila, columna),
         "hora_ingreso": datetime.now(),
-        "tipo": tipo,
+        "tipo_vehiculo": tipo_vehiculo,
         "estado": "OCUPADO",
     }
 
@@ -304,7 +303,7 @@ def registrar_ingreso_vehiculo(matriz, registros, historial):
         {
             "accion": "INGRESO",
             "patente": patente,
-            "tipo": tipo,
+            "tipo_vehiculo": tipo_vehiculo,
             "plaza": (fila, columna),
             "fecha_hora": datetime.now(),
         }
@@ -477,11 +476,7 @@ def modificar_estado_plaza(matriz, registros):
         return
 
     while True:
-        print("\nModificaciones:")
-        print("  1 - Cambiar patente")
-        print("  2 - Cambiar tipo de vehículo")
-        print("  3 - Cambiar estado")
-        print("  4 - Volver")
+        lista_modificar_estado_plaza()
 
         opcion = validar_entero("Seleccione la modificación a realizar: ", 1, 4)
 

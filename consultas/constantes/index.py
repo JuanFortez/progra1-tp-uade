@@ -1,4 +1,4 @@
-PREFIJOS_PREFIJOS = [
+PREFIJOS_ARGENTINA = [
     "11",
     "220",
     "221",
@@ -256,3 +256,5 @@ MESES = {
     11: 30,
     12: 31,
 }
+
+TIPO_VEHICULO = {"AUTO", "MOTO", "CAMIONETA"}
