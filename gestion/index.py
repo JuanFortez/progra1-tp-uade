@@ -401,7 +401,7 @@ def registrar_salida_vehiculo(matriz, registros, historial):
         {
             "accion": "EGRESO",
             "patente": patente,
-            "tipo": registros[patente]["tipo"],
+            "tipo_vehiculo": registros[patente]["tipo_vehiculo"],
             "plaza": (fila, columna),
             "hora_ingreso": registros[patente]["hora_ingreso"],
             "hora_salida": datetime.now(),
@@ -443,7 +443,7 @@ def buscar_vehiculo(matriz, registros):
                     print(
                         f"Hora de ingreso del vehículo: {registros[patente]['hora_ingreso']}"
                     )
-                    print(f"Tipo de vehículo: {registros[patente]['tipo']}")
+                    print(f"Tipo de vehículo: {registros[patente]['tipo_vehiculo']}")
                     print(f"Estado del vehículo: {registros[patente]['estado']}")
                 return
 

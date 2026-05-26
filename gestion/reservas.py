@@ -349,11 +349,19 @@ def modificar_reserva(reservas, matriz):
                         reserva["fecha_salida"] = nueva_fecha
 
                     case 8:
-                        nuevo_tipo_vehiculo = input(
-                            "Ingrese el nuevo tipo de vehículo (auto, moto, camioneta): "
-                        ).upper()
-
-                        reserva["tipo_vehiculo"] = nuevo_tipo_vehiculo
+                        nuevo_tipo_vehiculo = (
+                            input("Ingrese el nuevo tipo de vehículo (auto, moto, camioneta): ")
+                            .upper()
+                            .strip()
+                        )
+                        
+                        while nuevo_tipo_vehiculo not in TIPO_VEHICULO:
+                            print("Tipo inválido. Opciones válidas: AUTO, MOTO, CAMIONETA")
+                            nuevo_tipo_vehiculo = (
+                                input("\nIngrese el tipo de vehículo (AUTO, MOTO o CAMIONETA): ")
+                                .upper()
+                                .strip()
+                            )
 
                     case 9:
                         print("Volviendo a vista de reservas...")
