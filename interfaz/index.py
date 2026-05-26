@@ -1,4 +1,5 @@
 from time import sleep
+from datetime import datetime
 
 from datos.persistencia import cargar_datos, guardar_datos
 from consultas.validacion.index import validar_entero
@@ -22,13 +23,13 @@ from gestion.reservas import (
     buscar_reserva_por_cliente,
 )
 from ui.index import (
-    encabezado_principal, 
+    encabezado_principal,
     limpiar_pantalla,
     lista_menu_principal,
     lista_panel_administracion,
     lista_panel_cliente,
-    lista_reservas_admin
-    )
+    lista_reservas_admin,
+)
 
 
 def interfaz_inicio():
@@ -79,7 +80,14 @@ def interfaz_inicio():
                     print("\nPrimero el administrador debe crear el estacionamiento.")
                 else:
                     print("Accediendo a panel de cliente...")
-                    interfaz_cliente(matriz, reservas, reservas_clientes, registros, historial, clientes)
+                    interfaz_cliente(
+                        matriz,
+                        reservas,
+                        reservas_clientes,
+                        registros,
+                        historial,
+                        clientes,
+                    )
             case 3:
                 guardar_datos(
                     matriz, reservas, reservas_clientes, registros, historial, clientes
@@ -153,7 +161,9 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
                 break
 
 
-def interfaz_cliente(matriz, reservas, reservas_clientes, registros, historial, clientes):
+def interfaz_cliente(
+    matriz, reservas, reservas_clientes, registros, historial, clientes
+):
     """
     Muestra el panel de cliente.
     Permite al cliente solicitar una reserva o salir del panel.
@@ -225,7 +235,7 @@ def interfaz_reservas_admin(
 
             case 6:
                 print("Búsqueda de reservas por fecha...")
-                buscar_fecha(reservas)
+                buscar_fecha(reservas, matriz)
 
             case 7:
                 buscar_reserva_por_cliente(
@@ -264,13 +274,13 @@ def mostrar_historial(historial):
         print(f"Tipo: {movimiento['tipo']}")
 
         if "fecha_hora" in movimiento:
-            print(f"Fecha y hora: {movimiento['fecha_hora']}")
+            print(f"Fecha y hora: {formatear_fecha_hora(movimiento['fecha_hora'])}")
 
         if "hora_ingreso" in movimiento:
-            print(f"Hora ingreso: {movimiento['hora_ingreso']}")
+            print(f"Hora ingreso: {formatear_fecha_hora(movimiento['hora_ingreso'])}")
 
         if "hora_salida" in movimiento:
-            print(f"Hora salida: {movimiento['hora_salida']}")
+            print(f"Hora salida: {formatear_fecha_hora(movimiento['hora_salida'])}")
 
         if "tiempo_estacionado" in movimiento:
             print(f"Tiempo estacionado: {movimiento['tiempo_estacionado']}")
@@ -279,3 +289,14 @@ def mostrar_historial(historial):
             print(f"Tarifa: ${movimiento['tarifa']:.2f}")
 
         print("-" * 30)
+
+
+def formatear_fecha_hora(fecha_hora):
+    """
+    Convierte una fecha/hora guardada en un formato mas legible.
+    """
+
+    if isinstance(fecha_hora, str):
+        fecha_hora = datetime.fromisoformat(fecha_hora)
+
+    return fecha_hora.strftime("%d/$m/%Y %H: %M: %S")

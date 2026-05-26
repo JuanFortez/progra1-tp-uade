@@ -2,6 +2,7 @@ import re
 import uuid
 from consultas.constantes.index import PREFIJOS_ARGENTINA, MESES
 
+
 def generar_codigo_reserva(reservas):
     """
     Genera un código al azar de ocho dígitos para las reservas.
@@ -12,6 +13,7 @@ def generar_codigo_reserva(reservas):
         if codigo_reserva not in codigos_existentes:
             return codigo_reserva
 
+
 def validar_patente(patente):
     """
     Valida los patrones de las patentes.
@@ -21,6 +23,7 @@ def validar_patente(patente):
     patron_viejo = r"^[A-Z]{3}\d{3}$"  # ABC123
     patron_nuevo = r"^[A-Z]{2}\d{3}[A-Z]{2}$"  # AB123CD
     return re.match(patron_viejo, patente) or re.match(patron_nuevo, patente)
+
 
 def validar_telefono(numero):
     """
@@ -37,14 +40,15 @@ def validar_telefono(numero):
 
     return re.match(patron, numero.strip()) is not None
 
+
 def validar_dni(dni):
-    '''
+    """
     Valida DNI formato argentino
     - Solo números
     - Permite puntos
     - Permite formato viejo de 7 dígitos
-    '''
-    return re.match(r'^\d{7,8}$', dni.replace('.', '').strip())
+    """
+    return re.match(r"^\d{7,8}$", dni.replace(".", "").strip())
 
 
 def año_bisiesto(anio):
@@ -115,3 +119,22 @@ def validar_entero(mensaje, minimo=None, maximo=None):
             continue
 
         return numero
+
+
+def validar_nombre(nombre):
+    """
+    Valida que un nombre contenga solo letras y espacios.
+
+    Retorna True si el nombre es válido.
+    Retorna False si esta vacío, contiene números o símbolos.
+    """
+    nombre = nombre.strip()
+
+    if len(nombre) == 0:
+        return False
+
+    for caracter in nombre:
+        if not caracter.isalpha() and caracter != " ":
+            return False
+
+    return True

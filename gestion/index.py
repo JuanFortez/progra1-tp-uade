@@ -4,9 +4,9 @@ from consultas.constantes.index import TIPO_VEHICULO
 from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import (
-    limpiar_pantalla, 
-    lista_crear_estacionamiento, 
-    lista_modificar_estado_plaza
+    limpiar_pantalla,
+    lista_crear_estacionamiento,
+    lista_modificar_estado_plaza,
 )
 
 ESTADO_LIBRE = "LIBRE"
@@ -351,8 +351,9 @@ def calcular_tarifa(tiempo):
         return TARIFA_BASE
 
     segundos_extra = total_segundos - 3600
-    fracciones = math.ceil(segundos_extra / 900)    #cuantas fracciones extras de 15 minutos
-    
+    fracciones = math.ceil(
+        segundos_extra / 900
+    )  # cuantas fracciones extras de 15 minutos
 
     tarifa = TARIFA_BASE + (fracciones * TARIFA_POR_FRACCION)
 
