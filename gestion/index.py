@@ -9,9 +9,10 @@ from ui.index import (
     lista_modificar_estado_plaza,
 )
 
-ESTADO_LIBRE = "LIBRE"
+ESTADO_LIBRE = "⬜️"
 ESTADO_PASILLO = "PASILLO"
 ESTADO_VACIO = "VACIO"
+ESTADO_OCUPADO = "🟥"
 
 
 def crear_estacionamiento():
