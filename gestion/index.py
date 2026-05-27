@@ -345,7 +345,7 @@ def calcular_tarifa(tiempo):
     TARIFA_BASE = 1000.0  # Precio por la primera hora
     TARIFA_POR_FRACCION = 250.0  # Precio por cada fracción de hora
 
-    total_segundos = tiempo.total_seconds()
+    total_segundos = int(tiempo.total_seconds())
 
     if total_segundos <= 3600:
         return TARIFA_BASE
@@ -401,7 +401,7 @@ def registrar_salida_vehiculo(matriz, registros, historial):
         {
             "accion": "EGRESO",
             "patente": patente,
-            "tipo": registros[patente]["tipo"],
+            "tipo_vehiculo": registros[patente]["tipo_vehiculo"],
             "plaza": (fila, columna),
             "hora_ingreso": registros[patente]["hora_ingreso"],
             "hora_salida": datetime.now(),
@@ -443,7 +443,7 @@ def buscar_vehiculo(matriz, registros):
                     print(
                         f"Hora de ingreso del vehículo: {registros[patente]['hora_ingreso']}"
                     )
-                    print(f"Tipo de vehículo: {registros[patente]['tipo']}")
+                    print(f"Tipo de vehículo: {registros[patente]['tipo_vehiculo']}")
                     print(f"Estado del vehículo: {registros[patente]['estado']}")
                 return
 
@@ -518,6 +518,10 @@ def modificar_estado_plaza(matriz, registros):
                     .upper()
                     .strip()
                 )
+                if nuevo_tipo not in TIPO_VEHICULO:
+                    print("Tipo invalido. Opciones validas: AUTO, MOTO, CAMIONETA")
+                    continue
+
                 if patente_actual in registros:
                     registros[patente_actual]["tipo"] = nuevo_tipo
                 print("Tipo de vehículo modificado correctamente.")
