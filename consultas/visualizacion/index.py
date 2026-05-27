@@ -4,6 +4,7 @@ from ui.index import limpiar_pantalla
 ESTADO_LIBRE = "LIBRE"
 ESTADO_PASILLO = "PASILLO"
 ESTADO_VACIO = "VACIO"
+ESTADO_RESERVADA = "RESERVADA"
 
 
 def mostrar_estacionamiento(matriz):
@@ -16,9 +17,19 @@ def mostrar_estacionamiento(matriz):
 
     for fila in matriz:
         for valor in fila:
-            print(valor, end=" ")
+            if valor == ESTADO_LIBRE:
+                print("🟩", end=" ")
+            elif valor == ESTADO_PASILLO:
+                print("⬛", end=" ")
+            elif valor == ESTADO_VACIO:
+                print("  ", end=" ")
+            elif valor == ESTADO_RESERVADA:
+                print("🟧", end=" ")
+            else:
+                print("🟥", end=" ")
         print()
 
+    print("\nLeyenda: 🟩 Libre  🟥 Ocupada  🟧 Reservada  ⬛ Pasillo")
     mostrar_plazas_ocupadas(matriz)
     mostrar_plazas_disponibles(matriz)
 
