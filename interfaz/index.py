@@ -271,7 +271,7 @@ def mostrar_historial(historial):
     for movimiento in historial:
         print(f"Acción: {movimiento['accion']}")
         print(f"Patente: {movimiento['patente']}")
-        print(f"Tipo: {movimiento['tipo']}")
+        print(f"Tipo: {movimiento['tipo_vehiculo']}")
 
         if "fecha_hora" in movimiento:
             print(f"Fecha y hora: {formatear_fecha_hora(movimiento['fecha_hora'])}")
@@ -299,4 +299,4 @@ def formatear_fecha_hora(fecha_hora):
     if isinstance(fecha_hora, str):
         fecha_hora = datetime.fromisoformat(fecha_hora)
 
-    return fecha_hora.strftime("%d/$m/%Y %H: %M: %S")
+    return fecha_hora.strftime("%d/%m/%Y %H: %M: %S")

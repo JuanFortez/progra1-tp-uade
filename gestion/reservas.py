@@ -223,7 +223,7 @@ def cancelar_reserva(reservas):
 
             print("Reserva cancelada correctamente.")
             escribir_log(
-                f"Reserva cancelada correctamente, patente: {reserva["patente"]}"
+                f"Reserva cancelada correctamente, patente: {reserva['patente']}"
             )
             return
 

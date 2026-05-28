@@ -346,7 +346,7 @@ def calcular_tarifa(tiempo):
     TARIFA_BASE = 1000.0  # Precio por la primera hora
     TARIFA_POR_FRACCION = 250.0  # Precio por cada fracción de hora
 
-    total_segundos = tiempo.total_seconds()
+    total_segundos = int(tiempo.total_seconds())
 
     if total_segundos <= 3600:
         return TARIFA_BASE
@@ -519,6 +519,10 @@ def modificar_estado_plaza(matriz, registros):
                     .upper()
                     .strip()
                 )
+                if nuevo_tipo not in TIPO_VEHICULO:
+                    print("Tipo invalido. Opciones validas: AUTO, MOTO, CAMIONETA")
+                    continue
+
                 if patente_actual in registros:
                     registros[patente_actual]["tipo"] = nuevo_tipo
                 print("Tipo de vehículo modificado correctamente.")
