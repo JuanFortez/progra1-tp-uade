@@ -1,7 +1,7 @@
 {
     "matriz": [
         [
-            "⬜️",
+            "ABC123",
             "PASILLO",
             "⬜️"
         ],
@@ -18,7 +18,29 @@
     ],
     "reservas": [],
     "reservas_clientes": [],
-    "registros": {},
-    "historial": [],
+    "registros": {
+        "ABC123": {
+            "patente": "ABC123",
+            "plaza": [
+                0,
+                0
+            ],
+            "hora_ingreso": "2026-05-27T09:40:57.258546",
+            "tipo_vehiculo": "AUTO",
+            "estado": "🟥"
+        }
+    },
+    "historial": [
+        {
+            "accion": "INGRESO",
+            "patente": "ABC123",
+            "tipo_vehiculo": "AUTO",
+            "plaza": [
+                0,
+                0
+            ],
+            "fecha_hora": "2026-05-27T09:40:57.258941"
+        }
+    ],
     "clientes": []
 }
