@@ -1,0 +1,24 @@
+{
+    "matriz": [
+        [
+            "⬜️",
+            "PASILLO",
+            "⬜️"
+        ],
+        [
+            "⬜️",
+            "PASILLO",
+            "⬜️"
+        ],
+        [
+            "⬜️",
+            "PASILLO",
+            "⬜️"
+        ]
+    ],
+    "reservas": [],
+    "reservas_clientes": [],
+    "registros": {},
+    "historial": [],
+    "clientes": []
+}
