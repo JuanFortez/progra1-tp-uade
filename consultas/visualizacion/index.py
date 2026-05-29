@@ -1,11 +1,6 @@
 from functools import reduce
 from ui.index import limpiar_pantalla
-
-ESTADO_LIBRE = "⬜️"
-ESTADO_PASILLO = "PASILLO"
-ESTADO_VACIO = "VACIO"
-ESTADO_RESERVADA = "RESERVADA"
-
+from consultas.constantes.index import ESTADO_LIBRE, ESTADO_PASILLO, ESTADO_VACIO, ESTADO_RESERVADA
 
 def mostrar_estacionamiento(matriz):
     """
@@ -32,7 +27,6 @@ def mostrar_estacionamiento(matriz):
     print("\nLeyenda: 🟩 Libre  🟥 Ocupada  🟧 Reservada  ⬛ Pasillo")
     mostrar_plazas_ocupadas(matriz)
     mostrar_plazas_disponibles(matriz)
-
 
 def es_plaza_real(valor):
     """
