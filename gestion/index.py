@@ -411,7 +411,7 @@ def registrar_salida_vehiculo(matriz, registros, historial):
         }
     )
 
-    matriz[fila][columna] = "LIBRE"
+    matriz[fila][columna] = ESTADO_LIBRE
     del registros[patente]
 
 
