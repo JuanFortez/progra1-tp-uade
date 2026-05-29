@@ -1,6 +1,6 @@
 from datetime import datetime
 import math
-from consultas.constantes.index import TIPO_VEHICULO
+from consultas.constantes.index import TIPO_VEHICULO, ESTADO_LIBRE, ESTADO_PASILLO, ESTADO_VACIO, ESTADO_OCUPADO
 from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import (
@@ -8,11 +8,6 @@ from ui.index import (
     lista_crear_estacionamiento,
     lista_modificar_estado_plaza,
 )
-
-ESTADO_LIBRE = "⬜️"
-ESTADO_PASILLO = "PASILLO"
-ESTADO_VACIO = "VACIO"
-ESTADO_OCUPADO = "🟥"
 
 
 def crear_estacionamiento():

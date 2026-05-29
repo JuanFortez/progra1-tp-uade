@@ -1,12 +1,12 @@
 {
     "matriz": [
         [
-            "LIBRE",
+            "⬜️",
             "PASILLO",
             "ERT123"
         ],
         [
-            "ESTADO_LIBRE",
+            "⬜️",
             "PASILLO",
             "⬜️"
         ],

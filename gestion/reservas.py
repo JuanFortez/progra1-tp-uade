@@ -1,4 +1,4 @@
-from consultas.constantes.index import TIPO_VEHICULO
+from consultas.constantes.index import TIPO_VEHICULO, ESTADO_LIBRE, ESTADO_RESERVADA
 from consultas.validacion.index import (
     validar_entero,
     validar_fecha,
@@ -90,7 +90,7 @@ def crear_reserva_administrador(reservas, matriz, clientes):
 
     fila, columna = plaza
 
-    if matriz[fila][columna] != "LIBRE":
+    if matriz[fila][columna] != ESTADO_LIBRE:
         print("La plaza seleccionada no está libre.")
         return
 
@@ -746,7 +746,7 @@ def asignar_plaza(reservas_clientes, reservas, matriz):
 
     fila, columna = plaza
 
-    if matriz[fila][columna] != "LIBRE":
+    if matriz[fila][columna] != ESTADO_LIBRE:
         print("La plaza esta ocupada o reservada actualmente.")
         return
 
