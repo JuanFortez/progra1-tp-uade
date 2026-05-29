@@ -1,7 +1,7 @@
 from functools import reduce
 from ui.index import limpiar_pantalla
 
-ESTADO_LIBRE = "LIBRE"
+ESTADO_LIBRE = "⬜️"
 ESTADO_PASILLO = "PASILLO"
 ESTADO_VACIO = "VACIO"
 ESTADO_RESERVADA = "RESERVADA"
@@ -20,7 +20,7 @@ def mostrar_estacionamiento(matriz):
             if valor == ESTADO_LIBRE:
                 print("🟩", end=" ")
             elif valor == ESTADO_PASILLO:
-                print("⬛", end=" ")
+                print(" ", end=" ")
             elif valor == ESTADO_VACIO:
                 print("  ", end=" ")
             elif valor == ESTADO_RESERVADA:
