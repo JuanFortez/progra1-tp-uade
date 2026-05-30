@@ -286,7 +286,7 @@ def registrar_ingreso_vehiculo(matriz, registros, historial):
             .strip()
         )
 
-    matriz[fila][columna] = patente
+    matriz[fila][columna] = ESTADO_OCUPADO
     registros[patente] = {
         "patente": patente,
         "plaza": (fila, columna),

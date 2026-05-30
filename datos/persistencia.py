@@ -1,9 +1,9 @@
 import json
 import os
 from datetime import datetime
+from consultas.constantes.index import DATOS_DIR
 
-ruta_datos = os.path.join("datos", "datos_estacionamiento.json")
-
+ruta_datos = str(DATOS_DIR)
 
 def convertir_para_json(dato):
     if isinstance(dato, datetime):

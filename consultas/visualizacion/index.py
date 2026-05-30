@@ -12,19 +12,10 @@ def mostrar_estacionamiento(matriz):
 
     for fila in matriz:
         for valor in fila:
-            if valor == ESTADO_LIBRE:
-                print("🟩", end=" ")
-            elif valor == ESTADO_PASILLO:
-                print(" ", end=" ")
-            elif valor == ESTADO_VACIO:
-                print("  ", end=" ")
-            elif valor == ESTADO_RESERVADA:
-                print("🟧", end=" ")
-            else:
-                print("🟥", end=" ")
+            print(valor, end=" ")
         print()
 
-    print("\nLeyenda: 🟩 Libre  🟥 Ocupada  🟧 Reservada  ⬛ Pasillo")
+    print("\nLeyenda: ⬜️ Libre  🟥 Ocupada  🟧 Reservada")
     mostrar_plazas_ocupadas(matriz)
     mostrar_plazas_disponibles(matriz)
 

@@ -92,7 +92,7 @@ def crear_reserva_administrador(reservas, matriz, clientes):
 
     if matriz[fila][columna] != ESTADO_LIBRE:
         print("La plaza seleccionada no está libre.")
-        return
+        plaza = seleccionar_plaza_por_codigo(matriz)
 
     fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ").strip()
 
@@ -130,6 +130,7 @@ def crear_reserva_administrador(reservas, matriz, clientes):
             "estado": "ACTIVA",
         }
         reservas.append(reserva)
+        matriz[fila][columna] = ESTADO_RESERVADA
         print("Reserva creada correctamente.")
         escribir_log(f"Reserva creada correctamente, patente: {patente}")
     else:
@@ -765,5 +766,5 @@ def asignar_plaza(reservas_clientes, reservas, matriz):
     reserva_encontrada["fila"] = fila
     reserva_encontrada["columna"] = columna
     reserva_encontrada["estado"] = "ACTIVA"
-    matriz[fila][columna] = "RESERVADA"
+    matriz[fila][columna] = ESTADO_RESERVADA
     print("La plaza fue reservada correctamente.")
