@@ -1,3 +1,5 @@
+from pathlib import Path 
+
 PREFIJOS_ARGENTINA = [
     "11",
     "220",
@@ -257,10 +259,18 @@ MESES = {
     12: 31,
 }
 
-TIPO_VEHICULO = {"AUTO", "MOTO", "CAMIONETA"}
+TIPO_VEHICULO = {
+    "AUTO", 
+    "MOTO", 
+    "CAMIONETA"
+}
 
-ESTADO_LIBRE = "⬜️"
-ESTADO_PASILLO = "PASILLO"
-ESTADO_VACIO = "VACIO"
-ESTADO_OCUPADO = "🟥"
-ESTADO_RESERVADA = "RESERVADA"
+ESTADO_LIBRE     = "⬜️"
+ESTADO_PASILLO   = "  "
+ESTADO_VACIO     = "  "
+ESTADO_OCUPADO   = "🟥"
+ESTADO_RESERVADA = "🟧"
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATOS_DIR = BASE_DIR / "datos" / "datos_estacionamiento.json"
+RUTA_LOG = BASE_DIR / "logs.txt"
