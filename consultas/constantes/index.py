@@ -260,9 +260,15 @@ MESES = {
 }
 
 TIPO_VEHICULO = {
-    "AUTO", 
-    "MOTO", 
+    "AUTO",
+    "MOTO",
     "CAMIONETA"
+}
+
+MULTIPLICADORES_TARIFA = {
+    "AUTO": 1.0,
+    "CAMIONETA": 2.0,
+    "MOTO": 0.5,
 }
 
 ESTADO_LIBRE     = "⬜️"

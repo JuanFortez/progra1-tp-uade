@@ -109,6 +109,29 @@
             "hora_salida": "2026-05-28T19:50:54.846317",
             "tiempo_estacionado": "0h 0m 5s",
             "tarifa": 1000.0
+        },
+        {
+            "accion": "INGRESO",
+            "patente": "ABC123",
+            "tipo_vehiculo": "AUTO",
+            "plaza": [
+                0,
+                0
+            ],
+            "fecha_hora": "2026-05-31T21:57:18.760083"
+        },
+        {
+            "accion": "EGRESO",
+            "patente": "ABC123",
+            "tipo_vehiculo": "AUTO",
+            "plaza": [
+                0,
+                0
+            ],
+            "hora_ingreso": "2026-05-31T21:57:18.758225",
+            "hora_salida": "2026-05-31T21:57:35.352576",
+            "tiempo_estacionado": "0h 0m 16s",
+            "tarifa": 1000.0
         }
     ],
     "clientes": []
