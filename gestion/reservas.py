@@ -307,7 +307,7 @@ def modificar_reserva(reservas, matriz):
 
                         nueva_fila, nueva_columna = plaza
 
-                        if matriz[nueva_fila][nueva_columna] != "LIBRE":
+                        if matriz[nueva_fila][nueva_columna] != ESTADO_LIBRE:
                             print("La plaza seleccionada no está libre.")
                             continue
 
@@ -355,7 +355,7 @@ def modificar_reserva(reservas, matriz):
                             .upper()
                             .strip()
                         )
-                        
+
                         while nuevo_tipo_vehiculo not in TIPO_VEHICULO:
                             print("Tipo inválido. Opciones válidas: AUTO, MOTO, CAMIONETA")
                             nuevo_tipo_vehiculo = (
@@ -363,6 +363,7 @@ def modificar_reserva(reservas, matriz):
                                 .upper()
                                 .strip()
                             )
+                        reserva["tipo_vehiculo"] = nuevo_tipo_vehiculo
 
                     case 9:
                         print("Volviendo a vista de reservas...")

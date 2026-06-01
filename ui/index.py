@@ -39,6 +39,7 @@ def lista_panel_administracion():
     print("  5 - Modificar plaza")
     print("  6 - Gestionar reservas")
     print("  7 - Ver historial")
+    print("  8 - Modificar estacionamiento")
     print("  9 - Volver\n")
     
 def lista_panel_cliente():
