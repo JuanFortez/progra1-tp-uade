@@ -1,6 +1,6 @@
 from datetime import datetime
 import math
-from consultas.constantes.index import TIPO_VEHICULO, MULTIPLICADORES_TARIFA, ESTADO_LIBRE, ESTADO_PASILLO, ESTADO_VACIO, ESTADO_OCUPADO
+from consultas.constantes.index import TIPO_VEHICULO, MULTIPLICADORES_TARIFA, ESTADO_LIBRE, ESTADO_PASILLO, ESTADO_VACIO, ESTADO_OCUPADO, ESTADO_RESERVADA
 from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import (
@@ -291,8 +291,12 @@ def registrar_ingreso_vehiculo(matriz, registros, historial):
 
     fila, columna = plaza
 
+    if matriz[fila][columna] == ESTADO_RESERVADA:
+        print("La plaza seleccionada está reservada.")
+        return
+
     if matriz[fila][columna] != ESTADO_LIBRE:
-        print("La plaza seleccionada no está libre.")
+        print("La plaza seleccionada está ocupada.")
         return
 
     tipo_vehiculo = (
