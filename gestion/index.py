@@ -1,6 +1,6 @@
 from datetime import datetime
 import math
-from consultas.constantes.index import TIPO_VEHICULO, ESTADO_LIBRE, ESTADO_PASILLO, ESTADO_VACIO, ESTADO_OCUPADO
+from consultas.constantes.index import TIPO_VEHICULO, MULTIPLICADORES_TARIFA, ESTADO_LIBRE, ESTADO_PASILLO, ESTADO_VACIO, ESTADO_OCUPADO
 from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import (
@@ -330,7 +330,7 @@ def calcular_tiempo_estacionado(patente, registros):
     return tiempo
 
 
-def calcular_tarifa(tiempo):
+def calcular_tarifa(tiempo, tipo_vehiculo):
     """
     Calcula y retorna la tarifa a cobrar según el tiempo estacionado.
     Recibe un objeto timedelta con el tiempo estacionado. Cobra una tarifa
@@ -338,8 +338,8 @@ def calcular_tarifa(tiempo):
     fracción de hora. Retorna el monto total a pagar como número flotante.
     """
 
-    TARIFA_BASE = 1000.0  # Precio por la primera hora
-    TARIFA_POR_FRACCION = 250.0  # Precio por cada fracción de hora
+    TARIFA_BASE = 1000.0
+    TARIFA_POR_FRACCION = 250.0
 
     total_segundos = int(tiempo.total_seconds())
 
@@ -347,13 +347,9 @@ def calcular_tarifa(tiempo):
         return TARIFA_BASE
 
     segundos_extra = total_segundos - 3600
-    fracciones = math.ceil(
-        segundos_extra / 900
-    )  # cuantas fracciones extras de 15 minutos
-
-    tarifa = TARIFA_BASE + (fracciones * TARIFA_POR_FRACCION)
-
-    return tarifa
+    fracciones = math.ceil(segundos_extra / 900)
+    multiplicador = MULTIPLICADORES_TARIFA[tipo_vehiculo]
+    return TARIFA_BASE + (fracciones * TARIFA_POR_FRACCION) * multiplicador
 
 
 def registrar_salida_vehiculo(matriz, registros, historial):
@@ -379,7 +375,7 @@ def registrar_salida_vehiculo(matriz, registros, historial):
     fila, columna = registros[patente]["plaza"]
 
     tiempo = calcular_tiempo_estacionado(patente, registros)
-    tarifa = calcular_tarifa(tiempo)
+    tarifa = calcular_tarifa(tiempo, registros[patente]["tipo_vehiculo"])
 
     horas = int(tiempo.total_seconds() // 3600)
     minutos = int((tiempo.total_seconds() % 3600) // 60)
