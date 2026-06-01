@@ -106,8 +106,8 @@ def crear_reserva_administrador(reservas, matriz, clientes):
         print("Fecha inválida. Formato esperado: AAAA-MM-DD")
         fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
 
-    if fecha_ingreso > fecha_salida:
-        print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
+    if fecha_ingreso >= fecha_salida:
+        print("La fecha de ingreso debe ser anterior a la fecha de salida.")
         return
 
     disponible = verificar_disponibilidad(
@@ -183,8 +183,8 @@ def crear_reserva_cliente(reservas_clientes):
         print("Fecha inválida. Formato esperado: AAAA-MM-DD")
         fecha_salida = input("Ingrese fecha de salida (AAAA-MM-DD): ")
 
-    if fecha_ingreso > fecha_salida:
-        print("La fecha de ingreso no puede ser mayor que la fecha de salida.")
+    if fecha_ingreso >= fecha_salida:
+        print("La fecha de ingreso debe ser anterior a la fecha de salida.")
         return
 
     codigo = generar_codigo_reserva(reservas_clientes)
@@ -373,9 +373,9 @@ def modificar_reserva(reservas, matriz):
                 if salir:
                     break
 
-                if reserva["fecha_ingreso"] > reserva["fecha_salida"]:
+                if reserva["fecha_ingreso"] >= reserva["fecha_salida"]:
                     print(
-                        "La fecha de ingreso no puede ser mayor que la fecha de salida."
+                        "La fecha de ingreso debe ser anterior a la fecha de salida."
                     )
                     continue
 
