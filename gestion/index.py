@@ -136,34 +136,57 @@ def crear_estacionamiento_doble_pasillo(cantidad_plazas):
 
 def crear_estacionamiento_en_u(cantidad_plazas):
     """
-    Crea un estacionamiento con forma aproximada de U.
+    Crea un estacionamiento en forma de U.
 
-    La idea es que haya plazas en los laterales y en el fondo,
-    dejando el centro como pasillo.
+    Una fila horizontal en la parte superior (3 o 5 plazas) y luego
+    dos columnas en los costados con pasillo central.
+
+    Ejemplo con ancho 5:
+    LIBRE LIBRE LIBRE LIBRE LIBRE
+    LIBRE PASILLO PASILLO PASILLO LIBRE
+    LIBRE PASILLO PASILLO PASILLO LIBRE
     """
+    print("\nAncho de la fila superior:")
+    print("  1 - 3 plazas")
+    print("  2 - 5 plazas")
+    opcion_ancho = validar_entero("Seleccione una opción: ", 1, 2)
+    ancho = 3 if opcion_ancho == 1 else 5
+    centro = ancho - 2
+
     matriz = []
     plazas_creadas = 0
 
+    # Fila superior horizontal (las esquinas quedan vacías porque
+    # quedarían bloqueadas por los laterales cuando el parking está lleno)
+    fila_top = []
+    for i in range(ancho):
+        if i == 0 or i == ancho - 1:
+            fila_top.append(ESTADO_VACIO)
+        elif plazas_creadas < cantidad_plazas:
+            fila_top.append(ESTADO_LIBRE)
+            plazas_creadas += 1
+        else:
+            fila_top.append(ESTADO_VACIO)
+    matriz.append(fila_top)
+
+    # Filas laterales: columna izquierda + pasillo central + columna derecha
     while plazas_creadas < cantidad_plazas:
         fila = []
 
-        if len(matriz) < 3:
-            for posicion in range(5):
-                if posicion == 0 or posicion == 4:
-                    if plazas_creadas < cantidad_plazas:
-                        fila.append(ESTADO_LIBRE)
-                        plazas_creadas += 1
-                    else:
-                        fila.append(ESTADO_VACIO)
-                else:
-                    fila.append(ESTADO_PASILLO)
+        if plazas_creadas < cantidad_plazas:
+            fila.append(ESTADO_LIBRE)
+            plazas_creadas += 1
         else:
-            for posicion in range(5):
-                if plazas_creadas < cantidad_plazas:
-                    fila.append(ESTADO_LIBRE)
-                    plazas_creadas += 1
-                else:
-                    fila.append(ESTADO_VACIO)
+            fila.append(ESTADO_VACIO)
+
+        for _ in range(centro):
+            fila.append(ESTADO_PASILLO)
+
+        if plazas_creadas < cantidad_plazas:
+            fila.append(ESTADO_LIBRE)
+            plazas_creadas += 1
+        else:
+            fila.append(ESTADO_VACIO)
 
         matriz.append(fila)
 
@@ -419,27 +442,61 @@ def buscar_vehiculo(matriz, registros):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
         return
 
-    for i in range(len(matriz)):
-        for j in range(len(matriz[i])):
-            if matriz[i][j] == patente:
-                mapa_plazas = generar_mapa_plazas(matriz)
-                codigo_plaza = None
+    if patente not in registros:
+        print("El vehículo no se encuentra en el estacionamiento.")
+        return
 
-                for codigo, coordenadas in mapa_plazas.items():
-                    if coordenadas == (i, j):
-                        codigo_plaza = codigo
+    fila, columna = registros[patente]["plaza"]
+    mapa_plazas = generar_mapa_plazas(matriz)
+    codigo_plaza = None
 
-                print(f"\nVehículo encontrado en la plaza {codigo_plaza}.")
+    for codigo, coordenadas in mapa_plazas.items():
+        if coordenadas == (fila, columna):
+            codigo_plaza = codigo
 
-                if patente in registros:
-                    print(
-                        f"Hora de ingreso del vehículo: {registros[patente]['hora_ingreso']}"
-                    )
-                    print(f"Tipo de vehículo: {registros[patente]['tipo_vehiculo']}")
-                    print(f"Estado del vehículo: {registros[patente]['estado']}")
-                return
+    print(f"\nVehículo encontrado en la plaza {codigo_plaza}.")
+    print(f"Hora de ingreso del vehículo: {registros[patente]['hora_ingreso']}")
+    print(f"Tipo de vehículo: {registros[patente]['tipo_vehiculo']}")
+    print(f"Estado del vehículo: {registros[patente]['estado']}")
 
-    print("El vehículo no se encuentra en el estacionamiento.")
+
+def modificar_estacionamiento(matriz, registros, reservas):
+    """
+    Permite recrear el estacionamiento con un nuevo tipo o número de plazas.
+    Bloquea la operación si hay vehículos actualmente estacionados.
+    Advierte si hay reservas activas, ya que sus coordenadas
+    quedarán inválidas.
+    """
+    limpiar_pantalla()
+
+    if registros:
+        print("\nNo se puede modificar el estacionamiento "
+              "mientras hay vehículos estacionados.")
+        print(f"Vehículos actualmente estacionados: {len(registros)}")
+        return
+
+    reservas_activas = [r for r in reservas if r["estado"] == "ACTIVA"]
+    if reservas_activas:
+        print(f"\nAtención: hay {len(reservas_activas)} reserva(s) activa(s).")
+        print("Si modifica el estacionamiento, las reservas activas "
+              "quedarán con coordenadas inválidas.")
+        confirmacion = input(
+            "¿Desea continuar de todas formas? (S/N): "
+        ).upper().strip()
+        if confirmacion != "S":
+            print("Modificación cancelada.")
+            return
+
+    nueva_matriz = crear_estacionamiento()
+
+    if nueva_matriz is None:
+        return
+
+    matriz.clear()
+    matriz.extend(nueva_matriz)
+
+    print("\nEstacionamiento modificado correctamente.")
+    mostrar_estacionamiento(matriz)
 
 
 def modificar_estado_plaza(matriz, registros):
@@ -458,15 +515,27 @@ def modificar_estado_plaza(matriz, registros):
 
     fila, columna = plaza
 
-    patente_actual = matriz[fila][columna]
+    estado_actual = matriz[fila][columna]
 
-    if patente_actual == ESTADO_PASILLO or patente_actual == ESTADO_VACIO:
+    if estado_actual == ESTADO_PASILLO or estado_actual == ESTADO_VACIO:
         print("La posición seleccionada no es una plaza modificable.")
         return
 
-    if patente_actual == ESTADO_LIBRE:
+    if estado_actual == ESTADO_LIBRE:
         print("La plaza está libre, no hay registro para modificar.")
         return
+
+    if estado_actual == ESTADO_OCUPADO:
+        patente_actual = None
+        for pat, datos in registros.items():
+            if datos["plaza"] == (fila, columna):
+                patente_actual = pat
+                break
+        if patente_actual is None:
+            print("No se encontró registro para esta plaza.")
+            return
+    else:
+        patente_actual = estado_actual
 
     while True:
         lista_modificar_estado_plaza()
@@ -515,7 +584,7 @@ def modificar_estado_plaza(matriz, registros):
                     continue
 
                 if patente_actual in registros:
-                    registros[patente_actual]["tipo"] = nuevo_tipo
+                    registros[patente_actual]["tipo_vehiculo"] = nuevo_tipo
                 print("Tipo de vehículo modificado correctamente.")
 
             case 3:

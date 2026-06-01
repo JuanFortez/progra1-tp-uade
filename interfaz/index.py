@@ -8,6 +8,7 @@ from gestion.index import (
     buscar_vehiculo,
     crear_estacionamiento,
     modificar_estado_plaza,
+    modificar_estacionamiento,
     registrar_ingreso_vehiculo,
     registrar_salida_vehiculo,
 )
@@ -111,10 +112,6 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
 
         opcion = validar_entero("Seleccione una opción: ", 1, 9)
 
-        if opcion == 8:
-            print("Opción no válida.")
-            continue
-
         match opcion:
             case 1:
                 print("Ingreso de vehiculo...")
@@ -154,6 +151,17 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
 
             case 7:
                 mostrar_historial(historial)
+
+            case 8:
+                modificar_estacionamiento(matriz, registros, reservas)
+                guardar_datos(
+                    matriz,
+                    reservas,
+                    reservas_clientes,
+                    registros,
+                    historial,
+                    clientes,
+                )
 
             case 9:
                 print("\n👋 Saliendo del panel de administración...")
@@ -299,4 +307,4 @@ def formatear_fecha_hora(fecha_hora):
     if isinstance(fecha_hora, str):
         fecha_hora = datetime.fromisoformat(fecha_hora)
 
-    return fecha_hora.strftime("%d/%m/%Y %H: %M: %S")
+    return fecha_hora.strftime("%d/%m/%Y %H:%M:%S")

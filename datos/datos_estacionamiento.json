@@ -1,138 +1,79 @@
 {
     "matriz": [
         [
+            "  ",
             "⬜️",
-            "PASILLO",
-            "ERT123"
+            "⬜️",
+            "⬜️",
+            "  "
         ],
         [
             "⬜️",
-            "PASILLO",
+            "  ",
+            "  ",
+            "  ",
             "⬜️"
         ],
         [
             "⬜️",
-            "PASILLO",
+            "  ",
+            "  ",
+            "  ",
+            "⬜️"
+        ],
+        [
+            "⬜️",
+            "  ",
+            "  ",
+            "  ",
+            "⬜️"
+        ],
+        [
+            "⬜️",
+            "  ",
+            "  ",
+            "  ",
+            "⬜️"
+        ],
+        [
+            "⬜️",
+            "  ",
+            "  ",
+            "  ",
+            "⬜️"
+        ],
+        [
+            "⬜️",
+            "  ",
+            "  ",
+            "  ",
+            "⬜️"
+        ],
+        [
+            "⬜️",
+            "  ",
+            "  ",
+            "  ",
+            "⬜️"
+        ],
+        [
+            "⬜️",
+            "  ",
+            "  ",
+            "  ",
+            "⬜️"
+        ],
+        [
+            "⬜️",
+            "  ",
+            "  ",
+            "  ",
             "⬜️"
         ]
     ],
     "reservas": [],
     "reservas_clientes": [],
-    "registros": {
-        "ERT123": {
-            "patente": "ERT123",
-            "plaza": [
-                0,
-                2
-            ],
-            "hora_ingreso": "2026-05-28T19:44:57.531376",
-            "tipo_vehiculo": "AUTO",
-            "estado": "OCUPADO"
-        }
-    },
-    "historial": [
-        {
-            "accion": "INGRESO",
-            "patente": "ABC123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                0,
-                0
-            ],
-            "fecha_hora": "2026-05-27T09:40:57.258941"
-        },
-        {
-            "accion": "INGRESO",
-            "patente": "ERT123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                0,
-                2
-            ],
-            "fecha_hora": "2026-05-28T19:44:57.531709"
-        },
-        {
-            "accion": "EGRESO",
-            "patente": "ABC123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                0,
-                0
-            ],
-            "hora_ingreso": "2026-05-27T09:40:57.258546",
-            "hora_salida": "2026-05-28T19:47:48.699348",
-            "tiempo_estacionado": "34h 6m 51s",
-            "tarifa": 34250.0
-        },
-        {
-            "accion": "INGRESO",
-            "patente": "ABC123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                1,
-                0
-            ],
-            "fecha_hora": "2026-05-28T19:48:59.644381"
-        },
-        {
-            "accion": "EGRESO",
-            "patente": "ABC123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                1,
-                0
-            ],
-            "hora_ingreso": "2026-05-28T19:48:59.644345",
-            "hora_salida": "2026-05-28T19:49:08.280804",
-            "tiempo_estacionado": "0h 0m 8s",
-            "tarifa": 1000.0
-        },
-        {
-            "accion": "INGRESO",
-            "patente": "ABC123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                1,
-                2
-            ],
-            "fecha_hora": "2026-05-28T19:50:49.172864"
-        },
-        {
-            "accion": "EGRESO",
-            "patente": "ABC123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                1,
-                2
-            ],
-            "hora_ingreso": "2026-05-28T19:50:49.172820",
-            "hora_salida": "2026-05-28T19:50:54.846317",
-            "tiempo_estacionado": "0h 0m 5s",
-            "tarifa": 1000.0
-        },
-        {
-            "accion": "INGRESO",
-            "patente": "ABC123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                0,
-                0
-            ],
-            "fecha_hora": "2026-05-31T21:57:18.760083"
-        },
-        {
-            "accion": "EGRESO",
-            "patente": "ABC123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                0,
-                0
-            ],
-            "hora_ingreso": "2026-05-31T21:57:18.758225",
-            "hora_salida": "2026-05-31T21:57:35.352576",
-            "tiempo_estacionado": "0h 0m 16s",
-            "tarifa": 1000.0
-        }
-    ],
+    "registros": {},
+    "historial": [],
     "clientes": []
 }
