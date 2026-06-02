@@ -110,7 +110,7 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
     while True:
         lista_panel_administracion()
 
-        opcion = validar_entero("Seleccione una opción: ", 1, 9)
+        opcion = validar_entero("Seleccione una opción: ", 1, 10)
 
         match opcion:
             case 1:
@@ -164,6 +164,9 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
                 )
 
             case 9:
+                mostrar_estadisticas(historial, matriz)
+
+            case 10:
                 print("\n👋 Saliendo del panel de administración...")
                 sleep(2)
                 break
@@ -308,3 +311,53 @@ def formatear_fecha_hora(fecha_hora):
         fecha_hora = datetime.fromisoformat(fecha_hora)
 
     return fecha_hora.strftime("%d/%m/%Y %H:%M:%S")
+
+
+def mostrar_estadisticas(historial, matriz):
+    """
+    Muestra estadísticas del estacionamiento:
+    - Total recaudado (suma de tarifas del historial)
+    - Porcentaje de ocupación promedio de la matriz actual
+    """
+    print("\n" + "=" * 40)
+    print(" " * 10 + "ESTADÍSTICAS")
+    print("=" * 40)
+
+    # --- Total recaudado ---
+    total_recaudado = 0.0
+    cantidad_pagos = 0
+
+    for movimiento in historial:
+        if "tarifa" in movimiento and movimiento["tarifa"] is not None:
+            total_recaudado += movimiento["tarifa"]
+            cantidad_pagos += 1
+
+    print(f"\n💰 Total recaudado:    ${total_recaudado:.2f}")
+    print(f"   Pagos registrados: {cantidad_pagos}")
+
+    # --- Ocupación actual ---
+    if matriz is None:
+        print("\n🅿️  Ocupación actual:   No hay estacionamiento creado.")
+    else:
+        total_plazas = 0
+        plazas_ocupadas = 0
+
+        for fila in matriz:
+            for plaza in fila:
+                if plaza is None:
+                    continue
+                estado = plaza.get("estado", "")
+                # Solo contar plazas reales (no pasillos ni vacíos)
+                if estado not in ("  ", ""):
+                    total_plazas += 1
+                    if estado == "🟥":  # ESTADO_OCUPADO
+                        plazas_ocupadas += 1
+
+        if total_plazas > 0:
+            porcentaje = (plazas_ocupadas / total_plazas) * 100
+            print(f"\n🅿️  Ocupación actual:   {plazas_ocupadas}/{total_plazas} plazas ocupadas ({porcentaje:.1f}%)")
+        else:
+            print("\n🅿️  Ocupación actual:   Sin plazas disponibles.")
+
+    print("\n" + "=" * 40)
+    input("\nPresione Enter para continuar...")
