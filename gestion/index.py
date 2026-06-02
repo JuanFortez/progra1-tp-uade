@@ -613,3 +613,21 @@ def modificar_estado_plaza(matriz, registros):
 
             case 4:
                 break
+
+def login(admin):
+    if admin is None:
+        usuario = input("Ingrese su nuevo usuario: ")
+        clave = input("Ingrese su nueva clave: ")
+        admin = {
+        "usuario": usuario,
+        "clave": clave
+        }
+        return admin
+    else:
+        while True:
+            usuario = input("Ingrese su usuario: ")
+            clave = input("Ingrese su clave: ")
+            if usuario == admin["usuario"] and clave == admin["clave"]:
+                return admin
+            else:
+                print("Credenciales incorrectas. Intente de nuevo.")
