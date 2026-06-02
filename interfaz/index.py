@@ -358,22 +358,8 @@ def mostrar_estadisticas(historial, matriz):
     if matriz is None:
         print("\n🅿️  Ocupación actual: No hay estacionamiento creado.")
     else:
-        total_plazas = 0
-        plazas_ocupadas = 0
-
-        for fila in matriz:
-            for plaza in fila:
-                if plaza is None:
-                    continue
-                if isinstance(plaza, dict):
-                    estado = plaza.get("estado", "Sin datos")
-                else:
-                    estado = plaza if isinstance(plaza, str) else "Sin datos"
-                # Solo contar plazas reales (no pasillos ni vacíos)
-                if estado not in ("  ", ""):
-                    total_plazas += 1
-                    if estado == "🟥":  # ESTADO_OCUPADO
-                        plazas_ocupadas += 1
+        total_plazas = sum(1 for fila in matriz for celda in fila if es_plaza_real(celda))
+        plazas_ocupadas = contar_plazas_ocupadas(matriz)
 
         if total_plazas > 0:
             porcentaje = (plazas_ocupadas / total_plazas) * 100
