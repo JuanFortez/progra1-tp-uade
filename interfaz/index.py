@@ -3,7 +3,7 @@ from datetime import datetime
 
 from datos.persistencia import cargar_datos, guardar_datos
 from consultas.validacion.index import validar_entero
-from consultas.visualizacion.index import mostrar_estacionamiento
+from consultas.visualizacion.index import mostrar_estacionamiento, contar_plazas_ocupadas, es_plaza_real
 from gestion.index import (
     buscar_vehiculo,
     crear_estacionamiento,
@@ -345,19 +345,8 @@ def mostrar_estadisticas(historial, matriz):
     if matriz is None:
         print("\n🅿️  Ocupación actual:   No hay estacionamiento creado.")
     else:
-        total_plazas = 0
-        plazas_ocupadas = 0
-
-        for fila in matriz:
-            for plaza in fila:
-                if plaza is None:
-                    continue
-                estado = plaza.get("estado", "")
-                # Solo contar plazas reales (no pasillos ni vacíos)
-                if estado not in ("  ", ""):
-                    total_plazas += 1
-                    if estado == "🟥":  # ESTADO_OCUPADO
-                        plazas_ocupadas += 1
+        total_plazas = sum(1 for fila in matriz for celda in fila if es_plaza_real(celda))
+        plazas_ocupadas = contar_plazas_ocupadas(matriz)
 
         if total_plazas > 0:
             porcentaje = (plazas_ocupadas / total_plazas) * 100
