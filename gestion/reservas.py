@@ -277,8 +277,10 @@ def modificar_reserva(reservas, matriz):
                         print("La plaza no está disponible en esas fechas.")
                         continue
 
+                    matriz[reserva["fila"]][reserva["columna"]] = ESTADO_LIBRE
                     reserva["fila"] = nueva_fila
                     reserva["columna"] = nueva_columna
+                    matriz[nueva_fila][nueva_columna] = ESTADO_RESERVADA
                     print("Plaza de la reserva modificada correctamente.")
                     continue
                 
