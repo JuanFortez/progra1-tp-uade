@@ -250,9 +250,43 @@ def modificar_reserva(reservas, matriz):
             while True:
                 lista_modificar_reserva()
 
-                salir = False
                 opcion = validar_entero("Seleccione la modificación a realizar: ", 1, 9)
 
+                if opcion == 5:
+                    plaza = seleccionar_plaza_por_codigo(matriz)
+
+                    if plaza is None:
+                        continue
+
+                    nueva_fila, nueva_columna = plaza
+
+                    if matriz[nueva_fila][nueva_columna] != ESTADO_LIBRE:
+                        print("La plaza seleccionada no está libre.")
+                        continue
+
+                    disponible = verificar_disponibilidad(
+                        reservas,
+                        nueva_fila,
+                        nueva_columna,
+                        reserva["fecha_ingreso"],
+                        reserva["fecha_salida"],
+                        codigo_buscar,
+                    )
+
+                    if not disponible:
+                        print("La plaza no está disponible en esas fechas.")
+                        continue
+
+                    reserva["fila"] = nueva_fila
+                    reserva["columna"] = nueva_columna
+                    print("Plaza de la reserva modificada correctamente.")
+                    continue
+                
+                if opcion == 9:
+                    print("Volviendo a vista de reservas...")
+                    sleep(1)
+                    break
+                
                 match opcion:
                     case 1:
                         nueva_patente = input("Ingrese nueva patente: ").upper()
@@ -299,38 +333,6 @@ def modificar_reserva(reservas, matriz):
 
                         reserva["numero_telefono"] = nuevo_telefono
 
-                    case 5:
-                        plaza = seleccionar_plaza_por_codigo(matriz)
-
-                        if plaza is None:
-                            continue
-
-                        nueva_fila, nueva_columna = plaza
-
-                        if matriz[nueva_fila][nueva_columna] != ESTADO_LIBRE:
-                            print("La plaza seleccionada no está libre.")
-                            continue
-
-                        disponible = verificar_disponibilidad(
-                            reservas,
-                            nueva_fila,
-                            nueva_columna,
-                            reserva["fecha_ingreso"],
-                            reserva["fecha_salida"],
-                            codigo_buscar,
-                        )
-
-                        if not disponible:
-                            print("La plaza no está disponible en esas fechas.")
-                            continue
-
-                        matriz[reserva["fila"]][reserva["columna"]] = ESTADO_LIBRE
-                        reserva["fila"] = nueva_fila
-                        reserva["columna"] = nueva_columna
-                        matriz[nueva_fila][nueva_columna] = ESTADO_RESERVADA
-                        print("Plaza de la reserva modificada correctamente.")
-                        continue
-
                     case 6:
                         nueva_fecha = input(
                             "Ingrese nueva fecha de inicio (AAAA-MM-DD): "
@@ -367,14 +369,6 @@ def modificar_reserva(reservas, matriz):
                             )
                         reserva["tipo_vehiculo"] = nuevo_tipo_vehiculo
 
-                    case 9:
-                        print("Volviendo a vista de reservas...")
-                        sleep(1)
-                        salir = True
-
-                if salir:
-                    break
-
                 if reserva["fecha_ingreso"] >= reserva["fecha_salida"]:
                     print(
                         "La fecha de ingreso debe ser anterior a la fecha de salida."
@@ -394,8 +388,6 @@ def modificar_reserva(reservas, matriz):
                     print("Reserva modificada correctamente.")
                 else:
                     print("La plaza no está disponible en esas fechas.")
-
-                continue
 
             break
 
