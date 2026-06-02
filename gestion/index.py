@@ -613,6 +613,9 @@ def modificar_estado_plaza(matriz, registros):
 
             case 4:
                 break
+            
+            case _:
+                print("Opción inválida.")
 
 def login(admin):
     if admin is None:
