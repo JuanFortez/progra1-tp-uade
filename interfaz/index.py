@@ -3,7 +3,7 @@ from datetime import datetime
 
 from datos.persistencia import cargar_datos, guardar_datos
 from consultas.validacion.index import validar_entero
-from consultas.visualizacion.index import mostrar_estacionamiento
+from consultas.visualizacion.index import mostrar_estacionamiento, contar_plazas_ocupadas, es_plaza_real
 from gestion.index import (
     buscar_vehiculo,
     crear_estacionamiento,

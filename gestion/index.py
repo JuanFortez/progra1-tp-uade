@@ -584,7 +584,7 @@ def modificar_estado_plaza(matriz, registros):
                     .strip()
                 )
                 if nuevo_tipo not in TIPO_VEHICULO:
-                    print("Tipo invalido. Opciones validas: AUTO, MOTO, CAMIONETA")
+                    print("Tipo inválido. Opciones válidas: AUTO, MOTO, CAMIONETA")
                     continue
 
                 if patente_actual in registros:
