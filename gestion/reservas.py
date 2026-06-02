@@ -52,7 +52,7 @@ def crear_reserva_administrador(reservas, matriz, clientes):
     nombre_titular = input("Ingrese nombre del titular: ").upper().strip()
 
     while not validar_nombre(nombre_titular):
-        print("\nNombre invalido. Ingrese solo letras y espacios.\n")
+        print("\nNombre inválido. Ingrese solo letras y espacios.\n")
         nombre_titular = input("Ingrese nombre del titular: ").upper().strip()
 
     dni_titular = input("Ingrese DNI del titular: ").strip()
@@ -152,7 +152,7 @@ def crear_reserva_cliente(reservas_clientes):
     nombre_titular = input("Ingrese nombre del titular: ").strip()
 
     while not validar_nombre(nombre_titular):
-        print("\nNombre invalido. Ingrese solo letras y espacios.\n")
+        print("\nNombre inválido. Ingrese solo letras y espacios.\n")
         nombre_titular = input("Ingrese nombre del titular: ").strip()
 
     dni_titular = input("Ingrese DNI del titular: ").strip()
@@ -324,8 +324,10 @@ def modificar_reserva(reservas, matriz):
                             print("La plaza no está disponible en esas fechas.")
                             continue
 
+                        matriz[reserva["fila"]][reserva["columna"]] = ESTADO_LIBRE
                         reserva["fila"] = nueva_fila
                         reserva["columna"] = nueva_columna
+                        matriz[nueva_fila][nueva_columna] = ESTADO_RESERVADA
                         print("Plaza de la reserva modificada correctamente.")
                         continue
 
@@ -730,7 +732,7 @@ def asignar_plaza(reservas_clientes, reservas, matriz):
             break
 
     if reserva_encontrada is None:
-        print("No se encontro una reserva con esa patente.")
+        print("No se encontró una reserva con esa patente.")
         return
 
     if reserva_encontrada["estado"] == "CANCELADA":
