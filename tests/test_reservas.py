@@ -57,7 +57,6 @@ def test_filtrar_rango_fechas():
     ]
     assert len(filtrar_rango_fechas(reservas, "2024-06-01", "2024-06-05")) == 2
 
-
 def test_filtrar_vehiculo_por_patente():
     vehiculos = [{"patente": "ABC123"}, {"patente": "XY123AB"}]
     resultado = filtrar_vehiculo_patente(vehiculos, "ABC123")

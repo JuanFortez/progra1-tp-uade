@@ -274,11 +274,11 @@ def registrar_ingreso_vehiculo(matriz, registros, historial):
     """
     limpiar_pantalla()
 
-    patente = input("\nIngrese la patente del vehículo: ").upper()
+    patente = input("\nIngrese la patente del vehículo: ").upper().strip()
 
     while not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
-        patente = input("\nIngrese la patente del vehículo: ").upper()
+        patente = input("\nIngrese la patente del vehículo: ").upper().strip()
 
     if patente in registros:
         print("Ese vehículo ya está en el estacionamiento.")
@@ -389,11 +389,11 @@ def registrar_salida_vehiculo(matriz, registros, historial):
 
     mostrar_estacionamiento(matriz)
 
-    patente = input("\nIngrese la patente del vehículo: ").upper()
+    patente = input("\nIngrese la patente del vehículo: ").upper().strip()
 
-    if not validar_patente(patente):
+    while not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
-        return
+        patente = input("\nIngrese la patente del vehículo: ").upper().strip()
 
     if patente not in registros:
         print("Ese vehículo no tiene ingreso registrado.")
@@ -440,11 +440,11 @@ def buscar_vehiculo(matriz, registros):
     """
     limpiar_pantalla()
 
-    patente = input("\nIngrese la patente a buscar: ").upper()
+    patente = input("\nIngrese la patente a buscar: ").upper().strip()
 
-    if not validar_patente(patente):
+    while not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
-        return
+        patente = input("\nIngrese la patente a buscar: ").upper().strip()
 
     if patente not in registros:
         print("El vehículo no se encuentra en el estacionamiento.")
@@ -458,13 +458,16 @@ def buscar_vehiculo(matriz, registros):
         if coordenadas == (fila, columna):
             codigo_plaza = codigo
 
+    hora_ingreso = registros[patente]['hora_ingreso']
+    if isinstance(hora_ingreso, str):
+        hora_ingreso = datetime.fromisoformat(hora_ingreso)
     print(f"\nVehículo encontrado en la plaza {codigo_plaza}.")
-    print(f"Hora de ingreso del vehículo: {registros[patente]['hora_ingreso']}")
+    print(f"Hora de ingreso del vehículo: {hora_ingreso.strftime('%d/%m/%Y %H:%M:%S')}")
     print(f"Tipo de vehículo: {registros[patente]['tipo_vehiculo']}")
     print(f"Estado del vehículo: {registros[patente]['estado']}")
 
 
-def modificar_estacionamiento(matriz, registros, reservas):
+def modificar_estacionamiento(matriz, registros, reservas, reservas_clientes):
     """
     Permite recrear el estacionamiento con un nuevo tipo o número de plazas.
     Bloquea la operación si hay vehículos actualmente estacionados.
@@ -480,8 +483,10 @@ def modificar_estacionamiento(matriz, registros, reservas):
         return
 
     reservas_activas = [r for r in reservas if r["estado"] == "ACTIVA"]
-    if reservas_activas:
-        print(f"\nAtención: hay {len(reservas_activas)} reserva(s) activa(s).")
+    reservas_clientes_activas = [r for r in reservas_clientes if r["estado"] == "ACTIVA"]
+    total_activas = len(reservas_activas) + len(reservas_clientes_activas)
+    if total_activas > 0:
+        print(f"\nAtención: hay {total_activas} reserva(s) activa(s).")
         print("Si modifica el estacionamiento, las reservas activas "
               "quedarán con coordenadas inválidas.")
         confirmacion = input(
@@ -589,7 +594,9 @@ def modificar_estado_plaza(matriz, registros):
 
                 if patente_actual in registros:
                     registros[patente_actual]["tipo_vehiculo"] = nuevo_tipo
-                print("Tipo de vehículo modificado correctamente.")
+                    print("Tipo de vehículo modificado correctamente.")
+                else:
+                    print("No hay registro activo para esta plaza.")
 
             case 3:
                 nuevo_estado = (
@@ -620,18 +627,37 @@ def modificar_estado_plaza(matriz, registros):
 
 def login(admin):
     if admin is None:
-        usuario = input("Ingrese su nuevo usuario: ")
-        clave = input("Ingrese su nueva clave: ")
-        admin = {
-        "usuario": usuario,
-        "clave": clave
-        }
+        usuario = input("Ingrese su nuevo usuario: ").strip()
+        while usuario == "-1" or usuario == "":
+            if usuario == "":
+                print("El usuario no puede estar vacío.")
+            else:
+                print('El usuario no puede ser "-1".')
+            usuario = input("Ingrese su nuevo usuario: ").strip()
+
+        clave = input("Ingrese su nueva clave: ").strip()
+        while clave == "-1" or clave == "":
+            if clave == "":
+                print("La clave no puede estar vacía.")
+            else:
+                print('La clave no puede ser "-1".')
+            clave = input("Ingrese su nueva clave: ").strip()
+
+        admin = {"usuario": usuario, "clave": clave}
         return admin
     else:
         while True:
-            usuario = input("Ingrese su usuario: ")
-            clave = input("Ingrese su clave: ")
-            if usuario == admin["usuario"] and clave == admin["clave"]:
-                return admin
+            usuario = input("Ingrese su usuario (o -1 para salir): ").strip()
+            if usuario == "-1":
+                return None
+
+            if usuario == admin["usuario"]:
+                while True:
+                    clave = input("Ingrese su clave (o -1 para salir): ").strip()
+                    if clave == "-1":
+                        return None
+                    if clave == admin["clave"]:
+                        return admin
+                    print("Clave incorrecta. Intente de nuevo.")
             else:
-                print("Credenciales incorrectas. Intente de nuevo.")
+                print("Usuario incorrecto. Intente de nuevo.")
