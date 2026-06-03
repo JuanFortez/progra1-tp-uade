@@ -1,6 +1,6 @@
 from functools import reduce
 from ui.index import limpiar_pantalla
-from consultas.constantes.index import ESTADO_LIBRE, ESTADO_PASILLO, ESTADO_VACIO, ESTADO_RESERVADA
+from consultas.constantes.index import ESTADO_LIBRE, ESTADO_PASILLO, ESTADO_VACIO, ESTADO_RESERVADA, ESTADO_OCUPADO
 
 def mostrar_estacionamiento(matriz):
     """
@@ -41,7 +41,7 @@ def contar_plazas_ocupadas(matriz):
     matriz_plana = [col for fila in matriz for col in fila]
 
     return reduce(
-        lambda acc, col: acc + (1 if es_plaza_real(col) and col != ESTADO_LIBRE else 0),
+        lambda acc, col: acc + (1 if col == ESTADO_OCUPADO else 0),
         matriz_plana,
         0,
     )

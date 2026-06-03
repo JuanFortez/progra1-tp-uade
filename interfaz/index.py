@@ -243,7 +243,7 @@ def interfaz_reservas_admin(
 
             case 2:
                 print("Cancelación de reserva...")
-                cancelar_reserva(reservas)
+                cancelar_reserva(reservas, matriz)
                 guardar_datos(
                     matriz, reservas, reservas_clientes, registros, historial, clientes, admin
                 )

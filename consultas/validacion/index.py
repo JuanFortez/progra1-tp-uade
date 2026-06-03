@@ -104,7 +104,7 @@ def validar_entero(mensaje, minimo=None, maximo=None):
     while True:
         entrada = input(mensaje).strip()
 
-        if not entrada.isdigit():
+        if not entrada.isdecimal():
             print("Debe ingresar un número entero válido.")
             continue
 

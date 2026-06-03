@@ -16,7 +16,7 @@ def test_pasillo_no_es_plaza_real():
 
 def test_contar_plazas_ocupadas():
     matriz = [[ESTADO_OCUPADO, ESTADO_LIBRE], [ESTADO_RESERVADA, ESTADO_PASILLO]]
-    assert contar_plazas_ocupadas(matriz) == 2
+    assert contar_plazas_ocupadas(matriz) == 1
 
 
 def test_contar_plazas_ocupadas_ninguna():
