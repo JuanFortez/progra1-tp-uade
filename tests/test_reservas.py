@@ -4,6 +4,7 @@ from gestion.reservas import (
     ordenar_reservas_fechas,
     filtrar_por_fecha,
     filtrar_rango_fechas,
+    filtrar_vehiculo_patente,
     registrar_cliente_si_no_existe,
 )
 
@@ -56,6 +57,10 @@ def test_filtrar_rango_fechas():
     ]
     assert len(filtrar_rango_fechas(reservas, "2024-06-01", "2024-06-05")) == 2
 
+def test_filtrar_vehiculo_por_patente():
+    vehiculos = [{"patente": "ABC123"}, {"patente": "XY123AB"}]
+    resultado = filtrar_vehiculo_patente(vehiculos, "ABC123")
+    assert len(resultado) == 1 and resultado[0]["patente"] == "ABC123"
 
 
 def test_registrar_cliente_nuevo():
