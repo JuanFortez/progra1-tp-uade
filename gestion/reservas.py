@@ -683,6 +683,12 @@ def filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida):
         )
     )
 
+def filtrar_vehiculo_patente(vehiculos, patente):
+    """
+    Busca vehículos que coincidan con la patente.
+    """
+
+    return list(filter(lambda vehiculo: vehiculo["patente"] == patente, vehiculos))
 
 
 def buscar_fecha(reservas, matriz):
