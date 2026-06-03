@@ -49,9 +49,13 @@ def cargar_datos():
     with open(ruta_datos, "r", encoding="utf-8") as archivo:
         datos = json.load(archivo)
 
+    datos["matriz"] = datos.get("matriz", None)
+    datos["reservas"] = datos.get("reservas", [])
+    datos["reservas_clientes"] = datos.get("reservas_clientes", [])
     datos["registros"] = restaurar_registros(datos.get("registros", {}))
     datos["historial"] = datos.get("historial", [])
     datos["clientes"] = datos.get("clientes", [])
+    datos["admin"] = datos.get("admin", None)
 
     return datos
 

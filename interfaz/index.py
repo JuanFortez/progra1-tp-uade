@@ -75,6 +75,11 @@ def interfaz_inicio():
             case 1:
                 print("Accediendo a panel de administración...")
                 admin = login(datos["admin"])
+
+                if admin is None:
+                    print("Acceso cancelado.")
+                    continue
+
                 datos["admin"] = admin
 
                 if matriz is None:
@@ -171,7 +176,7 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
                 mostrar_historial(historial)
 
             case 8:
-                modificar_estacionamiento(matriz, registros, reservas)
+                modificar_estacionamiento(matriz, registros, reservas, reservas_clientes)
                 guardar_datos(
                     matriz,
                     reservas,
@@ -236,7 +241,7 @@ def interfaz_reservas_admin(
         match opcion:
             case 1:
                 print("Creación de reserva...")
-                crear_reserva_administrador(reservas, matriz, clientes)
+                crear_reserva_administrador(reservas, reservas_clientes, matriz, clientes)
                 guardar_datos(
                     matriz, reservas, reservas_clientes, registros, historial, clientes, admin
                 )
@@ -250,7 +255,7 @@ def interfaz_reservas_admin(
 
             case 3:
                 print("Modificación de reserva...")
-                modificar_reserva(reservas, matriz)
+                modificar_reserva(reservas, reservas_clientes, matriz)
                 guardar_datos(
                     matriz, reservas, reservas_clientes, registros, historial, clientes, admin
                 )
