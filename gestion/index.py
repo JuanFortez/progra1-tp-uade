@@ -276,9 +276,9 @@ def registrar_ingreso_vehiculo(matriz, registros, historial):
 
     patente = input("\nIngrese la patente del vehículo: ").upper()
 
-    if not validar_patente(patente):
+    while not validar_patente(patente):
         print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
-        return
+        patente = input("\nIngrese la patente del vehículo: ").upper()
 
     if patente in registros:
         print("Ese vehículo ya está en el estacionamiento.")
@@ -563,7 +563,7 @@ def modificar_estado_plaza(matriz, registros):
 
                 if not validar_patente(nueva_patente):
                     print("\nPatente inválida. Formato esperado: ABC123 o AB123CD")
-                    return
+                    continue
 
                 if nueva_patente in registros and nueva_patente != patente_actual:
                     print("Esa patente ya está registrada en el estacionamiento.")
@@ -573,7 +573,7 @@ def modificar_estado_plaza(matriz, registros):
                     registros[nueva_patente] = registros.pop(patente_actual)
                     registros[nueva_patente]["patente"] = nueva_patente
 
-                matriz[fila][columna] = nueva_patente
+                matriz[fila][columna] = ESTADO_OCUPADO
                 patente_actual = nueva_patente
                 print(f"Patente modificada correctamente a {nueva_patente}.")
 
@@ -609,6 +609,7 @@ def modificar_estado_plaza(matriz, registros):
                 else:
                     if patente_actual in registros:
                         registros[patente_actual]["estado"] = nuevo_estado
+                    matriz[fila][columna] = ESTADO_OCUPADO
                     print(f"Estado modificado correctamente a {nuevo_estado}.")
 
             case 4:
