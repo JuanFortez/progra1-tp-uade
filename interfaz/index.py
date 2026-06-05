@@ -4,6 +4,7 @@ from datetime import datetime
 from datos.persistencia import cargar_datos, guardar_datos
 from consultas.validacion.index import validar_entero
 from consultas.visualizacion.index import mostrar_estacionamiento, contar_plazas_ocupadas, es_plaza_real
+from login.index import login
 from gestion.index import (
     buscar_vehiculo,
     crear_estacionamiento,
@@ -11,7 +12,6 @@ from gestion.index import (
     modificar_estacionamiento,
     registrar_ingreso_vehiculo,
     registrar_salida_vehiculo,
-    login,
 )
 from gestion.reservas import (
     asignar_plaza,
