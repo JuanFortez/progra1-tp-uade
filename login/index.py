@@ -1,37 +1,65 @@
-def login(admin):
-    if admin is None:
+def obtener_usuario_input():
+    """Solicita el nombre de usuario."""
+    while True:
+        usuario = input("Ingrese su usuario (o -1 para salir): ").strip()
+        if usuario == "":
+            print("El usuario no puede estar vacío.")
+        else:
+            return usuario
+
+
+def obtener_clave_input():
+    """Solicita la clave del administrador."""
+    while True:
+        clave = input("Ingrese su clave (o -1 para salir): ").strip()
+        if clave == "":
+            print("La clave no puede estar vacía.")
+        else:
+            return clave
+
+
+def crear_admin():
+    """Crea las credenciales del administrador por primera vez."""
+    print("No hay administrador registrado. Cree uno nuevo.")
+
+    while True:
         usuario = input("Ingrese su nuevo usuario: ").strip()
-        while usuario == "-1" or usuario == "":
-            if usuario == "":
-                print("El usuario no puede estar vacío.")
-            else:
-                print('El usuario no puede ser "-1".')
-            usuario = input("Ingrese su nuevo usuario: ").strip()
+        if not usuario or usuario == "-1":
+            print('El usuario no puede estar vacío ni ser "-1".')
+        else:
+            break
 
+    while True:
         clave = input("Ingrese su nueva clave: ").strip()
-        while clave == "-1" or clave == "":
-            if clave == "":
-                print("La clave no puede estar vacía.")
-            else:
-                print('La clave no puede ser "-1".')
-            clave = input("Ingrese su nueva clave: ").strip()
+        if not clave or clave == "-1":
+            print('La clave no puede estar vacía ni ser "-1".')
+        else:
+            break
 
-        admin = {"usuario": usuario, "clave": clave}
-        return admin
-    else:
-        while True:
-            usuario = input("Ingrese su usuario (o -1 para salir): ").strip()
-            if usuario == "-1":
-                return None
+    return {"usuario": usuario, "clave": clave}
 
-            if usuario == admin["usuario"]:
-                while True:
-                    clave = input("Ingrese su clave (o -1 para salir): ").strip()
-                    if clave == "-1":
-                        return None
-                    if clave == admin["clave"]:
-                        return admin
-                    print("Clave incorrecta. Intente de nuevo.")
-            else:
-                print("Usuario incorrecto. Intente de nuevo.")
 
+def login(admin):
+    """Maneja el inicio de sesión del administrador.
+    Retorna True si el login es exitoso, False si cancela.
+    """
+    usuario = obtener_usuario_input()
+
+    if usuario == "-1":
+        return False
+
+    if usuario != admin["usuario"]:
+        print("Usuario incorrecto. Intente de nuevo.")
+        return False
+
+    while True:
+        clave = obtener_clave_input()
+
+        if clave == "-1":
+            print("Acceso cancelado.")
+            return False
+
+        if clave == admin["clave"]:
+            return True
+
+        print("Clave incorrecta. Intente de nuevo.")

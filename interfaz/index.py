@@ -4,7 +4,7 @@ from datetime import datetime
 from datos.persistencia import cargar_datos, guardar_datos
 from consultas.validacion.index import validar_entero
 from consultas.visualizacion.index import mostrar_estacionamiento, contar_plazas_ocupadas, es_plaza_real
-from login.index import login
+from login.index import login, crear_admin
 from gestion.index import (
     buscar_vehiculo,
     crear_estacionamiento,
@@ -74,11 +74,13 @@ def interfaz_inicio():
         match opcion:
             case 1:
                 print("Accediendo a panel de administración...")
-                admin = login(datos["admin"])
 
-                if admin is None:
-                    print("Acceso cancelado.")
-                    continue
+                if datos["admin"] is None:
+                    admin = crear_admin()
+                else:
+                    if not login(datos["admin"]):
+                        continue
+                    admin = datos["admin"]
 
                 datos["admin"] = admin
 
