@@ -1,6 +1,14 @@
 from datetime import datetime
 import math
-from consultas.constantes.index import TIPO_VEHICULO, MULTIPLICADORES_TARIFA, ESTADO_LIBRE, ESTADO_PASILLO, ESTADO_VACIO, ESTADO_OCUPADO, ESTADO_RESERVADA
+from consultas.constantes.index import (
+    TIPO_VEHICULO, 
+    MULTIPLICADORES_TARIFA, 
+    ESTADO_LIBRE, 
+    ESTADO_PASILLO, 
+    ESTADO_VACIO, 
+    ESTADO_OCUPADO, 
+    ESTADO_RESERVADA,
+) 
 from consultas.validacion.index import validar_entero, validar_patente
 from consultas.visualizacion.index import mostrar_estacionamiento
 from ui.index import (
@@ -8,6 +16,7 @@ from ui.index import (
     lista_crear_estacionamiento,
     lista_modificar_estado_plaza,
 )
+from logs.index import escribir_log
 
 
 def crear_estacionamiento():
@@ -30,19 +39,27 @@ def crear_estacionamiento():
 
     match opcion:
         case 1:
-            return crear_estacionamiento_rectangular()
+            estacionamiento = crear_estacionamiento_rectangular()
+            tipo = "rectangular"
 
         case 2:
             cantidad_plazas = validar_entero("\nCantidad de plazas: ", 1)
-            return crear_estacionamiento_dos_columnas(cantidad_plazas)
+            estacionamiento = crear_estacionamiento_dos_columnas(cantidad_plazas)
+            tipo = "de dos columnas"
 
         case 3:
             cantidad_plazas = validar_entero("\nCantidad de plazas: ", 1)
-            return crear_estacionamiento_doble_pasillo(cantidad_plazas)
+            estacionamiento = crear_estacionamiento_doble_pasillo(cantidad_plazas)
+            tipo = "de doble pasillo"
 
         case 4:
             cantidad_plazas = validar_entero("\nCantidad de plazas: ", 1)
-            return crear_estacionamiento_en_u(cantidad_plazas)
+            estacionamiento = crear_estacionamiento_en_u(cantidad_plazas)
+            tipo = "en U"            
+
+    escribir_log(f"Se modificó el estacionamiento a un estacionamiento {tipo}")
+
+    return estacionamiento
 
 
 def crear_estacionamiento_rectangular():
@@ -331,7 +348,10 @@ def registrar_ingreso_vehiculo(matriz, registros, historial):
             "fecha_hora": datetime.now(),
         }
     )
-
+    escribir_log(
+        f"Se registró la entrada del vehículo con patente: {registros[patente]['patente']}. "
+        f"Vehiculo: {registros[patente]['tipo_vehiculo']}"
+    )
     print(
         f"\nIngreso registrado. Hora: {registros[patente]['hora_ingreso'].strftime('%H:%M:%S')}\n"
     )
@@ -428,7 +448,10 @@ def registrar_salida_vehiculo(matriz, registros, historial):
             "tarifa": tarifa,
         }
     )
-
+    escribir_log(
+        f"Se registró la salida del vehículo con patente: {registros[patente]['patente']}. " 
+        f"Vehiculo: {registros[patente]['tipo_vehiculo']}"
+    )
     matriz[fila][columna] = ESTADO_LIBRE
     del registros[patente]
 
@@ -563,6 +586,9 @@ def modificar_estado_plaza(matriz, registros):
                     if patente_actual in registros:
                         del registros[patente_actual]
                     matriz[fila][columna] = ESTADO_LIBRE
+                    escribir_log(
+                        f"Se liberó la plaza {plaza}. Pantente: {patente_actual}"
+                    )
                     print("Plaza liberada correctamente")
                     return
 
@@ -575,12 +601,18 @@ def modificar_estado_plaza(matriz, registros):
                     continue
 
                 if patente_actual in registros:
+                    patente_anterior = patente_actual
                     registros[nueva_patente] = registros.pop(patente_actual)
                     registros[nueva_patente]["patente"] = nueva_patente
 
                 matriz[fila][columna] = ESTADO_OCUPADO
                 patente_actual = nueva_patente
-                print(f"Patente modificada correctamente a {nueva_patente}.")
+                escribir_log(
+                    f"Se modificó la patente de la plaza {plaza}. " 
+                    f"Patente anterior: {patente_anterior}, " 
+                    f"patente nueva: {nueva_patente}"
+                )
+                print(f"\nPatente modificada correctamente a {nueva_patente}.")
 
             case 2:
                 nuevo_tipo = (
@@ -594,6 +626,9 @@ def modificar_estado_plaza(matriz, registros):
 
                 if patente_actual in registros:
                     registros[patente_actual]["tipo_vehiculo"] = nuevo_tipo
+                    escribir_log(
+                        f"Se modificó el tipo de vehículo de la plaza {plaza} a {nuevo_tipo} "
+                    )
                     print("Tipo de vehículo modificado correctamente.")
                 else:
                     print("No hay registro activo para esta plaza.")
@@ -611,6 +646,9 @@ def modificar_estado_plaza(matriz, registros):
                     if patente_actual in registros:
                         del registros[patente_actual]
                     matriz[fila][columna] = ESTADO_LIBRE
+                    escribir_log(
+                        f"Se liberó la plaza {plaza}. Pantente: {patente_actual}"
+                    )
                     print("Plaza liberada correctamente.")
                     return
                 else:
@@ -618,6 +656,9 @@ def modificar_estado_plaza(matriz, registros):
                         registros[patente_actual]["estado"] = nuevo_estado
                     matriz[fila][columna] = ESTADO_OCUPADO
                     print(f"Estado modificado correctamente a {nuevo_estado}.")
+                    escribir_log(
+                        f"Se modificó el estado de la plaza {plaza} a {nuevo_estado}"
+                    )
 
             case 4:
                 break

@@ -299,6 +299,7 @@ def modificar_reserva(reservas, reservas_clientes, matriz):
                     reserva["fila"] = nueva_fila
                     reserva["columna"] = nueva_columna
                     matriz[nueva_fila][nueva_columna] = ESTADO_RESERVADA
+                    escribir_log(f"Plaza de la reserva {codigo_buscar} modificada a {plaza}")
                     print("Plaza de la reserva modificada correctamente.")
                     continue
                 
@@ -315,6 +316,7 @@ def modificar_reserva(reservas, reservas_clientes, matriz):
                             print("Patente inválida.")
                             continue
                         reserva["patente"] = nueva_patente
+                        escribir_log(f"Patente de la reserva {codigo_buscar} modificada a {nueva_patente}")
                         print("Patente modificada correctamente.")
                         continue
 
@@ -330,6 +332,7 @@ def modificar_reserva(reservas, reservas_clientes, matriz):
                             )
 
                         reserva["nombre"] = nuevo_nombre
+                        escribir_log(f"Nombre de la reserva {codigo_buscar} modificado a {nuevo_nombre}")
                         print("Nombre modificado correctamente.")
                         continue
 
@@ -343,6 +346,7 @@ def modificar_reserva(reservas, reservas_clientes, matriz):
                             nuevo_dni = input("Ingrese nuevo DNI: ").strip()
 
                         reserva["dni_cliente"] = nuevo_dni
+                        escribir_log(f"DNI de la reserva {codigo_buscar} modificado a {nuevo_dni}")
                         print("DNI modificado correctamente.")
                         continue
 
@@ -358,6 +362,7 @@ def modificar_reserva(reservas, reservas_clientes, matriz):
                             ).strip()
 
                         reserva["numero_telefono"] = nuevo_telefono
+                        escribir_log(f"Teléfono de la reserva {codigo_buscar} modificado a {nuevo_telefono}")
                         print("Teléfono modificado correctamente.")
                         continue
 
@@ -382,6 +387,7 @@ def modificar_reserva(reservas, reservas_clientes, matriz):
                             print("Las nuevas fechas generan un conflicto con otra reserva.")
                             continue
                         reserva["fecha_ingreso"] = nueva_fecha
+                        escribir_log(f"Fecha de ingreso de la reserva {codigo_buscar} modificada a {nueva_fecha}")
                         print("Fecha de ingreso modificada correctamente.")
                         continue
 
@@ -406,6 +412,7 @@ def modificar_reserva(reservas, reservas_clientes, matriz):
                             print("Las nuevas fechas generan un conflicto con otra reserva.")
                             continue
                         reserva["fecha_salida"] = nueva_fecha
+                        escribir_log(f"Fecha de salida de la reserva {codigo_buscar} modificada a {nueva_fecha}")
                         print("Fecha de salida modificada correctamente.")
                         continue
 
@@ -424,6 +431,7 @@ def modificar_reserva(reservas, reservas_clientes, matriz):
                                 .strip()
                             )
                         reserva["tipo_vehiculo"] = nuevo_tipo_vehiculo
+                        escribir_log(f"Tipo de vehículo de la reserva {codigo_buscar} modificado a {nuevo_tipo_vehiculo}")
                         print("Tipo de vehículo modificado correctamente.")
                         continue
 
