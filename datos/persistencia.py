@@ -44,6 +44,8 @@ def cargar_datos():
             "historial": [],
             "clientes": [],
             "admin": None,
+            "abonos": [],
+            "abonos_clientes": [],
         }
 
     with open(ruta_datos, "r", encoding="utf-8") as archivo:
@@ -56,11 +58,13 @@ def cargar_datos():
     datos["historial"] = datos.get("historial", [])
     datos["clientes"] = datos.get("clientes", [])
     datos["admin"] = datos.get("admin", None)
+    datos["abonos"] = datos.get("abonos", [])
+    datos["abonos_clientes"] = datos.get("abonos_clientes", [])
 
     return datos
 
 
-def guardar_datos(matriz, reservas, reservas_clientes, registros, historial, clientes, admin):
+def guardar_datos(matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos=None, abonos_clientes=None):
     datos = {
         "matriz": matriz,
         "reservas": reservas,
@@ -69,6 +73,8 @@ def guardar_datos(matriz, reservas, reservas_clientes, registros, historial, cli
         "historial": historial,
         "clientes": clientes,
         "admin": admin,
+        "abonos": abonos if abonos is not None else [],
+        "abonos_clientes": abonos_clientes if abonos_clientes is not None else [],
     }
 
     datos_convertidos = convertir_para_json(datos)
