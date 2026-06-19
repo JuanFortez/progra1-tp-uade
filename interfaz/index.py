@@ -107,7 +107,7 @@ def interfaz_inicio():
                     abonos_clientes,
                 )
                 interfaz_admin(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 2:
@@ -444,9 +444,9 @@ def mostrar_estadisticas(historial, matriz):
 
         if total_plazas > 0:
             porcentaje = (plazas_ocupadas / total_plazas) * 100
-            print(f"\n🅿️  Ocupación actual:   {plazas_ocupadas}/{total_plazas} plazas ocupadas ({porcentaje:.1f}%)")
+            print(f"\n🅿️  Ocupación actual: {plazas_ocupadas}/{total_plazas} plazas ocupadas ({porcentaje:.1f}%)")
         else:
-            print("\n🅿️  Ocupación actual:   Sin plazas disponibles.")
+            print("\n🅿️  Ocupación actual: Sin plazas disponibles.")
 
     print("\n" + "=" * 40)
     input("\nPresione Enter para continuar...")

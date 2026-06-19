@@ -1,4 +1,4 @@
-from consultas.constantes.index import TIPO_VEHICULO, ESTADO_LIBRE, ESTADO_RESERVADA
+from consultas.constantes.index import TIPO_VEHICULO, ESTADO_LIBRE, ESTADO_RESERVADA, ESTADO_OCUPADO
 from consultas.validacion.index import (
     validar_entero,
     validar_fecha,
@@ -34,7 +34,7 @@ def verificar_disponibilidad(
     return True
 
 
-def crear_reserva_administrador(reservas, matriz, clientes):
+def crear_reserva_administrador(reservas, reservas_clientes, matriz, clientes):
     """
     Crea una reserva desde el panel de administrador.
 
@@ -52,7 +52,7 @@ def crear_reserva_administrador(reservas, matriz, clientes):
     nombre_titular = input("Ingrese nombre del titular: ").upper().strip()
 
     while not validar_nombre(nombre_titular):
-        print("\nNombre invalido. Ingrese solo letras y espacios.\n")
+        print("\nNombre inválido. Ingrese solo letras y espacios.\n")
         nombre_titular = input("Ingrese nombre del titular: ").upper().strip()
 
     dni_titular = input("Ingrese DNI del titular: ").strip()
@@ -90,9 +90,12 @@ def crear_reserva_administrador(reservas, matriz, clientes):
 
     fila, columna = plaza
 
-    if matriz[fila][columna] != ESTADO_LIBRE:
-        print("La plaza seleccionada no está libre.")
+    while matriz[fila][columna] == ESTADO_OCUPADO:
+        print("La plaza seleccionada está físicamente ocupada.")
         plaza = seleccionar_plaza_por_codigo(matriz)
+        if plaza is None:
+            return
+        fila, columna = plaza
 
     fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ").strip()
 
@@ -110,8 +113,10 @@ def crear_reserva_administrador(reservas, matriz, clientes):
         print("La fecha de ingreso debe ser anterior a la fecha de salida.")
         return
 
+    reservas_activas_clientes = [r for r in reservas_clientes if r["estado"] == "ACTIVA"]
+
     disponible = verificar_disponibilidad(
-        reservas, fila, columna, fecha_ingreso, fecha_salida
+        reservas + reservas_activas_clientes, fila, columna, fecha_ingreso, fecha_salida
     )
 
     if disponible:
@@ -152,7 +157,7 @@ def crear_reserva_cliente(reservas_clientes):
     nombre_titular = input("Ingrese nombre del titular: ").strip()
 
     while not validar_nombre(nombre_titular):
-        print("\nNombre invalido. Ingrese solo letras y espacios.\n")
+        print("\nNombre inválido. Ingrese solo letras y espacios.\n")
         nombre_titular = input("Ingrese nombre del titular: ").strip()
 
     dni_titular = input("Ingrese DNI del titular: ").strip()
@@ -168,8 +173,16 @@ def crear_reserva_cliente(reservas_clientes):
         numero_telefono = input("Ingrese número de teléfono (sin 0 ni 15): ").strip()
 
     tipo_vehiculo = (
-        input("Ingrese tipo de vehículo (auto, moto, camioneta): ").upper().strip()
+        input("Ingrese tipo de vehículo (AUTO, MOTO, CAMIONETA): ").upper().strip()
     )
+
+    while tipo_vehiculo not in TIPO_VEHICULO:
+        print("Tipo inválido. Opciones válidas: AUTO, MOTO, CAMIONETA")
+        tipo_vehiculo = (
+            input("\nIngrese el tipo de vehículo (AUTO, MOTO o CAMIONETA): ")
+            .upper()
+            .strip()
+        )
 
     fecha_ingreso = input("Ingrese fecha de ingreso (AAAA-MM-DD): ").strip()
 
@@ -204,13 +217,13 @@ def crear_reserva_cliente(reservas_clientes):
     escribir_log(f"Reserva creada correctamente, patente: {patente}.")
 
 
-def cancelar_reserva(reservas):
+def cancelar_reserva(reservas, matriz):
     """
     Cancela una reserva cambiando su estado a CANCELADA.
     """
     limpiar_pantalla()
 
-    codigo_buscar = input("Ingrese el código de la reserva a cancelar: ")
+    codigo_buscar = input("Ingrese el código de la reserva a cancelar: ").strip()
 
     for reserva in reservas:
 
@@ -222,6 +235,9 @@ def cancelar_reserva(reservas):
 
             reserva["estado"] = "CANCELADA"
 
+            if "fila" in reserva and "columna" in reserva:
+                matriz[reserva["fila"]][reserva["columna"]] = ESTADO_LIBRE
+
             print("Reserva cancelada correctamente.")
             escribir_log(
                 f"Reserva cancelada correctamente, patente: {reserva['patente']}"
@@ -231,13 +247,13 @@ def cancelar_reserva(reservas):
     print("No se encontró una reserva con ese código.")
 
 
-def modificar_reserva(reservas, matriz):
+def modificar_reserva(reservas, reservas_clientes, matriz):
     """
     Modifica los datos de una reserva existente.
     """
     limpiar_pantalla()
 
-    codigo_buscar = input("Ingrese el código de la reserva a modificar: ")
+    codigo_buscar = input("Ingrese el código de la reserva a modificar: ").strip()
 
     encontrada = False
     for reserva in reservas:
@@ -250,17 +266,59 @@ def modificar_reserva(reservas, matriz):
             while True:
                 lista_modificar_reserva()
 
-                salir = False
                 opcion = validar_entero("Seleccione la modificación a realizar: ", 1, 9)
 
+                if opcion == 5:
+                    plaza = seleccionar_plaza_por_codigo(matriz)
+
+                    if plaza is None:
+                        continue
+
+                    nueva_fila, nueva_columna = plaza
+
+                    if matriz[nueva_fila][nueva_columna] == ESTADO_OCUPADO:
+                        print("La plaza seleccionada está físicamente ocupada.")
+                        continue
+
+                    reservas_activas_clientes = [r for r in reservas_clientes if r["estado"] == "ACTIVA"]
+
+                    disponible = verificar_disponibilidad(
+                        reservas + reservas_activas_clientes,
+                        nueva_fila,
+                        nueva_columna,
+                        reserva["fecha_ingreso"],
+                        reserva["fecha_salida"],
+                        codigo_buscar,
+                    )
+
+                    if not disponible:
+                        print("La plaza no está disponible en esas fechas.")
+                        continue
+
+                    matriz[reserva["fila"]][reserva["columna"]] = ESTADO_LIBRE
+                    reserva["fila"] = nueva_fila
+                    reserva["columna"] = nueva_columna
+                    matriz[nueva_fila][nueva_columna] = ESTADO_RESERVADA
+                    escribir_log(f"Plaza de la reserva {codigo_buscar} modificada a {plaza}")
+                    print("Plaza de la reserva modificada correctamente.")
+                    continue
+                
+                if opcion == 9:
+                    print("Volviendo a vista de reservas...")
+                    sleep(1)
+                    break
+                
                 match opcion:
                     case 1:
-                        nueva_patente = input("Ingrese nueva patente: ").upper()
+                        nueva_patente = input("Ingrese nueva patente: ").upper().strip()
 
                         if not validar_patente(nueva_patente):
                             print("Patente inválida.")
                             continue
                         reserva["patente"] = nueva_patente
+                        escribir_log(f"Patente de la reserva {codigo_buscar} modificada a {nueva_patente}")
+                        print("Patente modificada correctamente.")
+                        continue
 
                     case 2:
                         nuevo_nombre = input("Ingrese nuevo nombre: ").upper().strip()
@@ -274,6 +332,9 @@ def modificar_reserva(reservas, matriz):
                             )
 
                         reserva["nombre"] = nuevo_nombre
+                        escribir_log(f"Nombre de la reserva {codigo_buscar} modificado a {nuevo_nombre}")
+                        print("Nombre modificado correctamente.")
+                        continue
 
                     case 3:
                         nuevo_dni = input("Ingrese nuevo DNI: ").strip()
@@ -285,6 +346,9 @@ def modificar_reserva(reservas, matriz):
                             nuevo_dni = input("Ingrese nuevo DNI: ").strip()
 
                         reserva["dni_cliente"] = nuevo_dni
+                        escribir_log(f"DNI de la reserva {codigo_buscar} modificado a {nuevo_dni}")
+                        print("DNI modificado correctamente.")
+                        continue
 
                     case 4:
                         nuevo_telefono = input(
@@ -298,35 +362,8 @@ def modificar_reserva(reservas, matriz):
                             ).strip()
 
                         reserva["numero_telefono"] = nuevo_telefono
-
-                    case 5:
-                        plaza = seleccionar_plaza_por_codigo(matriz)
-
-                        if plaza is None:
-                            continue
-
-                        nueva_fila, nueva_columna = plaza
-
-                        if matriz[nueva_fila][nueva_columna] != ESTADO_LIBRE:
-                            print("La plaza seleccionada no está libre.")
-                            continue
-
-                        disponible = verificar_disponibilidad(
-                            reservas,
-                            nueva_fila,
-                            nueva_columna,
-                            reserva["fecha_ingreso"],
-                            reserva["fecha_salida"],
-                            codigo_buscar,
-                        )
-
-                        if not disponible:
-                            print("La plaza no está disponible en esas fechas.")
-                            continue
-
-                        reserva["fila"] = nueva_fila
-                        reserva["columna"] = nueva_columna
-                        print("Plaza de la reserva modificada correctamente.")
+                        escribir_log(f"Teléfono de la reserva {codigo_buscar} modificado a {nuevo_telefono}")
+                        print("Teléfono modificado correctamente.")
                         continue
 
                     case 6:
@@ -337,7 +374,22 @@ def modificar_reserva(reservas, matriz):
                         if not validar_fecha(nueva_fecha):
                             print("Fecha inválida.")
                             continue
+                        if nueva_fecha >= reserva["fecha_salida"]:
+                            print("La fecha de ingreso debe ser anterior a la fecha de salida.")
+                            continue
+                        reservas_activas_clientes = [r for r in reservas_clientes if r["estado"] == "ACTIVA"]
+                        if not verificar_disponibilidad(
+                            reservas + reservas_activas_clientes,
+                            reserva["fila"], reserva["columna"],
+                            nueva_fecha, reserva["fecha_salida"],
+                            codigo_buscar,
+                        ):
+                            print("Las nuevas fechas generan un conflicto con otra reserva.")
+                            continue
                         reserva["fecha_ingreso"] = nueva_fecha
+                        escribir_log(f"Fecha de ingreso de la reserva {codigo_buscar} modificada a {nueva_fecha}")
+                        print("Fecha de ingreso modificada correctamente.")
+                        continue
 
                     case 7:
                         nueva_fecha = input(
@@ -347,7 +399,22 @@ def modificar_reserva(reservas, matriz):
                         if not validar_fecha(nueva_fecha):
                             print("Fecha inválida.")
                             continue
+                        if reserva["fecha_ingreso"] >= nueva_fecha:
+                            print("La fecha de salida debe ser posterior a la fecha de ingreso.")
+                            continue
+                        reservas_activas_clientes = [r for r in reservas_clientes if r["estado"] == "ACTIVA"]
+                        if not verificar_disponibilidad(
+                            reservas + reservas_activas_clientes,
+                            reserva["fila"], reserva["columna"],
+                            reserva["fecha_ingreso"], nueva_fecha,
+                            codigo_buscar,
+                        ):
+                            print("Las nuevas fechas generan un conflicto con otra reserva.")
+                            continue
                         reserva["fecha_salida"] = nueva_fecha
+                        escribir_log(f"Fecha de salida de la reserva {codigo_buscar} modificada a {nueva_fecha}")
+                        print("Fecha de salida modificada correctamente.")
+                        continue
 
                     case 8:
                         nuevo_tipo_vehiculo = (
@@ -364,36 +431,9 @@ def modificar_reserva(reservas, matriz):
                                 .strip()
                             )
                         reserva["tipo_vehiculo"] = nuevo_tipo_vehiculo
-
-                    case 9:
-                        print("Volviendo a vista de reservas...")
-                        sleep(1)
-                        salir = True
-
-                if salir:
-                    break
-
-                if reserva["fecha_ingreso"] >= reserva["fecha_salida"]:
-                    print(
-                        "La fecha de ingreso debe ser anterior a la fecha de salida."
-                    )
-                    continue
-
-                disponible = verificar_disponibilidad(
-                    reservas,
-                    reserva["fila"],
-                    reserva["columna"],
-                    reserva["fecha_ingreso"],
-                    reserva["fecha_salida"],
-                    codigo_buscar,
-                )
-
-                if disponible:
-                    print("Reserva modificada correctamente.")
-                else:
-                    print("La plaza no está disponible en esas fechas.")
-
-                continue
+                        escribir_log(f"Tipo de vehículo de la reserva {codigo_buscar} modificado a {nuevo_tipo_vehiculo}")
+                        print("Tipo de vehículo modificado correctamente.")
+                        continue
 
             break
 
@@ -467,18 +507,22 @@ def buscar_reserva_por_cliente(reservas, reservas_clientes, clientes, matriz):
 
     busqueda = input("\nIngrese nombre, DNI o patente del cliente: ").upper().strip()
 
+    if busqueda == "":
+        print("\nDebe ingresar un término de búsqueda.")
+        return
+
     reservas_encontradas = []
 
     for reserva in reservas:
         dni_cliente = reserva.get("dni_cliente", "")
         cliente = buscar_cliente_por_dni(clientes, dni_cliente)
 
-        nombre_cliente = ""
-        dni = ""
-
         if cliente is not None:
             nombre_cliente = cliente["nombre"].upper()
             dni = cliente["dni"]
+        else:
+            nombre_cliente = reserva.get("nombre", "").upper()
+            dni = reserva.get("dni_cliente", "")
 
         patente = reserva.get("patente", "").upper()
 
@@ -489,12 +533,12 @@ def buscar_reserva_por_cliente(reservas, reservas_clientes, clientes, matriz):
         dni_cliente = reserva.get("dni", "")
         cliente = buscar_cliente_por_dni(clientes, dni_cliente)
 
-        nombre_cliente = ""
-        dni = ""
-
         if cliente is not None:
             nombre_cliente = cliente["nombre"].upper()
             dni = cliente["dni"]
+        else:
+            nombre_cliente = reserva.get("nombre", "").upper()
+            dni = reserva.get("dni", "")
 
         patente = reserva.get("patente", "").upper()
 
@@ -527,6 +571,13 @@ def buscar_reserva_por_cliente(reservas, reservas_clientes, clientes, matriz):
             print(f"Cliente: {cliente['nombre']}")
             print(f"DNI: {cliente['dni']}")
             print(f"Teléfono: {cliente['telefono']}")
+        elif "nombre" in reserva:
+            print(f"Cliente: {reserva['nombre']}")
+            dni_mostrar = reserva.get("dni") or reserva.get("dni_cliente")
+            if dni_mostrar:
+                print(f"DNI: {dni_mostrar}")
+            if "numero_telefono" in reserva:
+                print(f"Teléfono: {reserva['numero_telefono']}")
         else:
             print("Cliente: Sin datos guardados")
 
@@ -640,7 +691,6 @@ def filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida):
         )
     )
 
-
 def filtrar_vehiculo_patente(vehiculos, patente):
     """
     Busca vehículos que coincidan con la patente.
@@ -678,7 +728,7 @@ def buscar_por_fecha_exacta(reservas, matriz):
 
     fecha = input("Ingrese la fecha (AAAA-MM-DD): ")
 
-    if validar_fecha(fecha) == False:
+    if not validar_fecha(fecha):
         print("Fecha inválida.")
         return
 
@@ -694,13 +744,13 @@ def buscar_por_rango_fechas(reservas, matriz):
 
     fecha_ingreso = input("Ingrese fecha inicio (AAAA-MM-DD): ")
 
-    fecha_salida = input("Ingrese fecha fin (AAAA-MM-DD): ")
-
-    if validar_fecha(fecha_ingreso) == False:
+    if not validar_fecha(fecha_ingreso):
         print("Fecha de inicio inválida.")
         return
 
-    if validar_fecha(fecha_salida) == False:
+    fecha_salida = input("Ingrese fecha fin (AAAA-MM-DD): ")
+
+    if not validar_fecha(fecha_salida):
         print("Fecha de fin inválida.")
         return
 
@@ -725,20 +775,16 @@ def asignar_plaza(reservas_clientes, reservas, matriz):
     reserva_encontrada = None
 
     for reserva in reservas_clientes:
-        if reserva["patente"] == patente_buscar:
+        if reserva["patente"] == patente_buscar and reserva["estado"] == "PENDIENTE":
             reserva_encontrada = reserva
             break
 
     if reserva_encontrada is None:
-        print("No se encontro una reserva con esa patente.")
-        return
-
-    if reserva_encontrada["estado"] == "CANCELADA":
-        print("No se puede asignar plaza a una reserva cancelada.")
-        return
-
-    if reserva_encontrada["estado"] == "ACTIVA":
-        print("La reserva ya tiene una plaza asignada.")
+        existe = any(r["patente"] == patente_buscar for r in reservas_clientes)
+        if existe:
+            print("No hay reservas pendientes con esa patente.")
+        else:
+            print("No se encontró una reserva con esa patente.")
         return
 
     plaza = seleccionar_plaza_por_codigo(matriz)
@@ -748,12 +794,14 @@ def asignar_plaza(reservas_clientes, reservas, matriz):
 
     fila, columna = plaza
 
-    if matriz[fila][columna] != ESTADO_LIBRE:
-        print("La plaza esta ocupada o reservada actualmente.")
+    if matriz[fila][columna] == ESTADO_OCUPADO:
+        print("La plaza esta físicamente ocupada actualmente.")
         return
 
+    reservas_activas_clientes = [r for r in reservas_clientes if r["estado"] == "ACTIVA"]
+
     disponible = verificar_disponibilidad(
-        reservas,
+        reservas + reservas_activas_clientes,
         fila,
         columna,
         reserva_encontrada["fecha_ingreso"],
