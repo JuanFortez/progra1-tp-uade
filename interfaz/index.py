@@ -1,8 +1,8 @@
 from time import sleep
 from datetime import datetime
-
+from unittest import case
 from datos.persistencia import cargar_datos, guardar_datos
-from consultas.validacion.index import validar_entero
+from consultas.validacion.index import validar_entero, validar_patente, validar_fecha
 from consultas.visualizacion.index import mostrar_estacionamiento, contar_plazas_ocupadas, es_plaza_real
 from login.index import login, crear_admin
 from gestion.index import (
@@ -38,6 +38,7 @@ from ui.index import (
     lista_reservas_admin,
     lista_abonos_admin,
     tabla_tarifas_abono,
+    lista_historial,
 )
 
 
@@ -103,6 +104,7 @@ def interfaz_inicio():
                     registros,
                     historial,
                     clientes,
+                    admin,
                     abonos,
                     abonos_clientes,
                 )
@@ -187,7 +189,7 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
                 )
 
             case 7:
-                mostrar_historial(historial)
+                menu_historial(historial)
 
             case 8:
                 modificar_estacionamiento(matriz, registros, reservas, reservas_clientes)
@@ -360,39 +362,236 @@ def interfaz_abonos_admin(
                 sleep(1)
                 break
 
-
-def mostrar_historial(historial):
+def menu_historial(historial):
     """
-    Muestra el historial de ingresos y egresos del estacionamiento.
+    Muestra el menú del historial y ejecuta la opción elegida.
+    """
+    while True:
+        lista_historial()
+
+        opcion = validar_entero("Seleccione una opción: ", 1, 5)
+
+        if opcion == 1:
+            mostrar_historial_completo(historial)
+
+        elif opcion == 2:
+            buscar_historial_por_patente(historial)
+
+        elif opcion == 3:
+            buscar_historial_por_fecha(historial)
+
+        elif opcion == 4:
+            mostrar_historial_ordenado_por_monto(historial)
+
+        elif opcion == 5:
+            print("Volviendo al panel de administración...")
+            sleep(1)
+            break
+
+def mostrar_historial_completo(historial):
+    """
+    Muestra todos los movimientos guardados en el historial.
     """
     if len(historial) == 0:
-        print("\nNo hay movimientos registrados.")
-        return
+        mostrar_mensaje_sin_movimientos()
+    else:
+        mostrar_lista_movimientos(historial)
 
-    print("\nHistorial de movimientos:\n")
+
+def buscar_historial_por_patente(historial):
+    """
+    Busca movimientos del historial usando una patente.
+    """
+    patente = pedir_patente_historial()
+    movimientos = filtrar_por_patente(historial, patente)
+
+    mostrar_resultado_historial(movimientos)
+
+def pedir_patente_historial():
+    """
+    Pide una patente válida para buscar en el historial.
+    """
+    patente = input("Ingrese la patente: ").upper().strip()
+
+    while not validar_patente(patente):
+        print("Patente inválida. Formato esperado: ABC123 o AB123CD")
+        patente = input("Ingrese la patente: ").upper().strip()
+
+    return patente
+
+
+def filtrar_por_patente(historial, patente):
+    """
+    Devuelve los movimientos que coinciden con la patente ingresada.
+    """
+    movimientos_filtrados = []
 
     for movimiento in historial:
-        print(f"Acción: {movimiento['accion']}")
-        print(f"Patente: {movimiento['patente']}")
-        print(f"Tipo: {movimiento['tipo_vehiculo']}")
+        if movimiento["patente"] == patente:
+            movimientos_filtrados.append(movimiento)
 
-        if "fecha_hora" in movimiento:
-            print(f"Fecha y hora: {formatear_fecha_hora(movimiento['fecha_hora'])}")
+    return movimientos_filtrados
 
-        if "hora_ingreso" in movimiento:
-            print(f"Hora ingreso: {formatear_fecha_hora(movimiento['hora_ingreso'])}")
+def buscar_historial_por_fecha(historial):
+    """
+    Busca movimientos del historial usando una fecha.
+    """
+    fecha = pedir_fecha_historial()
+    movimientos = filtrar_por_fecha(historial, fecha)
 
-        if "hora_salida" in movimiento:
-            print(f"Hora salida: {formatear_fecha_hora(movimiento['hora_salida'])}")
+    mostrar_resultado_historial(movimientos)
 
-        if "tiempo_estacionado" in movimiento:
-            print(f"Tiempo estacionado: {movimiento['tiempo_estacionado']}")
 
+def pedir_fecha_historial():
+    """
+    Pide una fecha válida en formato AAAA-MM-DD.
+    """
+    fecha = input("Ingrese la fecha AAAA-MM-DD: ").strip()
+
+    while not validar_fecha(fecha):
+        print("Fecha inválida. Formato esperado: AAAA-MM-DD")
+        fecha = input("Ingrese la fecha AAAA-MM-DD: ").strip()
+
+    return fecha
+
+
+def filtrar_por_fecha(historial, fecha_buscada):
+    """
+    Devuelve los movimientos que coinciden con la fecha ingresada.
+    """
+    movimientos_filtrados = []
+
+    for movimiento in historial:
+        fecha_movimiento = obtener_fecha_movimiento(movimiento)
+
+        if fecha_movimiento[:10] == fecha_buscada:
+            movimientos_filtrados.append(movimiento)
+
+    return movimientos_filtrados
+
+def obtener_fecha_movimiento(movimiento):
+    """
+    Devuelve la fecha del movimiento según el dato disponible.
+    """
+    if "fecha_hora" in movimiento:
+        return movimiento["fecha_hora"]
+
+    if "hora_salida" in movimiento:
+        return movimiento["hora_salida"]
+
+    if "hora_ingreso" in movimiento:
+        return movimiento["hora_ingreso"]
+
+    return ""
+
+
+def mostrar_historial_ordenado_por_monto(historial):
+    """
+    Muestra los movimientos con monto ordenados de mayor a menor.
+    """
+    movimientos = obtener_movimientos_con_monto(historial)
+    ordenar_por_monto(movimientos)
+
+    mostrar_resultado_historial(movimientos)
+
+
+def obtener_movimientos_con_monto(historial):
+    """
+    Devuelve solamente los movimientos que tienen tarifa.
+    """
+    movimientos_con_monto = []
+
+    for movimiento in historial:
         if "tarifa" in movimiento:
-            print(f"Tarifa: ${movimiento['tarifa']:.2f}")
+            movimientos_con_monto.append(movimiento)
 
-        print("-" * 30)
+    return movimientos_con_monto
 
+
+def ordenar_por_monto(movimientos):
+    """
+    Ordena los movimientos por tarifa de mayor a menor usando burbujeo.
+    """
+    cantidad = len(movimientos)
+
+    for i in range(cantidad):
+        for j in range(0, cantidad - 1):
+            monto_actual = movimientos[j]["tarifa"]
+            monto_siguiente = movimientos[j + 1]["tarifa"]
+
+            if monto_actual < monto_siguiente:
+                auxiliar = movimientos[j]
+                movimientos[j] = movimientos[j + 1]
+                movimientos[j + 1] = auxiliar
+
+
+def mostrar_resultado_historial(movimientos):
+    """
+    Muestra el resultado de una búsqueda del historial.
+    """
+    if len(movimientos) == 0:
+        mostrar_mensaje_sin_movimientos()
+    else:
+        mostrar_lista_movimientos(movimientos)
+
+
+def mostrar_mensaje_sin_movimientos():
+    """
+    Muestra un mensaje cuando no hay movimientos.
+    """
+    print("\nNo se encontraron movimientos.")
+    input("\nPresione Enter para continuar...")
+
+
+def mostrar_lista_movimientos(movimientos):
+    """
+    Muestra una lista de movimientos del historial.
+    """
+    for movimiento in movimientos:
+        mostrar_un_movimiento(movimiento)
+
+    input("\nPresione Enter para continuar...")
+
+
+def mostrar_un_movimiento(movimiento):
+    """
+    Muestra un movimiento del historial.
+    """
+    print("\nAcción:", movimiento["accion"])
+    print("Patente:", movimiento["patente"])
+    print("Tipo de vehículo:", movimiento["tipo_vehiculo"])
+
+    mostrar_fecha_movimiento(movimiento)
+    mostrar_tiempo_estacionado(movimiento)
+    mostrar_tarifa_movimiento(movimiento)
+
+    print("-" * 30)
+
+
+def mostrar_fecha_movimiento(movimiento):
+    """
+    Muestra la fecha del movimiento.
+    """
+    fecha = obtener_fecha_movimiento(movimiento)
+
+    if fecha != "":
+        print("Fecha:", fecha[:10])
+
+
+def mostrar_tiempo_estacionado(movimiento):
+    """
+    Muestra el tiempo estacionado si existe.
+    """
+    if "tiempo_estacionado" in movimiento:
+        print("Tiempo estacionado:", movimiento["tiempo_estacionado"])
+
+
+def mostrar_tarifa_movimiento(movimiento):
+    """
+    Muestra la tarifa si existe.
+    """
+    if "tarifa" in movimiento:
+        print("Tarifa: $", movimiento["tarifa"])
 
 def formatear_fecha_hora(fecha_hora):
     """

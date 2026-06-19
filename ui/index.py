@@ -123,3 +123,17 @@ def tabla_tarifas_abono():
                 camioneta = f"${tarifa:.0f}"
         print(f"  {tipo:<12} {dias:<8} {int(desc*100)}%{'':9} {auto:<12} {moto:<10} {camioneta}")
     print("=" * 55)
+    
+def lista_historial():
+    """
+    Muestra las opciones del menú de historial.
+    """
+    print("\n" + "=" * 40)
+    print(" " * 15 + "HISTORIAL")
+    print("=" * 40)
+
+    print("\n  1 - Ver historial completo")
+    print("  2 - Buscar por patente")
+    print("  3 - Buscar por fecha")
+    print("  4 - Ordenar por monto")
+    print("  5 - Volver\n")

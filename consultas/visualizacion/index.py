@@ -18,6 +18,9 @@ def mostrar_estacionamiento(matriz):
     print("\nLeyenda: ⬜️ Libre  🟥 Ocupada  🟧 Reservada")
     mostrar_plazas_ocupadas(matriz)
     mostrar_plazas_disponibles(matriz)
+    mostrar_alerta_ocupacion(matriz)
+
+
 
 def es_plaza_real(valor):
     """
@@ -72,3 +75,36 @@ def mostrar_plazas_disponibles(matriz):
     """
     disponibles = contar_plazas_disponibles(matriz)
     print(f"\nPlacas disponibles: {disponibles}")
+
+def contar_plazas_reales(matriz):
+    """Cuenta las plazas reales del estacionamiento."""
+    total = 0
+
+    for fila in matriz:
+        for celda in fila:
+            if es_plaza_real(celda):
+                total += 1
+
+    return total
+
+
+def calcular_porcentaje_ocupacion(matriz):
+    """Calcula el porcentaje de ocupación actual."""
+    total_plazas = contar_plazas_reales(matriz)
+
+    if total_plazas == 0:
+        return 0
+
+    ocupadas = contar_plazas_ocupadas(matriz)
+    porcentaje = (ocupadas / total_plazas) * 100
+
+    return porcentaje
+
+
+def mostrar_alerta_ocupacion(matriz):
+    """Muestra una advertencia si la ocupación supera el 80%."""
+    porcentaje = calcular_porcentaje_ocupacion(matriz)
+
+    if porcentaje > 80:
+        print("\nATENCIÓN: el estacionamiento supera el 80% de ocupación.")
+        print(f"Ocupación actual: {porcentaje:.1f}%")
