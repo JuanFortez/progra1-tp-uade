@@ -3,7 +3,8 @@ from datetime import datetime
 
 from datos.persistencia import cargar_datos, guardar_datos
 from consultas.validacion.index import validar_entero
-from consultas.visualizacion.index import mostrar_estacionamiento
+from consultas.visualizacion.index import mostrar_estacionamiento, contar_plazas_ocupadas, es_plaza_real
+from login.index import login, crear_admin
 from gestion.index import (
     buscar_vehiculo,
     crear_estacionamiento,
@@ -50,7 +51,20 @@ def interfaz_inicio():
     print(" " * 5 + "BIENVENIDO A PARKING CONTROL")
     print("🚗" * 19)
 
-    datos = cargar_datos()
+    try:
+        datos = cargar_datos()
+    except Exception as e:
+        print(f"\nNo se pudieron cargar los datos guardados ({e}).")
+        print("Se iniciará con datos vacíos.\n")
+        datos = {
+            "matriz": None,
+            "reservas": [],
+            "reservas_clientes": [],
+            "registros": {},
+            "historial": [],
+            "clientes": [],
+            "admin": None,
+        }
 
     reservas = datos["reservas"]
     reservas_clientes = datos["reservas_clientes"]
@@ -65,24 +79,33 @@ def interfaz_inicio():
         lista_menu_principal()
 
         opcion = validar_entero("Seleccione una opción: ", 1, 3)
-
+        
         match opcion:
             case 1:
                 print("Accediendo a panel de administración...")
 
+                if datos["admin"] is None:
+                    admin = crear_admin()
+                else:
+                    if not login(datos["admin"]):
+                        continue
+                    admin = datos["admin"]
+
+                datos["admin"] = admin
+
                 if matriz is None:
                     matriz = crear_estacionamiento()
-                    guardar_datos(
-                        matriz,
-                        reservas,
-                        reservas_clientes,
-                        registros,
-                        historial,
-                        clientes,
-                        abonos,
-                        abonos_clientes,
-                    )
 
+                guardar_datos(
+                    matriz,
+                    reservas,
+                    reservas_clientes,
+                    registros,
+                    historial,
+                    clientes,
+                    abonos,
+                    abonos_clientes,
+                )
                 interfaz_admin(
                     matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
                 )
@@ -99,12 +122,13 @@ def interfaz_inicio():
                         registros,
                         historial,
                         clientes,
+                        datos["admin"],
                         abonos,
                         abonos_clientes,
                     )
             case 3:
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, datos["admin"], abonos, abonos_clientes
                 )
                 print("\n👋 ¡Gracias por usar Parking Control!")
                 print("🚗 ¡Hasta la próxima!")
@@ -112,7 +136,7 @@ def interfaz_inicio():
                 break
 
 
-def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes):
+def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes):
     """
     Muestra el panel de administración del estacionamiento.
     Permite al administrador registrar ingresos y salidas de vehículos, ver la ocupación actual y buscar vehículos.
@@ -130,14 +154,14 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
                 print("Ingreso de vehiculo...")
                 registrar_ingreso_vehiculo(matriz, registros, historial)
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 2:
                 print("Salida de vehiculo...")
                 registrar_salida_vehiculo(matriz, registros, historial)
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 3:
@@ -151,22 +175,22 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
             case 5:
                 modificar_estado_plaza(matriz, registros)
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 6:
                 interfaz_reservas_admin(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 7:
                 mostrar_historial(historial)
 
             case 8:
-                modificar_estacionamiento(matriz, registros, reservas)
+                modificar_estacionamiento(matriz, registros, reservas, reservas_clientes)
                 guardar_datos(
                     matriz,
                     reservas,
@@ -174,6 +198,7 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
                     registros,
                     historial,
                     clientes,
+                    admin,
                     abonos,
                     abonos_clientes,
                 )
@@ -188,7 +213,7 @@ def interfaz_admin(matriz, reservas, reservas_clientes, registros, historial, cl
 
 
 def interfaz_cliente(
-    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
 ):
     """
     Muestra el panel de cliente.
@@ -198,17 +223,14 @@ def interfaz_cliente(
     encabezado_principal()
 
     while True:
-        print("\n=== PANEL DE CLIENTE ===\n")
-        print("  1 - Solicitar reserva")
-        print("  2 - Solicitar abono (quincenal/mensual/semestral)")
-        print("  3 - Salir\n")
+        lista_panel_cliente()
 
         opcion = validar_entero("Seleccione una opción: ", 1, 3)
         if opcion == 1:
             print("Solicitud de reserva...")
             crear_reserva_cliente(reservas_clientes)
             guardar_datos(
-                matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
             )
 
         elif opcion == 2:
@@ -226,7 +248,7 @@ def interfaz_cliente(
 
 
 def interfaz_reservas_admin(
-    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
 ):
     """
     Muestra el submenú de gestión de reservas para el administrador.
@@ -242,23 +264,23 @@ def interfaz_reservas_admin(
         match opcion:
             case 1:
                 print("Creación de reserva...")
-                crear_reserva_administrador(reservas, matriz, clientes)
+                crear_reserva_administrador(reservas, reservas_clientes, matriz, clientes)
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 2:
                 print("Cancelación de reserva...")
-                cancelar_reserva(reservas)
+                cancelar_reserva(reservas, matriz)
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 3:
                 print("Modificación de reserva...")
-                modificar_reserva(reservas, matriz)
+                modificar_reserva(reservas, reservas_clientes, matriz)
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 4:
@@ -282,7 +304,7 @@ def interfaz_reservas_admin(
                 print("Asignación de plaza...")
                 asignar_plaza(reservas_clientes, reservas, matriz)
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 9:
@@ -401,11 +423,11 @@ def mostrar_estadisticas(historial, matriz):
             total_recaudado += movimiento["tarifa"]
             cantidad_pagos += 1
 
-    print(f"\n💰 Total recaudado:    ${total_recaudado:.2f}")
-    print(f"   Pagos registrados: {cantidad_pagos}")
+    print(f"\n💰 Total recaudado: ${total_recaudado:.2f}")
+    print(f"Pagos registrados: {cantidad_pagos}")
 
     if matriz is None:
-        print("\n🅿️  Ocupación actual:   No hay estacionamiento creado.")
+        print("\n🅿️ Ocupación actual: No hay estacionamiento creado.")
     else:
         total_plazas = 0
         plazas_ocupadas = 0
