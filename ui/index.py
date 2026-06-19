@@ -41,7 +41,6 @@ def lista_panel_administracion():
     print("  7 - Ver historial")
     print("  8 - Modificar estacionamiento")
     print("  9 - Ver estadísticas")
-    #Aca estaba ver logs del sistema
     print(" 10 - Volver\n")
     
 def lista_panel_cliente():
@@ -61,7 +60,8 @@ def lista_reservas_admin():
     print("  6 - Buscar reservas por fecha")
     print("  7 - Buscar reservas por cliente")
     print("  8 - Asignar plaza")
-    print("  9 - Volver\n")
+    print("  9 - Gestionar abonos")
+    print(" 10 - Volver\n")
     
 def lista_crear_estacionamiento():
     print("\nSeleccione el tipo de plano del estacionamiento:\n")
@@ -89,6 +89,41 @@ def lista_modificar_reserva():
     print("  8 - Cambiar tipo de vehiculo")
     print("  9 - Volver")
 
+
+def lista_abonos_admin():
+    print("\n" + "=" * 40)
+    print(" " * 11 + "GESTIÓN DE ABONOS")
+    print("=" * 40)
+    print("\n  1 - Crear abono")
+    print("  2 - Listar abonos activos")
+    print("  3 - Cancelar abono")
+    print("  4 - Ver tabla de tarifas y descuentos")
+    print("  5 - Volver\n")
+
+
+def tabla_tarifas_abono():
+    from consultas.constantes.index import (
+        TIPOS_ABONO, DESCUENTOS_ABONO, TARIFA_DIARIA_RESERVA, MULTIPLICADORES_TARIFA
+    )
+    print("\n" + "=" * 55)
+    print(" " * 12 + "TARIFAS DE ABONO CON DESCUENTO")
+    print("=" * 55)
+    print(f"\n  Tarifa diaria base: ${TARIFA_DIARIA_RESERVA:.0f}/día")
+    print(f"\n  {'Tipo':<12} {'Días':<8} {'Descuento':<12} {'AUTO':<12} {'MOTO':<10} {'CAMIONETA'}")
+    print("  " + "-" * 53)
+    for tipo, dias in TIPOS_ABONO.items():
+        desc = DESCUENTOS_ABONO[tipo]
+        for vehiculo, mult in MULTIPLICADORES_TARIFA.items():
+            tarifa = TARIFA_DIARIA_RESERVA * dias * mult * (1 - desc)
+            if vehiculo == "AUTO":
+                auto = f"${tarifa:.0f}"
+            elif vehiculo == "MOTO":
+                moto = f"${tarifa:.0f}"
+            else:
+                camioneta = f"${tarifa:.0f}"
+        print(f"  {tipo:<12} {dias:<8} {int(desc*100)}%{'':9} {auto:<12} {moto:<10} {camioneta}")
+    print("=" * 55)
+    
 def lista_historial():
     """
     Muestra las opciones del menú de historial.
