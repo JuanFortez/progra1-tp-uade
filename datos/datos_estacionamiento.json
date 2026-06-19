@@ -49,5 +49,7 @@
     "admin": {
         "usuario": "Admin0000",
         "clave": "1234"
-    }
+    },
+    "abonos": [],
+    "abonos_clientes": []
 }
