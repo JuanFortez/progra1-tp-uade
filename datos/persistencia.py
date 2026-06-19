@@ -43,6 +43,7 @@ def cargar_datos():
             "registros": {},
             "historial": [],
             "clientes": [],
+            "admin": None,
             "abonos": [],
             "abonos_clientes": [],
         }
@@ -50,16 +51,20 @@ def cargar_datos():
     with open(ruta_datos, "r", encoding="utf-8") as archivo:
         datos = json.load(archivo)
 
+    datos["matriz"] = datos.get("matriz", None)
+    datos["reservas"] = datos.get("reservas", [])
+    datos["reservas_clientes"] = datos.get("reservas_clientes", [])
     datos["registros"] = restaurar_registros(datos.get("registros", {}))
     datos["historial"] = datos.get("historial", [])
     datos["clientes"] = datos.get("clientes", [])
+    datos["admin"] = datos.get("admin", None)
     datos["abonos"] = datos.get("abonos", [])
     datos["abonos_clientes"] = datos.get("abonos_clientes", [])
 
     return datos
 
 
-def guardar_datos(matriz, reservas, reservas_clientes, registros, historial, clientes, abonos=None, abonos_clientes=None):
+def guardar_datos(matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos=None, abonos_clientes=None):
     datos = {
         "matriz": matriz,
         "reservas": reservas,
@@ -67,6 +72,7 @@ def guardar_datos(matriz, reservas, reservas_clientes, registros, historial, cli
         "registros": registros,
         "historial": historial,
         "clientes": clientes,
+        "admin": admin,
         "abonos": abonos if abonos is not None else [],
         "abonos_clientes": abonos_clientes if abonos_clientes is not None else [],
     }
