@@ -16,7 +16,7 @@ from consultas.validacion.index import (
     validar_fecha,
 )
 from gestion.reservas import verificar_disponibilidad
-from gestion.index import seleccionar_plaza_por_codigo, generar_mapa_plazas
+from gestion.index import seleccionar_plaza_por_codigo
 from consultas.constantes.index import ESTADO_LIBRE, ESTADO_RESERVADA
 from ui.index import limpiar_pantalla
 from logs.index import escribir_log
