@@ -1,0 +1,2 @@
+[2026-06-20 11:44:44] Se registró la entrada del vehículo con patente: ABC123. Vehiculo: AUTO
+[2026-06-20 11:52:33] Se registró la entrada del vehículo con patente: AC237WQ. Vehiculo: AUTO

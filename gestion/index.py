@@ -1,5 +1,6 @@
 from datetime import datetime
 import math
+import re
 from consultas.constantes.index import (
     TIPO_VEHICULO, 
     MULTIPLICADORES_TARIFA, 
@@ -10,7 +11,11 @@ from consultas.constantes.index import (
     ESTADO_RESERVADA,
 ) 
 from consultas.validacion.index import validar_entero, validar_patente
-from consultas.visualizacion.index import mostrar_estacionamiento
+from consultas.visualizacion.index import (
+    mostrar_estacionamiento, 
+    generar_letras_columnas, 
+    es_plaza_real,
+)
 from ui.index import (
     limpiar_pantalla,
     lista_crear_estacionamiento,
@@ -210,78 +215,47 @@ def crear_estacionamiento_en_u(cantidad_plazas):
     return matriz
 
 
-def generar_mapa_plazas(matriz):
-    """
-    Genera un diccionario que relaciona códigos de plaza con coordenadas reales.
-
-    Ejemplo:
-    {
-        "P1": (0, 0),
-        "P2": (0, 2),
-        "P3": (1, 0)
-    }
-    """
-    mapa_plazas = {}
-    numero_plaza = 1
-
-    for fila in range(len(matriz)):
-        for columna in range(len(matriz[fila])):
-            if (
-                matriz[fila][columna] != ESTADO_PASILLO
-                and matriz[fila][columna] != ESTADO_VACIO
-            ):
-                codigo = f"P{numero_plaza}"
-                mapa_plazas[codigo] = (fila, columna)
-                numero_plaza += 1
-
-    return mapa_plazas
-
-
-def mostrar_codigos_plazas(matriz):
-    """
-    Muestra el estacionamiento usando códigos de plaza.
-
-    Las plazas reales se muestran como P1, P2, P3, etc.
-    Los pasillos se muestran como PASILLO.
-    Los espacios vacíos se muestran como VACIO.
-    """
-    mapa_plazas = generar_mapa_plazas(matriz)
-
-    for fila in range(len(matriz)):
-        for columna in range(len(matriz[fila])):
-            codigo_encontrado = None
-
-            for codigo, coordenadas in mapa_plazas.items():
-                if coordenadas == (fila, columna):
-                    codigo_encontrado = codigo
-
-            if codigo_encontrado is not None:
-                print(codigo_encontrado, end=" ")
-            else:
-                print(matriz[fila][columna], end=" ")
-
-        print()
-
-
 def seleccionar_plaza_por_codigo(matriz):
     """
-    Permite seleccionar una plaza ingresando un código como P1, P2 o P3.
-
-    Retorna la fila y columna correspondiente.
-    Si el código no existe, retorna None.
+    Muestra el estacionamiento con mostrar_estacionamiento() y permite
+    seleccionar una plaza ingresando un código compuesto por el número
+    de fila seguido de la letra de columna (ej: 1B, 2A, 3C), tal como
+    se ve en la grilla mostrada.
+ 
+    Retorna la tupla (fila, columna) si el código es válido y corresponde
+    a una plaza real. Si el código es inválido o no corresponde a una
+    plaza, retorna None.
     """
-    mapa_plazas = generar_mapa_plazas(matriz)
-
-    print("\nCódigos de plazas disponibles:\n")
-    mostrar_codigos_plazas(matriz)
-
-    codigo = input("\nIngrese el código de plaza: ").upper().strip()
-
-    if codigo not in mapa_plazas:
+    mostrar_estacionamiento(matriz)
+ 
+    letras_columnas = generar_letras_columnas(matriz)
+    letras_a_columna = {letra: columna for columna, letra in letras_columnas.items()}
+ 
+    codigo = input("\nIngrese el código de plaza (ej: 1B): ").upper().strip()
+ 
+    coincidencia = re.fullmatch(r"(\d+)([A-Z]+)", codigo)
+ 
+    if coincidencia is None:
+        print("Formato de código inválido. Use número de fila + letra de columna (ej: 1B).")
+        return None
+ 
+    numero_fila, letra_columna = coincidencia.groups()
+    fila = int(numero_fila) - 1
+    columna = letras_a_columna.get(letra_columna)
+ 
+    if fila < 0 or fila >= len(matriz):
         print("El código de plaza ingresado no existe.")
         return None
-
-    return mapa_plazas[codigo]
+ 
+    if columna is None or columna >= len(matriz[fila]):
+        print("El código de plaza ingresado no existe.")
+        return None
+ 
+    if not es_plaza_real(matriz[fila][columna]):
+        print("El código de plaza ingresado no existe.")
+        return None
+ 
+    return (fila, columna)
 
 
 def registrar_ingreso_vehiculo(matriz, registros, historial):
@@ -474,12 +448,10 @@ def buscar_vehiculo(matriz, registros):
         return
 
     fila, columna = registros[patente]["plaza"]
-    mapa_plazas = generar_mapa_plazas(matriz)
-    codigo_plaza = None
-
-    for codigo, coordenadas in mapa_plazas.items():
-        if coordenadas == (fila, columna):
-            codigo_plaza = codigo
+    
+    letras_columnas = generar_letras_columnas(matriz)
+    letra_columna = letras_columnas.get(columna, "?")
+    codigo_plaza = f"{fila + 1}{letra_columna}"
 
     hora_ingreso = registros[patente]['hora_ingreso']
     if isinstance(hora_ingreso, str):

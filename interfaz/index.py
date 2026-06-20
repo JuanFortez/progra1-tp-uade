@@ -635,7 +635,11 @@ def mostrar_estadisticas(historial, matriz):
             for plaza in fila:
                 if plaza is None:
                     continue
-                estado = plaza.get("estado", "")
+                if isinstance(plaza, dict):
+                    estado = plaza.get("estado", "")
+                else: 
+                    estado = plaza
+                    
                 if estado not in ("  ", ""):
                     total_plazas += 1
                     if estado == "🟥":

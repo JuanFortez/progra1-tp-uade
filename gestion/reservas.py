@@ -8,8 +8,8 @@ from consultas.validacion.index import (
     generar_codigo_reserva,
     validar_nombre,
 )
-from consultas.visualizacion.index import mostrar_estacionamiento
-from gestion.index import seleccionar_plaza_por_codigo, generar_mapa_plazas
+from consultas.visualizacion.index import mostrar_estacionamiento, generar_letras_columnas
+from gestion.index import seleccionar_plaza_por_codigo
 from ui.index import limpiar_pantalla, lista_modificar_reserva
 from logs.index import escribir_log
 from time import sleep
@@ -447,7 +447,7 @@ def lista_reservas_activas(reservas, matriz):
     """
     limpiar_pantalla()
 
-    mapa_plazas = generar_mapa_plazas(matriz)
+    letras_columnas = generar_letras_columnas(matriz)
 
     print("=" * 32)
     print("\tReservas activas")
@@ -462,9 +462,10 @@ def lista_reservas_activas(reservas, matriz):
         hay_activas = True
         codigo_plaza = "Sin asignar"
 
-        for codigo, coordenadas in mapa_plazas.items():
-            if coordenadas == (reserva["fila"], reserva["columna"]):
-                codigo_plaza = codigo
+        if "fila" in reserva and "columna" in reserva:
+            letra_columna = letras_columnas.get(reserva["columna"])
+            if letra_columna is not None:
+                codigo_plaza = f"{reserva['fila'] + 1}{letra_columna}"
 
         print(f"Reserva #{i + 1}")
         print(f"Código: {reserva.get('codigo', 'Sin dato')}")
@@ -549,7 +550,7 @@ def buscar_reserva_por_cliente(reservas, reservas_clientes, clientes, matriz):
         print("\nNo se encontraron reservas para ese cliente.")
         return
 
-    mapa_plazas = generar_mapa_plazas(matriz)
+    letras_columnas = generar_letras_columnas(matriz)
 
     print("\nReservas encontradas:\n")
 
@@ -560,9 +561,9 @@ def buscar_reserva_por_cliente(reservas, reservas_clientes, clientes, matriz):
         codigo_plaza = "Sin asignar"
 
         if "fila" in reserva and "columna" in reserva:
-            for codigo, coordenadas in mapa_plazas.items():
-                if coordenadas == (reserva["fila"], reserva["columna"]):
-                    codigo_plaza = codigo
+            letra_columna = letras_columnas.get(reserva["columna"])
+            if letra_columna is not None:
+                codigo_plaza = f"{reserva['fila'] + 1}{letra_columna}"
 
         print(f"Reserva #{i + 1}")
         print(f"Patente: {reserva.get('patente', 'Sin dato')}")
