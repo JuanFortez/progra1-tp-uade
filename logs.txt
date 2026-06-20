@@ -1,0 +1,2 @@
+[2026-06-20 18:17:44] Abono MENSUAL creado, patente: ABC123, tarifa: $19200.00
+[2026-06-20 18:18:03] Reserva cancelada correctamente, patente: ABC123

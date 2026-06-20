@@ -239,7 +239,7 @@ def interfaz_cliente(
             print("Solicitud de abono...")
             crear_abono_cliente(abonos_clientes)
             guardar_datos(
-                matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
             )
 
         elif opcion == 3:
@@ -310,7 +310,7 @@ def interfaz_reservas_admin(
                 )
 
             case 9:
-                interfaz_abonos_admin(matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes)
+                interfaz_abonos_admin(matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes)
 
             case 10:
                 print("Volviendo al panel de administración...")
@@ -322,7 +322,7 @@ def interfaz_reservas_admin(
 
 
 def interfaz_abonos_admin(
-    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
 ):
     """
     Submenú de gestión de abonos para el administrador.
@@ -339,7 +339,7 @@ def interfaz_abonos_admin(
                 print("Creación de abono...")
                 crear_abono_administrador(abonos, reservas, matriz, clientes)
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 2:
@@ -348,9 +348,9 @@ def interfaz_abonos_admin(
 
             case 3:
                 print("Cancelación de abono...")
-                cancelar_reserva(abonos)
+                cancelar_reserva(abonos, matriz)
                 guardar_datos(
-                    matriz, reservas, reservas_clientes, registros, historial, clientes, abonos, abonos_clientes
+                    matriz, reservas, reservas_clientes, registros, historial, clientes, admin, abonos, abonos_clientes
                 )
 
             case 4:
