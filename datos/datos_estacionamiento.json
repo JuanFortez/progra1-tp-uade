@@ -22,7 +22,7 @@
             "⬜️",
             "⬜️",
             "  ",
-            "🟥"
+            "⬜️"
         ],
         [
             "⬜️",
@@ -35,7 +35,7 @@
         [
             "⬜️",
             "  ",
-            "🟥",
+            "⬜️",
             "⬜️",
             "  ",
             "⬜️"
@@ -43,50 +43,8 @@
     ],
     "reservas": [],
     "reservas_clientes": [],
-    "registros": {
-        "ABC123": {
-            "patente": "ABC123",
-            "plaza": [
-                2,
-                5
-            ],
-            "hora_ingreso": "2026-06-20T11:44:44.858946",
-            "tipo_vehiculo": "AUTO",
-            "estado": "OCUPADO"
-        },
-        "AC237WQ": {
-            "patente": "AC237WQ",
-            "plaza": [
-                4,
-                2
-            ],
-            "hora_ingreso": "2026-06-20T11:52:33.959251",
-            "tipo_vehiculo": "AUTO",
-            "estado": "OCUPADO"
-        }
-    },
-    "historial": [
-        {
-            "accion": "INGRESO",
-            "patente": "ABC123",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                2,
-                5
-            ],
-            "fecha_hora": "2026-06-20T11:44:44.858972"
-        },
-        {
-            "accion": "INGRESO",
-            "patente": "AC237WQ",
-            "tipo_vehiculo": "AUTO",
-            "plaza": [
-                4,
-                2
-            ],
-            "fecha_hora": "2026-06-20T11:52:33.959282"
-        }
-    ],
+    "registros": {},
+    "historial": [],
     "clientes": [],
     "admin": {
         "usuario": "Admin0000",
