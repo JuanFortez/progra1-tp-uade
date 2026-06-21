@@ -41,55 +41,15 @@
             "⬜️"
         ]
     ],
-    "reservas": [
-        {
-            "codigo": "53d3f4cd",
-            "tipo": "ABONO",
-            "tipo_abono": "MENSUAL",
-            "patente": "ABC123",
-            "nombre": "JUAN",
-            "dni_cliente": "45246840",
-            "numero_telefono": "3585142216",
-            "tipo_vehiculo": "AUTO",
-            "fila": 2,
-            "columna": 2,
-            "fecha_ingreso": "2026-06-20",
-            "fecha_salida": "2026-07-20",
-            "tarifa_total": 19200.0,
-            "estado": "CANCELADA"
-        }
-    ],
+    "reservas": [],
     "reservas_clientes": [],
     "registros": {},
     "historial": [],
-    "clientes": [
-        {
-            "dni": "45246840",
-            "nombre": "JUAN",
-            "telefono": "3585142216"
-        }
-    ],
+    "clientes": [],
     "admin": {
         "usuario": "Admin0000",
         "clave": "1234"
     },
-    "abonos": [
-        {
-            "codigo": "53d3f4cd",
-            "tipo": "ABONO",
-            "tipo_abono": "MENSUAL",
-            "patente": "ABC123",
-            "nombre": "JUAN",
-            "dni_cliente": "45246840",
-            "numero_telefono": "3585142216",
-            "tipo_vehiculo": "AUTO",
-            "fila": 2,
-            "columna": 2,
-            "fecha_ingreso": "2026-06-20",
-            "fecha_salida": "2026-07-20",
-            "tarifa_total": 19200.0,
-            "estado": "CANCELADA"
-        }
-    ],
+    "abonos": [],
     "abonos_clientes": []
 }

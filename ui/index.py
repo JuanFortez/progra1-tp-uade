@@ -46,7 +46,8 @@ def lista_panel_administracion():
 def lista_panel_cliente():
     print("\n=== PANEL DE CLIENTE ===\n")
     print("  1 - Solicitar reserva")
-    print("  2 - Salir\n")
+    print("  2 - Solicitar abono")
+    print("  3 - Salir\n")
     
 def lista_reservas_admin():
     print("\n" + "=" * 40)
