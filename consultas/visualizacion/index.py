@@ -107,17 +107,18 @@ def es_plaza_real(valor):
     return valor != ESTADO_PASILLO and valor != ESTADO_VACIO
 
 
+def _contar_ocupadas_rec(lista):
+    if not lista:
+        return 0
+    return (1 if lista[0] == ESTADO_OCUPADO else 0) + _contar_ocupadas_rec(lista[1:])
+
+
 def contar_plazas_ocupadas(matriz):
     """
     Cuenta y retorna el número de plazas ocupadas en el estacionamiento.
     """
-    matriz_plana = [col for fila in matriz for col in fila]
-
-    return reduce(
-        lambda acc, col: acc + (1 if col == ESTADO_OCUPADO else 0),
-        matriz_plana,
-        0,
-    )
+    lista = [col for fila in matriz for col in fila]
+    return _contar_ocupadas_rec(lista)
 
 
 def mostrar_plazas_ocupadas(matriz):

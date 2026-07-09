@@ -459,15 +459,12 @@ def filtrar_por_fecha(historial, fecha_buscada):
     """
     Devuelve los movimientos que coinciden con la fecha ingresada.
     """
-    movimientos_filtrados = []
-
-    for movimiento in historial:
-        fecha_movimiento = obtener_fecha_movimiento(movimiento)
-
-        if fecha_movimiento[:10] == fecha_buscada:
-            movimientos_filtrados.append(movimiento)
-
-    return movimientos_filtrados
+    if not historial:
+        return []
+    movimiento = historial[0]
+    if obtener_fecha_movimiento(movimiento)[:10] == fecha_buscada:
+        return [movimiento] + filtrar_por_fecha(historial[1:], fecha_buscada)
+    return filtrar_por_fecha(historial[1:], fecha_buscada)
 
 def obtener_fecha_movimiento(movimiento):
     """
