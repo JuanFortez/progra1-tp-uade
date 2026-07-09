@@ -7,11 +7,11 @@ def generar_codigo_reserva(reservas):
     """
     Genera un código al azar de ocho dígitos para las reservas.
     """
-    codigos_existentes = {reserva["codigo"] for reserva in reservas}
-    while True:
-        codigo_reserva = str(uuid.uuid4())[:8]
-        if codigo_reserva not in codigos_existentes:
-            return codigo_reserva
+    codigos_existentes = {r["codigo"] for r in reservas}
+    codigo = str(uuid.uuid4())[:8]
+    if codigo in codigos_existentes:
+        return generar_codigo_reserva(reservas)
+    return codigo
 
 
 def validar_patente(patente):
