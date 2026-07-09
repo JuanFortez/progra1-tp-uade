@@ -675,8 +675,11 @@ def filtrar_por_fecha(reservas, fecha):
     """
     Devuelve reservas que comienzan en la fecha indicada.
     """
-
-    return list(filter(lambda reserva: reserva["fecha_ingreso"] == fecha, reservas))
+    if not reservas:
+        return []
+    if reservas[0]["fecha_ingreso"] == fecha:
+        return [reservas[0]] + filtrar_por_fecha(reservas[1:], fecha)
+    return filtrar_por_fecha(reservas[1:], fecha)
 
 
 def filtrar_rango_fechas(reservas, fecha_ingreso, fecha_salida):
