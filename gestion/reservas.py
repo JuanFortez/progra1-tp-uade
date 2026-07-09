@@ -594,15 +594,17 @@ def buscar_reserva_por_cliente(reservas, reservas_clientes, clientes, matriz):
         print("-" * 30)
 
 
-def buscar_cliente_por_dni(clientes, dni):
+def buscar_cliente_por_dni(clientes, dni, indice=0):
     """
     Busca un cliente por DNI dentro de la lista de clientes.
     """
-    for cliente in clientes:
-        if cliente["dni"] == dni:
-            return cliente
+    if indice >= len(clientes):
+        return None
 
-    return None
+    if clientes[indice]["dni"] == dni:
+        return clientes[indice]
+
+    return buscar_cliente_por_dni(clientes, dni, indice + 1)
 
 
 def registrar_cliente_si_no_existe(clientes, nombre, dni, numero_telefono):
