@@ -1,3 +1,1 @@
-[2026-07-09 22:08:55] Reserva creada correctamente, patente: ABE123.
-[2026-07-09 22:09:54] Reserva creada correctamente, patente: ABE124.
-[2026-07-09 22:10:43] Reserva creada correctamente, patente: ABE125.
+
