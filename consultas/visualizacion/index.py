@@ -147,16 +147,15 @@ def mostrar_plazas_disponibles(matriz):
     disponibles = contar_plazas_disponibles(matriz)
     print(f"\nPlacas disponibles: {disponibles}")
 
+def _contar_reales_rec(lista):
+    if not lista:
+        return 0
+    return (1 if es_plaza_real(lista[0]) else 0) + _contar_reales_rec(lista[1:])
+
 def contar_plazas_reales(matriz):
     """Cuenta las plazas reales del estacionamiento."""
-    total = 0
-
-    for fila in matriz:
-        for celda in fila:
-            if es_plaza_real(celda):
-                total += 1
-
-    return total
+    lista = [celda for fila in matriz for celda in fila]
+    return _contar_reales_rec(lista)
 
 
 def calcular_porcentaje_ocupacion(matriz):
