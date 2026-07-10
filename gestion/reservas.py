@@ -653,24 +653,35 @@ def lista_reservas_clientes(reservas):
 
 def ordenar_reservas_fechas(reservas):
     """
-    Ordena las reservas por fecha de ingreso, de menor a mayor.
+    Ordena las reservas por fecha de ingreso, de menor a mayor,
+    utilizando recursividad.
     """
+    
+    if len(reservas) <= 1:
+        return reservas[:]
 
     reservas_ordenadas = reservas[:]
 
-    for i in range(len(reservas_ordenadas) - 1):
-        for j in range(i + 1, len(reservas_ordenadas)):
+    
+    posicion_menor = 0
 
-            if (
-                reservas_ordenadas[i]["fecha_ingreso"]
-                > reservas_ordenadas[j]["fecha_ingreso"]
-            ):
+    for i in range(1, len(reservas_ordenadas)):
+        if (
+            reservas_ordenadas[i]["fecha_ingreso"]
+            < reservas_ordenadas[posicion_menor]["fecha_ingreso"]
+        ):
+            posicion_menor = i
 
-                aux = reservas_ordenadas[i]
-                reservas_ordenadas[i] = reservas_ordenadas[j]
-                reservas_ordenadas[j] = aux
+   
+    reserva_menor = reservas_ordenadas[posicion_menor]
 
-    return reservas_ordenadas
+    
+    reservas_restantes = (
+        reservas_ordenadas[:posicion_menor]
+        + reservas_ordenadas[posicion_menor + 1:]
+    )
+
+    return [reserva_menor] + ordenar_reservas_fechas(reservas_restantes)
 
 
 def filtrar_por_fecha(reservas, fecha):
