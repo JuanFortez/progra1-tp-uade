@@ -420,17 +420,19 @@ def pedir_patente_historial():
     return patente
 
 
-def filtrar_por_patente(historial, patente):
+def filtrar_por_patente(historial, patente, indice=0):
     """
     Devuelve los movimientos que coinciden con la patente ingresada.
     """
-    movimientos_filtrados = []
+    if indice >= len(historial):
+        return []
 
-    for movimiento in historial:
-        if movimiento["patente"] == patente:
-            movimientos_filtrados.append(movimiento)
+    resto = filtrar_por_patente(historial, patente, indice + 1)
 
-    return movimientos_filtrados
+    if historial[indice]["patente"] == patente:
+        return [historial[indice]] + resto
+
+    return resto
 
 def buscar_historial_por_fecha(historial):
     """
