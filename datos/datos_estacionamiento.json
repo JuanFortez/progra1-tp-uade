@@ -42,7 +42,41 @@
         ]
     ],
     "reservas": [],
-    "reservas_clientes": [],
+    "reservas_clientes": [
+        {
+            "codigo": "6f81723e",
+            "patente": "ABE123",
+            "nombre": "sam",
+            "dni": "95959598",
+            "numero_telefono": "1155447788",
+            "tipo_vehiculo": "AUTO",
+            "fecha_ingreso": "2026-07-20",
+            "fecha_salida": "2026-07-21",
+            "estado": "PENDIENTE"
+        },
+        {
+            "codigo": "9cf969d8",
+            "patente": "ABE124",
+            "nombre": "sam",
+            "dni": "95959598",
+            "numero_telefono": "1155447788",
+            "tipo_vehiculo": "AUTO",
+            "fecha_ingreso": "2026-07-15",
+            "fecha_salida": "2026-07-23",
+            "estado": "PENDIENTE"
+        },
+        {
+            "codigo": "6d4018ae",
+            "patente": "ABE125",
+            "nombre": "sam",
+            "dni": "95959598",
+            "numero_telefono": "1155447788",
+            "tipo_vehiculo": "AUTO",
+            "fecha_ingreso": "2026-07-10",
+            "fecha_salida": "2026-07-25",
+            "estado": "PENDIENTE"
+        }
+    ],
     "registros": {},
     "historial": [],
     "clientes": [],
